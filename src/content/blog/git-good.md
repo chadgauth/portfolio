@@ -1,33 +1,30 @@
 ---
-title: 'Dr. Gitgood: How I learned to Stop Worrying and Embrace the Refactor'
-description: 'Lorem ipsum dolor sit amet'
+title: 'Dr. Gitgood or: How I learned to Stop Worrying and Love the Refactor'
+description: |
+  In the world of software development, venturing into old code can feel like a journey through time, rife with relics of rushed decisions and late-night coding euphoria. This tale chronicles Dr. Gitgood's metamorphosis from fearing refactoring to embracing it, all with a sprinkle of "Dr. Strangelove" references.
 pubDate: 'Jul 08 2022'
 heroImage: '/blog-placeholder-3.jpg'
 ---
 
-In software development, change is inevitable as a pull request. However when that change includes a refactor, it might stir up a storm. But let's get real here, folks. When your code looks like the mushroom cloud that makes you squint and shield your eyes, it may be too late to sprint for your life. To further demonstrate, I bring you the tale of Dr. Gitgood and how he learned to stop worrying and embrace the refactor.
+> Before we dive deep into the code, let's set the stage with a cinematic parallel. "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb" is a 1964 satirical black comedy that humorously addresses the Cold War fears of a nuclear conflict. It’s a tale of mishaps, miscommunications, and the madness of mutually assured destruction. Similarly, in the world of software development, the unaddressed errors, convoluted logic, and the looming disaster of a system crash are all too real. Just as the world leaders in the film had to grapple
 
-Dr. Gitgood, a greenfield engineer had spent the last month or so grappling with a daunting task, constructing a custom video player. Deployed quickly to production he looked back proud at his 150-line function riddled with complexity, code duplication, and comments explaining this method of madness.
+Revisiting one's code is akin to opening a time capsule, filled with nostalgia of past decisions, both good and regrettable. Dr. Gitgood, like many developers, found pride in his creation - a complex video player. However, much like a Cold War era mechanism with too many buttons and no instruction manual, the player’s complexity began to overshadow its functionality. A simple task like adjusting the volume felt like a high-stakes game of defusing a doomsday device.
 
-However, when the time came for Dr. Gitgood to simply inject a few new features a month later, his once familiar code began to misbehave. A simple volume adjustment paused the video, and his once reliable codebase transformed into a maze of bugs. When your code begins to resemble the likes of a mushroom cloud that burns your eyes, it's too late to sprint for your life.
+Seeing the struggle, his mentor, Professor CodeWise, a sage of software engineering, stepped in. He helped Dr. Gitgood see that the code was not a labyrinth to be feared, but a puzzle to be solved. With his guidance, Dr. Gitgood began to embrace refactoring, turning the once daunting task into an exciting challenge.
 
-## Why a Refactor?
+## The War Room of Code: Why Refactor?
 
-Refactoring: a software developer's rite of passage - akin to untangling a nest of wires without disrupting the connections. It's a task that Dr. Gitgood, despite his best efforts, was wrestling with, much like a novice juggler trying to keep all balls in the air.
+Much like the War Room discussions in "Dr. Strangelove", refactoring is the strategic process where developers plan, deliberate, and act. The goal isn't just to declutter but to optimize, ensuring that revisiting the code doesn’t feel like decoding a launch sequence.
 
-Unlike the chaotic aftermath of an atom bomb, refactoring is calculated and intentional - a meticulous but necessary process aiming to enhance the codebase without introducing new bugs or altering the existing functionality. It's a proactive strategy to clean up code debris left behind by pressing deadlines, eradicate bugs and performance issues, boost efficiency in software development and improve code longevity. 
+## Unraveling the Video Player Engima
 
-Enter Professor CleanCode, a software development veteran, called upon to guide our struggling Dr. Gitgood through the winding roads of refactoring. With an aura that spelled calmness and a cup of green tea as his constant companion, the Professor began his tutorial.
-
-## The Lessons of the Video Player
-
-Dr. Gitgood, in his initial enthusiasm, had created a monolith - a single function controlling the entire video. It was an opus, spanning over 150 lines of code, filled with hooks for play, pause, volume, and UI changes. The logic duplication was rampant and widespread much like the destruction of an atomic bombing.
+Dr. Gitgood's video player, with its layers of code, resembled the layers of bureaucracy in the War Room. For those unfamiliar with the movie, the War Room is where the president and his advisors decide the fate of the world, amidst a storm of bureaucracy and miscommunication. Similarly, Dr. Gitgood's video player, with its layers of code, could be seen as its own War Room.
 
 ### Lesson 1: Lengthy Functions
 
-Professor CleanCode, sipped his tea, and calmly suggested a different approach. 
+Professor CodeWise pointed out, “This lengthy function reminds me of a convoluted government protocol. Let's simplify.”
 
-This global function is a bear to manage, let's break this down.
+**Before:**
 
 ```javascript
 function controlEntireVideo() {
@@ -36,7 +33,7 @@ function controlEntireVideo() {
 controlEntireVideo();
 ```
 
- Each function should have a single, well-defined responsibility."
+***After*:**
 
 ```javascript
 function handlePlayEvent() {...}
@@ -52,15 +49,17 @@ handleCustomUIChanges();
 
 ### Lesson 2: Duplicated Logic
 
-Dr. Gitgood had fallen into the trap of repeated logic within his pause and play functions.
+Dr. Gitgood's code violated the sacred DRY (Don't Repeat Yourself) principle.
+
+The Professor advised, "Consolidate and streamline the logic."
+
+**Before:**
 
 ```javascript
 // Handling play event
 function handlePlayEvent() {
     video.on('play', function() {
         isPlaying = true;
-        // Other logging and control
-        // Additional logic to update UI or other operations
         $('#playButton').hide();
         $('#pauseButton').show();
     });
@@ -69,8 +68,6 @@ function handlePlayEvent() {
 function handlePauseEvent() {
     video.on('pause', function() {
         isPlaying = false;
-        // Other pause related logic
-        // Additional logic to update UI or other operations
         $('#playButton').show();
         $('#pauseButton').hide();
     });
@@ -79,7 +76,7 @@ handlePlayEvent();
 handlePauseEvent();
 ```
 
-Recognizing this, Professor CleanCode enlightened him, "Look here, Dr. Gitgood, you have essentially the same logic for `play` and `pause`. This is a classic case of DRY (Don't Repeat Yourself) principle violation. Refactor this to a single function that toggles the play state."
+Recognizing this, Professor CodeWise enlightened him, "Look here, Dr. Gitgood, you have essentially the same logic for `play` and `pause`. This is a classic case of DRY (Don't Repeat Yourself) principle violation. Refactor this to a single function that toggles the play state."
 
 ```javascript
 function handleVideoEvent(eventType) {
@@ -87,8 +84,6 @@ function handleVideoEvent(eventType) {
         isPlaying = eventType === 'play';
         $('#playButton').toggle(!isPlaying);
         $('#pauseButton').toggle(isPlaying);
-        // Other logging and control
-        // Additional logic to update UI or other operations
     });
 }
 
@@ -100,26 +95,29 @@ This way, he explained, you avoid repeating the same logic and makes any future 
 
 ### Lesson 3: Excessive Commenting
 
-Dr. Gitgood had a habit of leaving extensive comments in his code. This is an example:
+"Dr. Gitgood," Professor CodeWise began, "Your code should be the star of the show, not the comments accompanying it."
 
 ```javascript
-// Keeping track of current frame of video so that we can determine 
-// what frame to set the video to when we are trying to backtrack or forward track
-var currentFrame = 0;
+// This variable stores the video quality setting. It's important because 
+// users might want to adjust quality based on their internet speed.
+var videoQuality = '1080p';
 ```
 
-Professor CleanCode pointed out, "While comments can be useful, they are often a band-aid for unclear code. Your code should be self-explanatory. If you feel the need to write such a lengthy comment, it's a sign that you might need to refactor."
+Professor CodeWise continued,  "Comments are useful when they provide insight into the 'why', especially when dealing with non-trivial business logic. However, if you feel the need to describe the 'what', your variable or function names might not be clear enough."
 
-He suggested a more self-explanatory naming convention:
+He suggested a more self-explanatory variable name:
 
 ```javascript
-var frameForBackwardOrForwardTrack = 0;
+var userSelectedVideoQuality = '1080p';
 ```
 
-"With this change, the variable's purpose is clear without needing a comment. Remember, good code is like a good joke - it needs no explanation."
+"With this name," Professor CodeWise explained, "it's evident that the variable represents the quality of the video chosen by the user. It's always a good idea to let your naming conventions do the heavy lifting in terms of explanation."
 
 ### Lesson 4: Nested If Statements
-Nested if statements are like Russian dolls, there's always one more layer. They complicate the flow and make the code hard to follow.
+
+"Nesting is for birds, not for logic," quipped the Professor, urging simplicity.
+
+**Before:**
 
 ```javascript
 if(video.readyState === 4) {
@@ -130,7 +128,9 @@ if(video.readyState === 4) {
     }
 }
 ```
-Flatten them, or better yet, use guard clauses.
+He advised, "By flattening your conditionals, you make the code easier to read and understand. It reduces cognitive complexity."
+
+**After:**
 
 ```javascript
 if(video.readyState !== 4) return;
@@ -139,89 +139,104 @@ if(video.paused || video.ended) return;
 // Play video
 ```
 
+This refactoring not only simplifies the code but also enhances its readability and maintainability.
+
 ### Lesson 5: Mixed Responsibilities
 
-Dr. Gitgood's function with mixed responsibilities:
+"Every function, Dr. Gitgood, should have a mission, a sole purpose," Professor CodeWise emphasized.
+
+**Before:**
 
 ```javascript
-function controlEntireVideo() {
-    // Handling play and pause events
-    // Adjusting video brightness
+function trackFrameAndUpdateSettings(frame) {
+    currentFrame = frame;
+    
+    // Logic to determine if this frame is a keyframe
+    if (isKeyframe(currentFrame)) {
+        userSettings.update('lastKeyFrame', currentFrame);
+    }
+    
+    // Update brightness based on user settings
+    const brightness = userSettings.get('brightness');
+    adjustVideoBrightness(brightness);
 }
-controlEntireVideo()
 ```
 
-Refactored to separate functions, each with a single responsibility:
+The Professor proposed a separation of unrelated functionality.
+
+**After:**
 
 ```javascript
-function handlePlayPauseEvent() {...}
-function adjustBrightness() {...}
+function trackFrame(frame) {
+    currentFrame = frame;
+    if (isKeyframe(currentFrame)) {
+        updateUserLastKeyFrame(currentFrame);
+    }
+}
+
+function updateUserSettings() {
+    const brightness = userSettings.get('brightness');
+    adjustVideoBrightness(brightness);
+}
 ```
+
+"By ensuring each function has a single responsibility, your code becomes more modular, maintainable, and testable. If it's too hard to test, it is doing too much"
 
 ### Lesson 6: Complicated Logic Checks
-And finally, if your logic checks need a flowchart to understand, simplification may be needed. Use meaningful variables and leverage language-specific techniques.
+
+"Complex logic checks can be a headache," the Professor remarked. "They can lead to what we call 'Boolean Blindness', where the true intention behind a series of checks becomes murky."
+
+**Before:**
 
 ```javascript
-if(video.readyState === 4 && !video.paused && !video.ended && video.currentTime > 0){
+if(video.readyState === 4 && !(video.paused || video.ended) && video.currentTime > 0){
     // Play video
 }
 ```
 
-Refactored to simplified logic checks:
+He suggested, "Break it down. Use descriptive variables to make the intention clear."
+
+**After:**
 
 ```javascript
 const isVideoReadyToPlay = video.readyState === 4 && video.currentTime > 0;
-const isVideoPlaying = !video.paused && !video.ended;
+const isVideoPlaying = !(video.paused || video.ended);
 
-if(isVideoReadyToPlay && isVideoPlaying){
+if(isVideoReadyToPlay && !isVideoPlaying){
     // Play video
 }
 ```
 
-With these lessons, Dr. Gitgood was ready to embrace the refactor. The Professor concluded, "Remember, refactoring is not a one-time task. It's a continuous process. It's about anticipating change and designing for it." It's having the race today to avoid running a marathon tomorrow.
+## The Codebase Stability Doctrine
 
-## Sounding the Sirens: Recognizing the Need for Code Refactoring
+While Dr. Gitgood added new features, the code length remained unchanged. This wasn’t some programming sleight of hand, but the result of efficient refactoring. When he returned to the code, he didn’t have to navigate a minefield; it was a clear path.
 
-IV. When Should You Refactor?
-   A. The dangers of the 'fix it all at the end' mentality
-   B. Identifying signs that refactoring is needed
-   C. The right time for refactoring: Regular intervals and before adding new features
+## Red Alert: Signs of Code Distress
 
-II. When it's time
+- *Clarity is key*: If your code needs extensive comments to explain the "what", it's time for a revisit.
+Complex conditionals: If your logic checks feel like deciphering the Enigma, simplify.
+- *Function length*: Aim for brevity. While 5-7 lines is optimistic, if your function feels like a marathon, it's time to sprint towards refactoring.
+- *Single Responsibility Principle*: Each file should have a clear purpose. If it's juggling too many tasks, break it up.
+- *Repetition*: Duplicated logic is a red flag. Consolidate and streamline.
 
-- Your unclear code has comments that have to explain what is happening instead of why
-    - example code justifying that we need to reset a global variable due to oddities with the volume control function
-- You have an if statement with more than a few logical operators (this && this && !this || sometimesThis)
-    - example code that says while video is playing hook into with jquery control to pause video and if the video is paused than allow screenshot (add a few other complex arguments to make a really long conditional)
-- When functions go beyond the length of the screen, some say beyond 5-7 lines but that's sometimes too optimistic. There's a balance between delivering DRY code and code that has been optimized to look like a flattened city. 5-7 lines might be a good goal, less is overkill, double is okay, triple might be eminant danger for being stuck on a code change for days and introduction of new defects.
-- Your file a single responsibility. It handles this and that and also that (all different contexts)
-  - Video player that handles video controls, but also UI state, and loading in files to play, and uploading screenshots to export example code in a global function
-- You have a file with duplicated logic with only one slight variation
-  - Repeat playback code in two different places one that says if video is paused on volume raised that it should play again (using another jquery selector);
-- The team has to do workarounds to add new features and has to program like it's a game of whack-a-mole (or better analogy)
+## The Testing Protocol
 
-III. How to
+Professor CodeWise emphasized the importance of testing. "In the same way that the world leaders in 'Dr. Strangelove' had a series of checks and balances (albeit flawed), ensure your code has a robust testing mechanism.”
 
-- Encourage open discussion and a culture of allowing developers to run their own standup to achieve at the beginning of a sprint. A standup is not a status report so that a project owner can make good excuses as to why we'll never deliver on time, but as a forum for engineers to discuss technically and decide which approaches they need to take collectively to acheive the goals that have committed to as a team.
-- Extract logical operators to constants to describe what it is we are checking for
-- Comments should only be an apology for complex business logic
-- Extract functions into private methods with names that describe what a block of code does.
-- Split responsibilities into new files that does one thing instead of the whole kit and kaboodle
-- Manually line up nearly duplicated files, and start extracting their shared functionality into a new component
+## The Road to Codebase Diplomacy
 
-V. The Benefits of Embracing Refactoring: Lessons from Dr. Gitgood
-   A. The aftermath of the fallout: Lessons learned
-1.  to comment or not to comment
-            i. comments should only apologize for complex business logic
-   B. The benefits and improvements after refactoring
-   C. How refactoring can lead to better Monday mornings  
+- **Open Discussions**: Encourage technical discussions, not just status reports.
+- **Simplify**: Extract complex logic checks into self-explanatory constants.
+- **Comment Wisely**: Comments should be apologies for unavoidable complexity, not explanations of the code.
+- **Delegate**: Split large functions into smaller, more manageable chunks.
+- **Divide Responsibilities**: One file, one task. Keep it focused.
 
-VI. Conclusion
-   A. Recap of the importance and benefits of refactoring
-   B. Final thoughts and call to action: Stop worrying and embrace the refactor.
+## The Post-Refactoring Era
 
-IV: Conclusion
+Dr. Gitgood, with Professor CodeWise's guidance, learned that refactoring isn't a one-time task. It's a continuous journey, ensuring that the software remains agile and maintainable.
 
-[Review the body here]
+## Strangelove’s Code Wisdom
 
-Technical debt is better paid down over time then to try to save it for an end of a process, because when the codebase creditors are knocking at the door, it might be too late to do anything but file for a codebase rewrite. Paying down the debt ensures a wealth of benefit for engineers, customers, and business goals. A good engineering team that builds quality code embraces refactoring as a habit in their position, that sometimes going that extra mile, can save us from marathon in the future.
+Technical debt, like any debt, accumulates interest. Much like financial debt, the longer you ignore technical debt, the greater the 'interest' you'll pay in the form of additional work down the line. Pay it off gradually. Proactive refactoring ensures a smoother journey for developers, a better product for users, and a more successful project overall. As Dr. Gitgood learned, sometimes going the extra mile today can save a marathon tomorrow.
+
+Embrace refactoring. Embrace change. And remember, in the world of coding, as in global politics, stalemates aren't solutions. So grab your refactoring toolkit and prepare for a thrilling ride into the world of continuous improvement.
