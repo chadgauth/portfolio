@@ -5,122 +5,180 @@ pubDate: 'Jul 08 2022'
 heroImage: '/blog-placeholder-3.jpg'
 ---
 
-In the world of software development, change is inevitable. And when that change comes in the form of a refactor, it can stir up quite a storm. Picture this: a codebase resembling a mushroom cloud, burning your eyes and making your Monday mornings a mess. But fear not, my fellow developers, for I bring you the tale of Dr. Gitgood and their quest to stop worrying and embrace the refactor.
+In software development, change is inevitable as a pull request. However when that change includes a refactor, it might stir up a storm. But let's get real here, folks. When your code looks like the mushroom cloud that makes you squint and shield your eyes, it may be too late to sprint for your life. To further demonstrate, I bring you the tale of Dr. Gitgood and how he learned to stop worrying and embrace the refactor.
 
-Dr. Gitgood, a greenfield engineer thrust onto the front lines of a fresh codebase, had a singular mission: to construct a custom video player. Armed with a 200-line function and an abundance of global variables, they embarked on their coding journey. But then, a hotshot coder entered the scene, armed with the power of "let" and "const". They dared to challenge the sacred global state function, breaking it up into pipsqueak pure functions. Change, they say, is inevitable. But when that change is a refactor, you can bet your GIT commit it can stir up quite a storm.
+Dr. Gitgood, a greenfield engineer had spent the last month or so grappling with a daunting task, constructing a custom video player. Deployed quickly to production he looked back proud at his 150-line function riddled with complexity, code duplication, and comments explaining this method of madness.
 
-Sure, we've all got that 'fix it all at the end' card stashed away, waiting for that Hail Mary moment. But let's get real here, folks. When your code looks like the mushroom cloud that burns your eyes, it's too late to sprint for your life. The fallout? Well, let's just say it can make a real mess of your Monday mornings.
+However, when the time came for Dr. Gitgood to simply inject a few new features a month later, his once familiar code began to misbehave. A simple volume adjustment paused the video, and his once reliable codebase transformed into a maze of bugs. When your code begins to resemble the likes of a mushroom cloud that burns your eyes, it's too late to sprint for your life.
 
-## The Case of Dr. Gitgood: A Refactoring Tale
+## Why a Refactor?
 
-In the trenches of software development, Dr. Gitgood and the Hotshot coder found themselves grappling with a fresh task - to infuse new features into their codebase.
+Refactoring: a software developer's rite of passage - akin to untangling a nest of wires without disrupting the connections. It's a task that Dr. Gitgood, despite his best efforts, was wrestling with, much like a novice juggler trying to keep all balls in the air.
 
-Hotshot coder, ever the advocate for code cleanliness, proposed a sweeping refactor. Dr. Gitgood, however, saw this as needless meddling, arguing to focus on the features instead. Hotshot coder, not wanting to escalate the dispute, conceded.
+Unlike the chaotic aftermath of an atom bomb, refactoring is calculated and intentional - a meticulous but necessary process aiming to enhance the codebase without introducing new bugs or altering the existing functionality. It's a proactive strategy to clean up code debris left behind by pressing deadlines, eradicate bugs and performance issues, boost efficiency in software development and improve code longevity. 
 
-However, as Dr. Gitgood delved into the task, his once familiar code started misbehaving. Raising the volume now paused the video, and his once cherished codebase was becoming a mysterious labyrinth.
+Enter Professor CleanCode, a software development veteran, called upon to guide our struggling Dr. Gitgood through the winding roads of refactoring. With an aura that spelled calmness and a cup of green tea as his constant companion, the Professor began his tutorial.
 
-## Understanding Refactoring
+## The Lessons of the Video Player
 
-Refactoring is the process of restructuring existing computer code—changing the factoring—without changing its external behavior. It involves making incremental modifications to the code, such as simplifying complex logic, removing duplication, and improving naming conventions. Why bother, you ask? The benefits are immense. Improved code readability means less time squinting at your screen, trying to decipher what that 200-line function was supposed to do. Reduced complexity means fewer headaches and more streamlined code. Discovering bugs becomes easier and development times increase. 
+Dr. Gitgood, in his initial enthusiasm, had created a monolith - a single function controlling the entire video. It was an opus, spanning over 150 lines of code, filled with hooks for play, pause, volume, and UI changes. The logic duplication was rampant and widespread much like the destruction of an atomic bombing.
 
-Unlike an atom bomb, which wreaks havoc and chaos, refactoring is a measured and intentional process. Its goal is to improve the codebase without introducing new bugs or altering the existing functionality. It's a proactive strategy that enables developers to clean up the code mess created under tight deadlines, eliminate bugs and performance issues, and ultimately enhance their productivity in software development.
+### Lesson 1: Lengthy Functions
 
-## Decoding the Distress Signals: When Your Code Cries for Refactoring
+Professor CleanCode, sipped his tea, and calmly suggested a different approach. 
 
-## Code Red: Deciphering the Desperate Signals from Your Code
+This global function is a bear to manage, let's break this down.
 
-Let's boomerang back again to the battlefield that was Dr. Gitgood's codebase and put various distress signals under our forensic lens. Often buried in plain sight, these disturbances can rock the very ship that ought to streamline your victory- your codebase. 
+```javascript
+function controlEntireVideo() {
+    // Play event, pause event, volume controls, UI changes, duplicated logic
+}
+controlEntireVideo();
+```
 
-1. **Comment Marathons:** Excessive commenting is more than a mere pixel pain, it's an ear-splitting shout out that your code needs a translator. 
+ Each function should have a single, well-defined responsibility."
 
-    ```javascript
-    var video = $('#videoPlayer');
-    var frame = 0;
+```javascript
+function handlePlayEvent() {...}
+function handlePauseEvent() {...}
+function handleVolumeControl() {...}
+function handleCustomUIChanges() {...}
 
-    // Next lines handle the user pressing the frame forward button on the UI
-    $('#nextFrame').on('click', function() {
-      while (video.get(0).isPlaying) {
-        frame++;
-      }
-      video.get(0).currentTime = frame / 30;
+handlePlayEvent();
+handlePauseEvent();
+handleVolumeControl();
+handleCustomUIChanges();
+```
+
+### Lesson 2: Duplicated Logic
+
+Dr. Gitgood had fallen into the trap of repeated logic within his pause and play functions.
+
+```javascript
+// Handling play event
+function handlePlayEvent() {
+    video.on('play', function() {
+        isPlaying = true;
+        // Other logging and control
+        // Additional logic to update UI or other operations
+        $('#playButton').hide();
+        $('#pauseButton').show();
     });
-    ```
+}
 
-   Configure this prose to binary; transform vague paragraphs into crisp lines of functions.
+function handlePauseEvent() {
+    video.on('pause', function() {
+        isPlaying = false;
+        // Other pause related logic
+        // Additional logic to update UI or other operations
+        $('#playButton').show();
+        $('#pauseButton').hide();
+    });
+}
+handlePlayEvent();
+handlePauseEvent();
+```
 
-    ```javascript
-    var video = $('#videoPlayer');
-    var frame = 0;
+Recognizing this, Professor CleanCode enlightened him, "Look here, Dr. Gitgood, you have essentially the same logic for `play` and `pause`. This is a classic case of DRY (Don't Repeat Yourself) principle violation. Refactor this to a single function that toggles the play state."
 
-    function advanceFrame() {...}
-    function setFrameTime() {...}
+```javascript
+function handleVideoEvent(eventType) {
+    video.on(eventType, function() {
+        isPlaying = eventType === 'play';
+        $('#playButton').toggle(!isPlaying);
+        $('#pauseButton').toggle(isPlaying);
+        // Other logging and control
+        // Additional logic to update UI or other operations
+    });
+}
 
-    $('#nextFrame').on('click', advanceFrame);
-    ```
+handleVideoEvent('play');
+handleVideoEvent('pause');
+```
 
-2. **Overstuffed Conditions**: If your conditional statement feels like an overloaded burger, nearly impossible to hold, you need simpler servings.
+This way, he explained, you avoid repeating the same logic and makes any future changes like adding error handling easier.
 
-    ```javascript
-    if ((video.get(0).playing && user.get(0).active) || (!video.get(0).paused && screen.get(0).live)) {...}
-    ```
+### Lesson 3: Excessive Commenting
 
-   Make it bite-sized and orderly by slipping complexity in smaller functions.
+Dr. Gitgood had a habit of leaving extensive comments in his code. This is an example:
 
-    ```javascript
-    function isPlayable(...) {...}
+```javascript
+// Keeping track of current frame of video so that we can determine 
+// what frame to set the video to when we are trying to backtrack or forward track
+var currentFrame = 0;
+```
 
-    if (isPlayable()) {...}
-    ```
+Professor CleanCode pointed out, "While comments can be useful, they are often a band-aid for unclear code. Your code should be self-explanatory. If you feel the need to write such a lengthy comment, it's a sign that you might need to refactor."
 
-3. **Bridging Functions**: If your function resembles the length of the Golden Gate, it's telling you to build more bridges.
+He suggested a more self-explanatory naming convention:
 
-    ```javascript
-    function controlVideo() {
-       // Over 40 lines of code...
+```javascript
+var frameForBackwardOrForwardTrack = 0;
+```
+
+"With this change, the variable's purpose is clear without needing a comment. Remember, good code is like a good joke - it needs no explanation."
+
+### Lesson 4: Nested If Statements
+Nested if statements are like Russian dolls, there's always one more layer. They complicate the flow and make the code hard to follow.
+
+```javascript
+if(video.readyState === 4) {
+    if(video.currentTime > 0) {
+        if(!video.paused && !video.ended) {
+            // Play video
+        }
     }
-    ```
+}
+```
+Flatten them, or better yet, use guard clauses.
 
-   Opting for modular streams never choked a river:
+```javascript
+if(video.readyState !== 4) return;
+if(video.currentTime <= 0) return;
+if(video.paused || video.ended) return;
+// Play video
+```
 
-    ```javascript
-    function handleInitialState() {...}
-    function handleUserControl() {...}
-    function handleBrightness() {...}
+### Lesson 5: Mixed Responsibilities
 
-    handleInitialState();
-    handleUserControl();
-    handleBrightness();
-    ```
+Dr. Gitgood's function with mixed responsibilities:
 
-4. **Juggling Responsibilities**: When a file is crowned as the Jack of all trades, it echoes chaos. Distinct features signal a lack of separation of role. Assign dedicated roles.
+```javascript
+function controlEntireVideo() {
+    // Handling play and pause events
+    // Adjusting video brightness
+}
+controlEntireVideo()
+```
 
-    ```javascript
-    class VideoPlayer {
-       // too many responsibilities for one class: video controls, UI state, files, screenshots etc. 
-    }
-    // Decouple into multiple classes/ functions based on responsibility 
-    ```
+Refactored to separate functions, each with a single responsibility:
 
-5. **Twins everywhere**: Seeing double isn't good news here! If logic carbon copies itself, refactor them into an Abstract factory method.
+```javascript
+function handlePlayPauseEvent() {...}
+function adjustBrightness() {...}
+```
 
-    ```javascript
-    $('#prevFrame').on('click', function() {...});
-    $('#nextFrame').on('click', function() {...});
-    ```
+### Lesson 6: Complicated Logic Checks
+And finally, if your logic checks need a flowchart to understand, simplification may be needed. Use meaningful variables and leverage language-specific techniques.
 
-   Halves the work, doubles the efficiency!
+```javascript
+if(video.readyState === 4 && !video.paused && !video.ended && video.currentTime > 0){
+    // Play video
+}
+```
 
-    ```javascript
-    function goToFrame(action) {...}
-    $('#prevFrame').on('click', ()=> goToFrame('decrease'));
-    $('#nextFrame').on('click', ()=> goToFrame('increase'));
-    ```
+Refactored to simplified logic checks:
 
-6. **Assault Course Workflows**: Code should seem like a well-paced marathon, not an unpredictable assault course. If it feels like the latter, de-obstacle your path and grapple to refactoring.
+```javascript
+const isVideoReadyToPlay = video.readyState === 4 && video.currentTime > 0;
+const isVideoPlaying = !video.paused && !video.ended;
 
-Each of these instances is a siren, whispering the immediate need for software stethoscopy. And remember, refactoring is not just a rescue mission, it's preventative maintenance for your software vessel. Embody Dr. Gitgood's experience, welcome refactoring, and give your code the care it craves. A stitch in codebase may well save nine!
+if(isVideoReadyToPlay && isVideoPlaying){
+    // Play video
+}
+```
 
-Remember, refactoring is not an unnecessary detour, but a bridge to better code. So, when your code sends distress signals, consider Dr. Gitgood's story, embrace the refactor, and transform chaos into order.
+With these lessons, Dr. Gitgood was ready to embrace the refactor. The Professor concluded, "Remember, refactoring is not a one-time task. It's a continuous process. It's about anticipating change and designing for it." It's having the race today to avoid running a marathon tomorrow.
 
 ## Sounding the Sirens: Recognizing the Need for Code Refactoring
 
