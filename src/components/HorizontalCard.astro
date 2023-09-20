@@ -1,10 +1,10 @@
 ---
-const { title, img, desc, url, badge, tags, target = "_blank" } = Astro.props;
+const { title, subtitle, img, desc, url, badge, tags, target = "_blank" } = Astro.props;
 import { Image } from "@astrojs/image/components";
 ---
 
 <div
-  class="rounded-lg bg-base-100 hover:shadow-xl transition ease-in-out hover:scale-[102%]"
+  class="rounded-lg bg-blue-700 hover:shadow-xl transition ease-in-out hover:scale-[102%] text-grey-50"
 >
   <a href={url} target={target}>
     <div class="hero-content flex-col md:flex-row">
@@ -22,10 +22,10 @@ import { Image } from "@astrojs/image/components";
       }
       <div class="grow w-full">
         <h1 class="text-xl font-bold">
-          {title}
+          {title}<span class="text-base text-grey-100">&nbsp;&nbsp;{subtitle}</span>
           {badge && <div class="badge badge-secondary mx-2">{badge}</div>}
         </h1>
-        <p class="py-1 text-1xl">{desc}</p>
+        <p class="pt-3 pb-1 text-1xl text-right text-green-100">{desc}</p>
         <div class="card-actions justify-end">
           {
             tags &&

@@ -5,73 +5,227 @@ import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const currentYear = new Date().getFullYear();
+const age = currentYear - 1989;
+const grayscale = Math.min(age, 100);
+
 const last_posts = posts.slice(0, 3);
+const values = [
+  "Full stack software engineering is my specialty",
+  "I bring a decade of career experience",
+  "I embrace change daily",
+  "Passionate about human interface design",
+  "Fueled by energy drinks",
+  "Amateur tech journalist",
+  "Making art from code",
+  "Believer of continuous improvement",
+  "Challenging problems energize me",
+  "Fan of mentoring and sharing knowledge, because sharing is caring",
+];
 ---
 
-<BaseLayout sideBarActiveItemID="home">
-  <div class="pb-12 mt-5">
-    <div class="text-xl py-1">Hey there 👋</div>
-    <div class="text-5xl font-bold">I'm Manuel Ernesto</div>
-    <div class="text-3xl py-3 font-bold">Software Engineer and Entrepreneur</div>
-    <div class="py-2">
-      <text class="text-lg">
-        This is <b>Astrofy</b> a free and open-source template for your Personal Portfolio Website built with Astro and TailwindCSS.
-        Create in minutes a website with Blog, CV, Project Section, Store and RSS Feed. I hope you find
-        it useful!
-      </text>
+<BaseLayout className="p-0" sideBarActiveItemID="home">
+  <div class="flex flex-col h-screen">
+<div class="bg-green-700 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
+  <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
+    <div class="bg-green-900 px-6 py-3 pb-2">
+      <h1 class="text-4xl text-blue-200 font-bold font-serif">Chad Gauthier</h1>
+      <div class="typewrite text-lg text-cyan" data-type={JSON.stringify(values)} role="textbox" aria-live="polite">
+        <span class="wrap"></span>
+      </div>
     </div>
-    <div class="mt-8">
-      <a class="btn" href="https://twitter.com/manuelernestog" target="_blank"> Let's connect!</a>
-      <a href="https://github.com/manuelernestog/astrofy" target="_blank" class="btn btn-outline ml-5">
-        Get This template
-      </a>
+    <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] grid-rows-[1fr,120px,120px] md:grid-rows-2 border-green-900 text-blue-900 bg-blue border-r-2 border-l-2 min-h-[150px]">
+      <div class="image-container md:row-span-2">
+        <img style={`filter: grayscale(${grayscale}%);`} src="chad_profile.jpg" alt="Your Image" class="profile-image" />
+      </div>
+      <div class="row-start-2 md:row-start-1 md:col-start-2 border-green-900 bg-blue md:border-l-2 p-4">
+        <h2 class="text-xl font-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7a4 4 0 118 0 4 4 0 01-8 0zm12 0a4 4 0 100-8 4 4 0 000 8zm-1 8a7 7 0 00-14 0v5a1 1 0 001 1h16a1 1 0 001-1v-5a7 7 0 00-4-6.417z" />
+          </svg>
+          Chad Gauthier
+        </h2>
+        <p class="pt-2 pl-10">Full Stack Software Engineer</p>
+        <p class="pl-10">Austin, TX</p>
+      </div>
+      <div class="row-start-3 md:row-start-2 md:col-start-2 border-green-900 bg-blue md:border-l-2 border-t-2 p-4">
+        <h2 class="text-xl font-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-5.591 0-10.075-.73-12-2V9a2 2 0 012-2h6.839a2 2 0 011.161.423L12 9l1.839-1.577A2 2 0 0115.161 7H22a2 2 0 012 2v2.255z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 10a7 7 0 00-7 7h7a7 7 0 000-7z" />
+          </svg>
+          Get in touch
+        </h2>
+        <a href="https://www.linkedin.com" target="_blank" class="ml-10 mt-5 inline-block bg-green-700 text-white px-4 py-2 rounded" >LinkedIn</a>
+      </div>
+    </div>
+    <div class="border-green-900 bg-blue border-2 min-h-12 px-6 pt-4 pb-12">
+      <h2 class="font-bold text-lg text-grey-900">About Me:</h2>
+      <div class="pt-2">
+        <text class="text-base text-grey-800">
+          Welcome, fellow explorer, to my digital universe, a unique fusion of Astro and TailwindCSS, sprinkled with a touch of cosmic curiosity.
+          Throughout my journey in the vast expanse of software engineering, I've gathered a galaxy of knowledge and expertise.
+          This is my personal space station where I share my blog, portfolio, and insights into the tech cosmos. Strap in and enjoy your voyage into the digital abyss!
+        </text>
+      </div>
     </div>
   </div>
-
-  <div>
-    <div class="text-3xl w-full font-bold mb-2">My last projects {"</>"}</div>
+</div>
+<div class="bg-blue-700 flex-grow">
+  <div class="p-5 pt-1 lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
+    <div class="text-3xl w-full font-bold mt-7 mb-3 text-yellow-50">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 inline-block align-text-top mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+      <h2 class="inline-block">Engineering Entries</h2>
+    </div>
   </div>
-
-  <HorizontalCard
-    title="Demo Project 1"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-    badge="NEW"
-  />
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Demo Project 2"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-  />
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Demo Project 3"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-    badge="FOSS"
-  />
-
-  <div>
-    <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
-  </div>
-
+  <div class="lg:max-w-[900px] max-w-[100vw] mx-auto">
   {
-    last_posts.map((post) => (
+    last_posts.map((post, index) => (
       <>
         <HorizontalCard
           title={post.data.title}
+          subtitle={post.data.subtitle}
           img={post.data.heroImage}
           desc={post.data.description}
           url={"/blog/" + post.slug}
           target="_self"
           badge={post.data.badge}
         />
-        <div class="divider my-0" />
+        {index < last_posts.length - 1 && <div class="divider my-0" />}
       </>
     ))
   }
+  </div>
+</div>
+</div>
 </BaseLayout>
+
+<style>
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-container::before {
+  width: 100%;
+  height: 100%;
+  background-color: hsl(129, 37%, 33%); /* Change this to your desired color */
+  opacity: 1;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.image-container:hover::before {
+  opacity: 0;
+}
+
+.profile-image {
+  overflow:hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: .89;
+  transition: all 0.3s ease;
+}
+
+.typewrite {
+  min-height: 3.4em;
+  padding-top: .6em;
+}
+
+@media (max-width: 768px) {
+  .profile-image {
+    object-position: left;
+  }
+}
+
+@media (min-width: 768px) {
+  .typewrite {
+    min-height: 1.6em;
+    padding-top: .2em;
+  }
+}
+
+.image-container:hover .profile-image {
+  filter: grayscale(0) !important;
+  opacity: 1;
+}
+</style>
+
+<script>
+class TxtType {
+    private toRotate: string[];
+    private el: HTMLElement;
+    private loopNum: number;
+    private period: number;
+    private waitPeriod: number;
+    private txt: string;
+    private isDeleting: boolean;
+    private isWaiting: boolean;
+
+    constructor(el: HTMLElement, toRotate: string[], period: number, waitPeriod: number) {
+        this.toRotate = toRotate;
+        this.el = el;
+        this.loopNum = 0;
+        this.period = period || 2000;
+        this.waitPeriod = waitPeriod || 1000;
+        this.txt = '';
+        this.isDeleting = false;
+        this.isWaiting = false;
+        setTimeout(() => this.tick(), this.waitPeriod);
+    }
+
+    async tick() {
+      const fullTxt = this.toRotate[this.loopNum % this.toRotate.length];
+      const typeSpeed = 80;
+      const deleteSpeed = 50;
+      const endPause = 700;
+
+      if (this.isDeleting) {
+          if (this.txt.length > 0) {
+              this.txt = fullTxt.substring(0, this.txt.length - 1);
+              await new Promise(resolve => setTimeout(resolve, deleteSpeed));
+          } else {
+              this.isDeleting = false;
+              this.loopNum++;
+          }
+      } else {
+          const stillTyping = this.txt.length < fullTxt.length
+          if(stillTyping) this.txt = fullTxt.substring(0, this.txt.length + 1);
+          else this.isDeleting = true;
+          const nextCall = stillTyping ? typeSpeed : endPause;
+          await new Promise(resolve => setTimeout(resolve, nextCall));
+      }
+
+      this.el.innerHTML = `<span class="wrap">${this.txt}</span>`;
+      this.tick();
+  }
+}
+
+function sendEmail() {
+  console.log("email")
+  var user = 'chadgauth';
+  var domain = 'gmail.com';
+  window.location.href = 'mailto:' + user + '@' + domain;
+}
+
+window.onload = function() {
+    const elements = document.getElementsByClassName('typewrite');
+    Array.from(elements).forEach(element => {
+      const toRotate = element.getAttribute('data-type');
+      const period = element.getAttribute('data-period');
+      const waitPeriod = element.getAttribute('data-wait');
+      if (toRotate) {
+          new TxtType(element, JSON.parse(toRotate), parseInt(period, 10), parseInt(waitPeriod, 10));
+      }
+    });
+    const css = document.createElement("style");
+    css.type = "text/css";
+    css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid hsl(177 7% 77%)}";
+    document.body.appendChild(css);
+    document.getElementById('emailLink')?.addEventListener('click', sendEmail);
+};
+</script>

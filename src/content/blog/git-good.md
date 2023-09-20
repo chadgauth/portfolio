@@ -1,9 +1,10 @@
 ---
-title: 'Dr. GitGood or: How I learned to Stop Worrying and Love the Refactor'
+title: 'Dr. GitGood or:'
+subtitle: 'How I learned to Stop Worrying and Love the Refactor'
 description: |
   We explore the value of refactoring and Dr. GitGood's metamorphosis from fearing refactoring to embracing it, all with a sprinkle of "Dr. Strangelove" references.
 pubDate: 'Jul 08 2022'
-heroImage: '/blog-placeholder-3.jpg'
+heroImage: '/dr_refactor.jpg'
 ---
 
 Legacy code can often mimic a Cold War-era system - tangled and complex. Here, we follow the journey of developer Dr. GitGood as he navigates this maze, learning to appreciate the art of refactoring. Just like the classic satire "Dr. Strangelove" humorously tackles a nuclear crisis, we take a witty look at the serious issue of technical debt.
@@ -28,7 +29,14 @@ Colonel CodeWise barked, “This lengthy function is as tangled as a government 
 
 ```javascript
 function controlEntireVideo() {
-    // Play event, pause event, volume controls, UI changes, duplicated logic
+    // Play event
+    {...}
+    // pause event
+    {...}
+    //volume controls
+    {...}
+    //UI changes
+    {...}
 }
 controlEntireVideo();
 ```
@@ -59,7 +67,7 @@ The Colonel roared, "This isn't the time for duplication, GitGood. Consolidate a
 
 ```javascript
 // Handling play event
-function handlePlayEvent() {
+function handlePlayEventUI() {
     video.on('play', function() {
         isPlaying = true;
         $('#playButton').hide();
@@ -67,15 +75,15 @@ function handlePlayEvent() {
     });
 }
 
-function handlePauseEvent() {
+function handlePauseEventUI() {
     video.on('pause', function() {
         isPlaying = false;
         $('#playButton').show();
         $('#pauseButton').hide();
     });
 }
-handlePlayEvent();
-handlePauseEvent();
+handlePlayEventUI();
+handlePauseEventUI();
 ```
 
 Pointing at the code, Colonel CodeWise grumbled, "Look here, GitGood, you have essentially the same logic for `play` and `pause`. This is a textbook violation of the DRY principle. Refactor this to a single function that toggles the play state."
@@ -122,81 +130,61 @@ var userSelectedVideoQuality = '1080p';
 **Before:**
 
 ```javascript
-if(video.readyState === 4) {
-    if(video.currentTime > 0) {
-        if(!video.paused && !video.ended) {
-            // Play video
+function togglePlayState() {
+    if(video.readyState === 4) {
+        if(video.currentTime > 0) {
+            if(video.paused && !video.ended) {
+                video.play();
+            } else {
+                video.pause()
+            }
+        } else {
+            console.log("tracking error");
         }
     }
 }
+
 ```
 
 **After:**
 
 ```javascript
-if(video.readyState !== 4) return;
-if(video.currentTime <= 0) return;
-if(video.paused || video.ended) return;
-// Play video
-```
-
-### Drill 5: Single Responsibility, One Mission!
-
-"Every function, Dr. GitGood, should have a mission, a sole purpose," Colonel CodeWise hollered. "Get your functions in line!"
-
-**Before:**
-
-```javascript
-function trackFrameAndUpdateSettings(frame) {
-    currentFrame = frame;
-    
-    // Logic to determine if this frame is a keyframe
-    if (isKeyframe(currentFrame)) {
-        userSettings.update('lastKeyFrame', currentFrame);
-    }
-    
-    // Update brightness based on user settings
-    const brightness = userSettings.get('brightness');
-    adjustVideoBrightness(brightness);
+function togglePlayState() {
+    if(video.readyState !== 4) return;
+    if(video.currentTime <= 0) {
+        console.log("tracking error");
+        return;
+    } 
+    if(!video.ended && video.paused) {
+        video.play();
+    } else {
+        video.pause();
+    } 
 }
 ```
 
-**After:**
-
-```javascript
-function trackFrame(frame) {
-    currentFrame = frame;
-    if (isKeyframe(currentFrame)) {
-        updateUserLastKeyFrame(currentFrame);
-    }
-}
-
-function updateUserSettings() {
-    const brightness = userSettings.get('brightness');
-    adjustVideoBrightness(brightness);
-}
-```
-
-### Drill 6: Descriptive Logic Variables, Make It Clear!
+### Drill 5: Descriptive Logic Variables, Make It Clear!
 
 "Complex logic checks are a headache," the Colonel grumbled. "They can lead to 'Boolean Blindness'. Break it down, soldier! Use descriptive variables to make the intention clear."
 
 **Before:**
 
 ```javascript
-if(video.readyState === 4 && !(video.paused || video.ended) && video.currentTime > 0){
-    // Play video
+if(video.networkState === 2 && video.textTracks.length > 0 && video.textTracks[0].mode === 'showing'){
+    // Show a buffering indicator and display captions
+    ...
 }
 ```
 
 **After:**
 
 ```javascript
-const isVideoReadyToPlay = video.readyState === 4 && video.currentTime > 0;
-const isVideoPlaying = !(video.paused || video.ended);
+const isVideoBuffering = video.networkState === 2;
+const isCaptionEnabled = video.textTracks.length > 0 && video.textTracks[0].mode === 'showing';
 
-if(isVideoReadyToPlay && !isVideoPlaying){
-    // Play video
+if(isVideoBuffering && isCaptionEnabled){
+    // Show a buffering indicator and display captions
+    ...
 }
 ```
 
@@ -210,23 +198,19 @@ Neglecting to refactor code can lead to a Mutually Assured Destruction of softwa
 
 Like flashing red alerts on a control panel, these code smells indicate a need for action:
 
-- Convoluted logic flows: Complex logic makes code hard to understand and prone to bugs. Simplify and refactor to improve readability.
+- **Convoluted logic flows**: Complex logic makes code hard to understand and prone to bugs. Simplify and refactor to improve readability.
 
-- Excessive comments: Too many comments can indicate unclear code. Refactor to make code self-explanatory and reduce the need for excessive comments.
+- **Excessive comments**: Too many comments can indicate unclear code. Refactor to make code self-explanatory and reduce the need for excessive comments.
 
-- Unfocused functions: Functions with multiple responsibilities make code harder to maintain. Break them down into smaller, focused functions.
+- **Unfocused functions**: Functions with multiple responsibilities make code harder to maintain. Break them down into smaller, focused functions.
 
-- Duplicated code: Repeated code leads to maintenance issues and bugs. Refactor to eliminate duplication and improve code quality.
+- **Duplicated code**: Repeated code leads to maintenance issues and bugs. Refactor to eliminate duplication and improve code quality.
 
-- Unrelated logic: Mixing unrelated logic makes code harder to comprehend. Separate into distinct sections or functions for better readability.
+- **Unrelated logic**: Mixing unrelated logic makes code harder to comprehend. Separate into distinct sections or functions for better readability.
 
-- Brittle tests: Fragile tests that break easily indicate poor design or tight coupling. Refactor to improve testability and make tests more reliable.
+- **Brittle tests**: Fragile tests that break easily indicate poor design or tight coupling. Refactor to improve testability and make tests more reliable.
 
 Addressing these warning signs through refactoring improves code quality and maintainability.
-
-## The Testing Protocol
-
-In the same way that the world leaders in 'Dr. Strangelove' had a series of 'Fail-Safe' systems (albeit flawed), your code should have a robust testing mechanism.
 
 ## The Road to Codebase Diplomacy
 

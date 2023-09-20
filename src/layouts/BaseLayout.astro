@@ -6,7 +6,7 @@ import SideBar from "../components/SideBar.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
 
-const { image, title = SITE_TITLE, description = SITE_DESCRIPTION, includeSidebar = true, sideBarActiveItemID } = Astro.props;
+const { image, title = SITE_TITLE, description = SITE_DESCRIPTION, includeSidebar = false, sideBarActiveItemID, className } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -15,12 +15,12 @@ const { image, title = SITE_TITLE, description = SITE_DESCRIPTION, includeSideba
     <BaseHead title={title} description={description} image={image} />
   </head>
   <body>
-    <div class="bg-base-100 drawer lg:drawer-open">
+    <div class="bg-green-700 drawer lg:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content bg-base-100">
-        <Header title={SITE_TITLE} />
-        <div class="md:flex md:justify-center">
-          <main class="p-6 pt-10 lg:max-w-[900px] max-w-[100vw]">
+      <div class="drawer-content bg-blue-700">
+        <!-- <Header title={SITE_TITLE} /> -->
+        <div class="min-h-[calc(100vh-152px)] w-full">
+          <main class={className || "p-6 pt-10 lg:max-w-[900px] max-w-[100vw]"}>
             <slot />
           </main>
         </div>

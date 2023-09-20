@@ -6,16 +6,19 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export interface Props extends BlogSchema {}
 
-const { title, description, pubDate, updatedDate, heroImage, badge } =
+const { title, subtitle, description, pubDate, updatedDate, heroImage, badge } =
   Astro.props;
 dayjs.extend(localizedFormat);
 const displayDate = dayjs(pubDate).format("ll");
 import { Image } from "@astrojs/image/components";
+
+const pageTitle = `${title} ${subtitle}`;
+
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
+<BaseLayout title={pageTitle} description={description} image={heroImage}>
   <main class="md:flex md:justify-center">
-    <article class="prose prose-lg max-w-[750px] prose-img:mx-auto">
+    <article class="prose max-w-[750px] prose-img:mx-auto">
       {
         heroImage && (
         <Image
@@ -29,9 +32,9 @@ import { Image } from "@astrojs/image/components";
           />
         )
       }
-      <h1 class="title my-2 text-4xl font-bold">{title}</h1>
-      {pubDate && <time>{displayDate}</time>}
-      <br />
+      <h1 class="title my-2 text-3xl text-yellow-200 font-bold">{title}<span class="text-xl">&nbsp;&nbsp;{subtitle}</span></h1>
+      {pubDate && <time class="text-green-200">{displayDate}</time>}
+      <br class="border-green-800" />
       {badge && <div class="badge badge-secondary my-1">{badge}</div>}
       {
         updatedDate && (
