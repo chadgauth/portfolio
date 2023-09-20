@@ -40,13 +40,16 @@ const values = [
       </div>
       <div class="row-start-2 md:row-start-1 md:col-start-2 border-base-900 bg-blue md:border-l-2 p-4">
         <h2 class="text-xl font-bold">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7a4 4 0 118 0 4 4 0 01-8 0zm12 0a4 4 0 100-8 4 4 0 000 8zm-1 8a7 7 0 00-14 0v5a1 1 0 001 1h16a1 1 0 001-1v-5a7 7 0 00-4-6.417z" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mr-2" viewBox="0 0 24 24" id="person"><g data-name="Layer 2"><path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm6 10a1 1 0 0 0 1-1 7 7 0 0 0-14 0 1 1 0 0 0 1 1z" data-name="person"></path></g></svg>
           Chad Gauthier
         </h2>
-        <p class="pt-2 pl-10">Full Stack Software Engineer</p>
+        <p class="pl-10">Full Stack Software Engineer</p>
         <p class="pl-10">Austin, TX</p>
+        <a href="/cv" class="pl-10 inline-block float-right">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Resume
+          </button>
+        </a>
       </div>
       <div class="row-start-3 md:row-start-2 md:col-start-2 border-base-900 bg-blue md:border-l-2 border-t-2 p-4">
         <h2 class="text-xl font-bold">
@@ -226,6 +229,6 @@ window.onload = function() {
     css.type = "text/css";
     css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid hsl(177 7% 77%)}";
     document.body.appendChild(css);
-    document.getElementById('emailLink')?.addEventListener('click', sendEmail);
+    //document.getElementById('emailLink')?.addEventListener('click', sendEmail);
 };
 </script>
