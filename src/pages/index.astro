@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HorizontalCard from "../components/HorizontalCard.astro";
 import { getCollection } from "astro:content";
-
+import Icon from "../components/Icon.astro";
 const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const currentYear = new Date().getFullYear();
@@ -26,11 +26,17 @@ const values = [
   <div class="flex flex-col h-screen">
 <div class="bg-base-700 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
   <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
-    <div class="bg-base-900 px-6 py-3 pb-2">
-      <h1 class="text-4xl text-blue-200 font-bold font-serif">Chad Gauthier</h1>
+    <div class="flex justify-between bg-base-900 px-6 py-3 pb-2">
+      <div>
+        <h1 class="text-4xl text-blue-200 font-bold font-serif">Chad Gauthier</h1>
       <strong class="text-xl text-blue-200 font-bold font-serif">Software Engineer</strong>
       <div class="typewrite text-lg text-cyan h-4 sm:h-10" data-type={JSON.stringify(values)} role="textbox" aria-live="polite">
         <span class="wrap"></span>
+      </div>
+      </div>
+      <div class="flex flex-row">
+        <a href="https://www.linkedin.com/" target="_blank"><Icon name="linkedin"/></a>
+        <a href="https://www.linkedin.com/" target="_blank"><Icon name="youtube"/></a>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-[450px,1fr] grid-rows-[1fr,120px,120px] md:grid-rows-2 border-base-900 text-blue-900 bg-blue border-r-2 border-l-2 min-h-[150px]">

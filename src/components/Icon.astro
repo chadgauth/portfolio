@@ -1,0 +1,14 @@
+---
+import LinkedIn from "./Icon/LinkedIn.astro";
+import YouTube from "./Icon/YouTube.astro";
+
+const iconMap = {
+    linkedin: LinkedIn,
+    youtube: YouTube
+}
+
+const IconComponent = iconMap[Astro.props.name]
+
+---
+
+<IconComponent/>
