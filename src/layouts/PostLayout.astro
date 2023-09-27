@@ -16,21 +16,23 @@ const pageTitle = `${title} ${subtitle}`;
 
 ---
 
-<BaseLayout title={pageTitle} description={description} image={heroImage}>
-  <main class="md:flex md:justify-center">
-    <article class="prose max-w-[750px] prose-img:mx-auto">
-      {
-        heroImage && (
-        <Image
-            width={750}
-            height={422}
-            format="webp"
-            src={heroImage}
-            alt={title}
-            class="w-full mb-6"
-          />
-        )
-      }
+<BaseLayout className="w-full pb-10 min-h-screen" title={pageTitle} description={description} image={heroImage}>
+  <main class="w-full mx-auto max-w-[960px] bg-primary-700">
+    {
+      heroImage && (
+      <Image
+          transition:name="hero"
+          width={750}
+          height={422}
+          format="webp"
+          src={heroImage}
+          alt={title}
+          class="w-full mb-6"
+        />
+      )
+    }
+    <a href="/" class="p-1 text-text-200 hover:underline">&lt; Back</a>
+    <article class="prose max-w-[750px] mx-auto pb-10 px-4 prose-img:mx-auto">
       <h1 class="title my-2 text-3xl text-yellow-200 font-bold">{title}<span class="text-xl">&nbsp;&nbsp;{subtitle}</span></h1>
       {pubDate && <time class="text-base-200">{displayDate}</time>}
       <br class="border-base-800" />

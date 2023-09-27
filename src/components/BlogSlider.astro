@@ -1,14 +1,22 @@
 ---
 const { last_posts=[] } = Astro.props;
 import 'caroucssel/styles/caroucssel.min.css'
+import { Image } from "astro:assets"
 ---
 
 <div class="container w-full relative">
-    <div class="caroucssel use-snap w-full h-full relative">
+    <div transition:name="hero" class="caroucssel use-snap w-full h-full relative">
         {last_posts.map((post: { data: { heroImage: string | null | undefined; title: string; pubDate: unknown; subtitle: unknown; description: unknown; }; slug: string; }, index: any) => (
         <div class="item w-full h-full relative">
             <div class="w-full h-full overflow-hidden">
-                <img class="h-full w-auto object-cover" src={post.data.heroImage} alt={post.data.title} />
+                <Image
+                    class="h-full w-auto object-cover"
+                    width={528}
+                    height={264}
+                    format="webp"
+                    src={post.data.heroImage} 
+                    alt={post.data.title} 
+                />
             </div>
             <div class="absolute top-0 bottom-0 px-8 py-4 bg-gradient-to-b from-secondary-700/95 to-background-900/75">
                 <div class="text-accent-50 text-2xl font-bold leading-snug line-clamp-1">{post.data.title}</div>
