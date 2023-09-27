@@ -1,0 +1,77 @@
+---
+const { last_posts=[] } = Astro.props;
+import 'caroucssel/styles/caroucssel.min.css'
+---
+
+<div class="container w-full relative">
+    <div class="caroucssel use-snap w-full h-full relative">
+        {last_posts.map((post: { data: { heroImage: string | null | undefined; title: string; pubDate: unknown; subtitle: unknown; description: unknown; }; slug: string; }, index: any) => (
+        <div class="item w-full h-full relative">
+            <div class="w-full h-full overflow-hidden">
+                <img class="h-full w-auto object-cover" src={post.data.heroImage} alt={post.data.title} />
+            </div>
+            <div class="absolute top-0 bottom-0 px-8 py-4 bg-gradient-to-b from-secondary-700/95 to-background-900/75">
+                <div class="text-accent-50 text-2xl font-bold leading-snug line-clamp-1">{post.data.title}</div>
+                <div class="text-lg text-accent-100 leading-snug line-clamp-1">{post.data.subtitle}</div>
+                <div class="pt-3 text-background-200 text-sm line-clamp-2">{post.data.description}</div>
+            </div>
+            <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
+                <button class="bg-accent-400 text-text-900 px-4 py-2">READ MORE</button>
+            </a>
+            <span class="absolute bottom-4 left-8 text-text-100">{new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}</span>
+        </div>
+        ))}
+    </div> 
+</div>
+
+<style is:inline>
+    .arrows {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) scaleY(1.4) scaleX(.9);
+    }    
+    .next-arrow {
+        right: .3rem;
+    }
+    .prev-arrow {
+        left: .3rem;
+    }
+</style>
+
+<script>
+    import { Carousel } from 'caroucssel';
+import { Buttons } from 'caroucssel/features/buttons';
+import { Mouse } from 'caroucssel/features/mouse';
+import { Pagination } from 'caroucssel/features/pagination';
+
+var element = document.querySelector('.caroucssel');
+var items = Array.from(document.querySelectorAll('.item'));
+
+if (!element) {
+	throw new Error('Missing element for carousel.');
+}
+
+new Carousel(element, {
+	features: [
+		new Buttons({
+      className: 'arrows',
+      nextClassName: 'next-arrow',
+      nextTitle: 'Click this button to go one step forward',
+      nextLabel: '>',
+      previousClassName: 'prev-arrow',
+      previousTitle: 'Click this button to go one step back',
+      previousLabel: '<',
+      template: ({className, label, title}) =>
+        `<button class="${className} text-3xl text-primary-400" title="${title}">
+          ${label}
+        </button>`,
+    }),
+		new Mouse(),
+	],
+	onScroll: function(event) {
+		items.forEach(function(item, index) {
+			item.classList[event.index.includes(index) ? 'add' : 'remove']('is-active');
+		});
+	}
+});
+</script>
