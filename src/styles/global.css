@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Inclusive Sans:700|Bricolage Grotesque:400');
-
 body {
-  font-family: 'Bricolage Grotesque';
+  font-family: 'Nunito', sans-serif;
   font-weight: 400;
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: 'Inclusive Sans';
+  font-family: 'Bitter', serif;
   font-weight: 700;
 }
 
