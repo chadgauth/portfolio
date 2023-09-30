@@ -30,7 +30,7 @@ const values = [
   <div class="flex flex-col h-screen">
 <div class="bg-background-900 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
   <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
-    <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full">
+    <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full glow">
       <div class="flex flex-row justify-between w-full">
         <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title">Chad Gauthier<div class="aurora">
       <div class="aurora__item"></div>
@@ -110,6 +110,10 @@ When I'm not immersed in code, I'm a roller-skating, movie-watching, rock-climbi
   --clr-4: theme('colors.background.300');
 
   --blur: .75rem;
+}
+
+.glow {
+  filter: drop-shadow(0 0 75px lch(var(--accent-700) / 0.25));
 }
 
 .image-container {
