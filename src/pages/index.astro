@@ -207,20 +207,27 @@ function sendEmail() {
   window.location.href = 'mailto:' + user + '@' + domain;
 }
 
-window.onload = function() {
-    const elements = document.getElementsByClassName('typewrite');
-    Array.from(elements).forEach(element => {
-      const toRotate = element.getAttribute('data-type');
-      const period = element.getAttribute('data-period');
-      const waitPeriod = element.getAttribute('data-wait');
-      if (toRotate) {
-          new TxtType(element, JSON.parse(toRotate), parseInt(period, 10), parseInt(waitPeriod, 10));
-      }
-    });
-    const css = document.createElement("style");
-    css.type = "text/css";
-    css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid hsl(177 7% 77%)}";
-    document.body.appendChild(css);
-    //document.getElementById('emailLink')?.addEventListener('click', sendEmail);
-};
+function setupTyping() {
+const elements = document.getElementsByClassName('typewrite');
+Array.from(elements).forEach(element => {
+  const toRotate = element.getAttribute('data-type');
+  const period = element.getAttribute('data-period');
+  const waitPeriod = element.getAttribute('data-wait');
+  if (toRotate) {
+      new TxtType(element, JSON.parse(toRotate), parseInt(period, 10), parseInt(waitPeriod, 10));
+  }
+});
+const css = document.createElement("style");
+css.type = "text/css";
+css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid hsl(177 7% 77%)}";
+document.body.appendChild(css);
+}
+
+//document.getElementById('emailLink')?.addEventListener('click', sendEmail);
+
+
+document.addEventListener('astro:page-load', () => {
+    // This only runs once.
+    setupTyping();
+});
 </script>
