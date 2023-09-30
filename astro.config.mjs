@@ -11,6 +11,11 @@ import vercel from "@astrojs/vercel/serverless";
 export default defineConfig({
   site: "https://chad.gauthier.dev",
   integrations: [mdx(), sitemap(), tailwind(), partytown()],
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/noop",
+    },
+  },
   output: "server",
   adapter: vercel({
     webAnalytics: {
@@ -19,5 +24,7 @@ export default defineConfig({
     speedInsights: {
       enabled: true,
     },
+    imageService: true,
+    functionPerRoute: true
   }),
 });
