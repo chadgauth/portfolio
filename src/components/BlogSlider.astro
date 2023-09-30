@@ -41,7 +41,11 @@ import { Image } from "astro:assets"
         position: absolute;
         top: 50%;
         transform: translateY(-50%) scaleY(1.4) scaleX(.9);
+        transition: .1s opacity ease-out;
     }    
+    .arrows[disabled] {
+        opacity: .3;
+    }
     .next-arrow {
         right: .3rem;
     }
