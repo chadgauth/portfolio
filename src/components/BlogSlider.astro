@@ -8,7 +8,7 @@ import { Image } from "astro:assets"
     <div transition:name="hero" class="caroucssel use-snap w-full h-full relative">
         {last_posts.map((post: { data: { heroImage: string | null | undefined; title: string; pubDate: unknown; subtitle: unknown; description: unknown; }; slug: string; }, index: any) => (
         <div class="item w-full h-full relative">
-            <div class="w-full h-full overflow-hidden">
+            <div class="w-full h-[242px] overflow-hidden">
                 {post.data.heroImage && <Image
                     class="h-full w-auto object-cover"
                     width={528}
@@ -24,7 +24,7 @@ import { Image } from "astro:assets"
                 <div class="pt-3 text-background-200 text-sm line-clamp-2">{post.data.description}</div>
             </div>
             <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
-                <button class="bg-accent-400 text-text-900 px-4 py-2">READ MORE</button>
+                <button class="bg-accent-400 text-text-900 px-4 py-2">Explore Post</button>
             </a>
             <span class="absolute bottom-4 left-8 text-text-100">{post.data.pubDate instanceof Date ? 
     new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) 
