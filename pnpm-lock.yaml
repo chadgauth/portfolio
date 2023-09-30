@@ -41,6 +41,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.9
     version: 1.11.10
+  heroicons-astro:
+    specifier: ^1.0.4
+    version: 1.0.4
   sharp:
     specifier: ^0.32.1
     version: 0.32.6
@@ -2505,6 +2508,10 @@ packages:
       hast-util-parse-selector: 3.1.1
       property-information: 6.3.0
       space-separated-tokens: 2.0.2
+    dev: false
+
+  /heroicons-astro@1.0.4:
+    resolution: {integrity: sha512-sfY0g5yWMDKl8z5Ax5pWuSNLpWhJiaFDzxg2zFvrSrx+dXzh+gOu1mfKkV+81kV2w898V/fXKRBdkoTBokbc9g==}
     dev: false
 
   /html-escaper@3.0.3:

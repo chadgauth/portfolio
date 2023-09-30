@@ -11,6 +11,7 @@ const { postTitle, subtitle, description, pubDate, updatedDate, heroImage, badge
 dayjs.extend(localizedFormat);
 const displayDate = dayjs(pubDate).format("ll");
 import { Image } from "astro:assets";
+import Icon from "heroicons-astro/Heroicon.astro";
 
 const pageTitle = `${postTitle} ${subtitle}`;
 
@@ -32,7 +33,10 @@ const pageTitle = `${postTitle} ${subtitle}`;
         />
       )
     }
-    <a href="/" class="p-1 text-text-200 hover:underline">&lt; Back</a>
+<a href="/" class="flex pb-5 pl-4 text-text-200 hover:underline">
+  <Icon iconCode="home" iconStyle="outline" customClasses="h-5 w-5 m-1 self-center" />
+  <span class="self-center">Home</span>
+</a>
     <article class="prose max-w-[750px] mx-auto pb-10 px-4 prose-img:mx-auto">
       <h1 class="title my-2 text-3xl text-yellow-200 font-bold">{postTitle}<span class="text-xl">&nbsp;&nbsp;{subtitle}</span></h1>
       {pubDate && <time class="text-base-200">{displayDate}</time>}
