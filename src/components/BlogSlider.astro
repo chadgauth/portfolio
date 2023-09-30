@@ -24,8 +24,10 @@ import { Image } from "astro:assets"
                 <div class="pt-3 text-background-200 text-sm line-clamp-2">{post.data.description}</div>
             </div>
             <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
-                <button class="bg-accent-400 text-text-900 px-4 py-2">Explore Post</button>
+                <button class="custom-btn btn"><span>Read More</span></button>
+                
             </a>
+             
             <span class="absolute bottom-4 left-8 text-text-100">{post.data.pubDate instanceof Date ? 
     new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) 
     : 'Invalid Date'}</span>
@@ -46,6 +48,63 @@ import { Image } from "astro:assets"
     .prev-arrow {
         left: .3rem;
     }
+
+.custom-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 2px;
+  padding: 10px 25px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+    .btn {
+  width: 100px;
+  height: 40px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: theme('colors.accent.600');
+  background: linear-gradient(0deg, theme('colors.accent.600'), theme('colors.primary.600'));
+}
+.btn:hover {
+  color: theme('colors.text.100');
+  background: theme('colors.accent.600');
+   box-shadow:none;
+}
+.btn:before,
+.btn:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: theme('colors.accent.500');
+  box-shadow:
+   -1px -1px 5px 0px #fff,
+   7px 7px 20px 0px #0003,
+   4px 4px 5px 0px #0002;
+  transition:400ms ease all;
+}
+.btn:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+.btn:hover:before,
+.btn:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
 </style>
 
 <script>
