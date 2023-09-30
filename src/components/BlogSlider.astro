@@ -9,14 +9,14 @@ import { Image } from "astro:assets"
         {last_posts.map((post: { data: { heroImage: string | null | undefined; title: string; pubDate: unknown; subtitle: unknown; description: unknown; }; slug: string; }, index: any) => (
         <div class="item w-full h-full relative">
             <div class="w-full h-full overflow-hidden">
-                <Image
+                {post.data.heroImage && <Image
                     class="h-full w-auto object-cover"
                     width={528}
                     height={264}
                     format="webp"
                     src={post.data.heroImage} 
                     alt={post.data.title} 
-                />
+                />}
             </div>
             <div class="absolute top-0 bottom-0 px-8 py-4 bg-gradient-to-b from-secondary-700/95 to-background-900/75">
                 <div class="text-accent-50 text-2xl font-bold leading-snug line-clamp-1">{post.data.title}</div>
@@ -26,7 +26,9 @@ import { Image } from "astro:assets"
             <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
                 <button class="bg-accent-400 text-text-900 px-4 py-2">READ MORE</button>
             </a>
-            <span class="absolute bottom-4 left-8 text-text-100">{new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}</span>
+            <span class="absolute bottom-4 left-8 text-text-100">{post.data.pubDate instanceof Date ? 
+    new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) 
+    : 'Invalid Date'}</span>
         </div>
         ))}
     </div> 
@@ -46,8 +48,8 @@ import { Image } from "astro:assets"
     }
 </style>
 
-<script>
-    import { Carousel } from 'caroucssel';
+<script is:inline>
+import { Carousel } from 'caroucssel';
 import { Buttons } from 'caroucssel/features/buttons';
 import { Mouse } from 'caroucssel/features/mouse';
 import { Pagination } from 'caroucssel/features/pagination';
@@ -56,30 +58,30 @@ var element = document.querySelector('.caroucssel');
 var items = Array.from(document.querySelectorAll('.item'));
 
 if (!element) {
-	throw new Error('Missing element for carousel.');
+    throw new Error('Missing element for carousel.');
 }
 
 new Carousel(element, {
-	features: [
-		new Buttons({
-      className: 'arrows',
-      nextClassName: 'next-arrow',
-      nextTitle: 'Click this button to go one step forward',
-      nextLabel: '>',
-      previousClassName: 'prev-arrow',
-      previousTitle: 'Click this button to go one step back',
-      previousLabel: '<',
-      template: ({className, label, title}) =>
-        `<button class="${className} text-3xl text-primary-400" title="${title}">
+    features: [
+        new Buttons({
+            className: 'arrows',
+            nextClassName: 'next-arrow',
+            nextTitle: 'Click this button to go one step forward',
+            nextLabel: '>',
+            previousClassName: 'prev-arrow',
+            previousTitle: 'Click this button to go one step back',
+            previousLabel: '<',
+            template: ({ className, label, title }) =>
+                `<button class="${className} text-3xl text-primary-400" title="${title}">
           ${label}
         </button>`,
-    }),
-		new Mouse(),
-	],
-	onScroll: function(event) {
-		items.forEach(function(item, index) {
-			item.classList[event.index.includes(index) ? 'add' : 'remove']('is-active');
-		});
-	}
+        }),
+        new Mouse(),
+    ],
+    onScroll: function (event) {
+        items.forEach(function (item, index) {
+            item.classList[event.index.includes(index) ? 'add' : 'remove']('is-active');
+        });
+    }
 });
 </script>
