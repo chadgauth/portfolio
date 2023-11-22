@@ -1,0 +1,123 @@
+---
+import Icon from "../components/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+let params = new URL(Astro.request.url).searchParams;
+let message = params.get('message') || '';
+import qrImage from "../assets/qr.png";
+import { Image } from "astro:assets";
+
+---
+
+<BaseLayout className="p-0">
+    <div class="flex flex-col h-screen">
+      <div class="bg-background-900 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
+        <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
+          <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full glow">
+            <div class="flex flex-row justify-between w-full">
+              <div class="flex flex-row items-center justify-between">
+                  <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title">Chad Gauthier</h1>
+                  <!-- vCard -->
+                  <a class="bg-accent-700 text-white px-4 py-2 ml-2 mr-2 rounded-md text-sm font-medium" href="data:text/vcard,BEGIN:VCARD%0AN:Gauthier;Chad;;;%0AFN:Chad Gauthier%0ATEL;CELL:719-799-3434%0AEMAIL;PREF;INTERNET:chadgauth@gmail.com%0AURL:https://chad.gauthier.dev%0AEND:VCARD" download="Chad_Gauthier.vcf">Add me to Phone</a>
+              </div>
+              
+              <a href="https://www.linkedin.com/in/chadgauth/" target="_blank"><Icon name="linkedin"/></a>
+            </div>
+  
+            <!-- Contact Form -->
+            <form
+            action="https://formspree.io/f/maygzgoy"
+            method="POST"
+            class="space-y-4"
+          >
+          <label class="block">
+              <span>What's your email? <span class="text-sm text-green-600">It's just for me so I can keep in touch!</span></span>
+              <input type="email" name="email" class="mt-1 block w-full rounded-md bg-black border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-white">
+            </label>
+            <label class="block">
+              <div>Want to share more details? <div class="text-sm text-green-600">Feel free to share your phone number or anything you'd like to follow up on:</div></div>
+              <textarea name="message" class="mt-1 block w-full rounded-md bg-black border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-white">Met at {message}</textarea>
+            </label>
+            <div class="text-right">
+              <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-accent-700 hover:bg-accent-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send</button>
+            </div>
+            </form>
+            <button id="showQRButton" class="pt-10 bg-accent-700 text-white px-4 py-2 rounded-md text-sm font-medium">Show QR Code</button>
+  
+  <div id="qrModal" class="modal">
+    <div class="modal-content bg-primary-800">
+      
+      <span id="closeModal" class="close">&times;</span>
+      <Image loading="eager" width="515" height="515" src={qrImage} alt="QR code" />
+    </div>
+  </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </BaseLayout>
+
+<!-- Add your styles here -->
+<style>
+    /* The Modal (background) */
+    .modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+  
+    /* The Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+  
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
+<!-- Add your scripts here -->
+<script>
+window.onload = function() {
+    const modal = document.getElementById('qrModal');
+    const btn = document.getElementById('showQRButton');
+    const span = document.getElementById('closeModal');
+  
+    if(!btn || !span || !modal) return;
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+}
+  </script>
