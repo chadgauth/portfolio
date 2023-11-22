@@ -14,11 +14,13 @@ import { Image } from "astro:assets";
         <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
           <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full glow">
             <div class="flex flex-row justify-between w-full">
-              <div class="flex flex-row items-center justify-between">
-                  <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title">Chad Gauthier</h1>
-                  <!-- vCard -->
-                  <a class="bg-accent-700 text-white px-4 py-2 ml-2 mr-2 rounded-md text-sm font-medium" href="data:text/vcard,BEGIN:VCARD%0AN:Gauthier;Chad;;;%0AFN:Chad Gauthier%0ATEL;CELL:719-799-3434%0AEMAIL;PREF;INTERNET:chadgauth@gmail.com%0AURL:https://chad.gauthier.dev%0AEND:VCARD" download="Chad_Gauthier.vcf">Add me to Phone</a>
-              </div>
+                <div class="flex flex-row items-center justify-between" style="min-height: 3em;">
+                    <a href="/">
+                        <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title leading-tight">Chad Gauthier</h1>
+                    </a>
+                    <!-- vCard -->
+                    <a class="bg-accent-700 text-white px-4 py-2 ml-2 mr-2 rounded-md text-sm font-medium" href="data:text/vcard,BEGIN:VCARD%0AN:Gauthier;Chad;;;%0AFN:Chad Gauthier%0ATEL;CELL:719-799-3434%0AEMAIL;PREF;INTERNET:chadgauth@gmail.com%0AURL:https://chad.gauthier.dev%0AEND:VCARD" download="Chad_Gauthier.vcf">Add me to Phone</a>
+                </div>
               
               <a href="https://www.linkedin.com/in/chadgauth/" target="_blank"><Icon name="linkedin"/></a>
             </div>
@@ -27,10 +29,10 @@ import { Image } from "astro:assets";
             <form
             action="https://formspree.io/f/maygzgoy"
             method="POST"
-            class="space-y-4"
+            class="pt-4 space-y-4"
           >
           <label class="block">
-              <span>What's your email? <span class="text-sm text-green-600">It's just for me so I can keep in touch!</span></span>
+              <div>What's your email? <div class="text-sm text-green-600">It's just for me so I can keep in touch!</div></div>
               <input type="email" name="email" class="mt-1 block w-full rounded-md bg-black border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-white">
             </label>
             <label class="block">
@@ -41,14 +43,15 @@ import { Image } from "astro:assets";
               <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-accent-700 hover:bg-accent-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send</button>
             </div>
             </form>
-            <button id="showQRButton" class="pt-10 bg-accent-700 text-white px-4 py-2 rounded-md text-sm font-medium">Show QR Code</button>
+            <button id="showQRButton" class="pt-10 text-grey-200 rounded-md text-sm font-medium">Show QR Code</button>
   
   <div id="qrModal" class="modal">
     <div class="modal-content bg-primary-800">
-      
-      <span id="closeModal" class="close">&times;</span>
-      <Image loading="eager" width="515" height="515" src={qrImage} alt="QR code" />
-    </div>
+        <span id="closeModal" class="close">&times;</span>
+        <div class="centered-content">
+          <Image loading="eager" width="515" height="515" src={qrImage} alt="QR code" />
+        </div>
+      </div>
   </div>
           </div>
         </div>
@@ -58,41 +61,52 @@ import { Image } from "astro:assets";
 
 <!-- Add your styles here -->
 <style>
-    /* The Modal (background) */
-    .modal {
+#qrModal {
   display: none;
-  position: fixed;
-  z-index: 1;
+  position: fixed; /* Position it fixed relative to the viewport */
+  z-index: 1000; /* Give it a high z-index so it appears above other content */
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
 .modal-content {
-  background-color: #fefefe;
+  position: relative;
+  background-color: #e0dfff;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+  box-shadow: 0 0 10px #6dfff0, 0 0 20px #fb65fd; /* Add glow effect */
 }
-  
-    /* The Close Button */
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-  
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 0 0 10px #6dfff0; /* Add glow effect to text */
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  text-shadow: 0 0 20px #6dfff0; /* Increase glow effect on hover and focus */
+}
   </style>
 
 <!-- Add your scripts here -->
