@@ -8,7 +8,7 @@ pubDate: 'Dec 6 2023'
 heroImage: '/doppler.png'
 ---
 
-I have been experimenting with and embarking on a journey to explore how to utilize AI to replicate my voice or attempt to emulate me to provide behavioural style interview question examples of the highlights/challenges of my career. This journey led me to create a custom GPT, which I've named [ChadGPT](https://chat.openai.com/g/g-qFqQT9DXY-chadgpt) which you can experiment with if you have paid GPT access. If you're not familiar with GPT, you can learn more about it [here](https://openai.com/blog/introducing-gpts).
+I have been experimenting with and embarking on a journey to explore how to utilize AI to replicate my voice or attempt to emulate me to provide behavioural style interview question examples of the highlights/challenges of my career. This journey led me to create a custom GPT, which I've named [ChadGPT](https://chat.openai.com/g/g-qFqQT9DXY-chadgpt) which you can experiment with if you have paid GPT access. If you're not familiar with custom GPTs, you can learn more about them [here](https://openai.com/blog/introducing-gpts).
 
 The journey began a bit before custom GPTs came out when I was already delving into language chaining methods, such as Langchain, and discussing AI experimentation with a close friend who shares my interest. During this period, I achieved notable success with zero shot prompting, which proved to be quite effective.
 
