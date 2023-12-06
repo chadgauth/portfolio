@@ -1,7 +1,7 @@
 ---
 title: 'Crafting My Digital Doppelgänger: A CustomGPT experiment'
 subtitle: | 
-    How I created a custom GPT to emulate myself as an interviewer
+    How I created a custom GPT to emulate myself as an interviewee
 description: |
     Join me as I recount my adventure of creating a custom GPT, the challenges I faced, and how I overcame them.
 pubDate: 'Dec 6 2023'
