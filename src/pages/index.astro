@@ -45,6 +45,12 @@ const values = [
       <div class="typewrite text-base py-2 leading-tight md:text-xl text-accent-300 h-4 sm:h-12" data-type={JSON.stringify(values)} role="textbox" aria-live="polite">
         <span class="wrap"></span>
       </div>
+      <!-- <button id="showAllValues" class="accessibility-button">Show all values</button>
+      <div id="allValues" class="hidden">
+        {values.map(value => (
+          <p>{value}</p>
+        ))}
+      </div> -->
     </div>
     <div class="flex flex-col md:flex-row">
       <Image loading="eager" width="515" height="291" src={profileImage} alt="photograph of Chad Gauthier in a Japanese park wearing a hoodie that says 'Good Vibes'" />
@@ -62,13 +68,14 @@ const values = [
     <div class="border-primary-800 bg-primary-700 border-2 min-h-12 px-6 pt-4 pb-12">
       <h2 class="font-bold text-2xl text-text-200 pt-1 pb-4">About Me:</h2>
       <div class="text-text-100">
-        <p class="pt-4s">
-          Hi there! I'm a seasoned full-stack engineer with a knack for React, Angular, TypeScript, and the intricacies of edge servers, CDNs, and TypeScript configuration. Guided by customer focus, honesty, and directness, I aim to deliver efficient solutions. My approach is shaped by lean training early in my career from a Japanese Lean Sensai and later from Lean IT courses. I'm a firm believer in sharing knowledge, fostering improvement, and eliminating inefficiencies.
+        <p class="pt-4">
+          Hi there! I'm a <span class="highlight">full-stack engineer</span> with a knack for <span class="highlight">React, Angular, TypeScript</span>, and the intricacies of edge servers, CDNs, and TypeScript configuration. Guided by <span class="highlight">customer focus, honesty, and directness</span>, I aim to deliver efficient solutions. My approach is shaped by lean training early in my career from a Japanese Lean Sensai and later from Lean IT courses. I'm a firm believer in <span class="highlight">sharing knowledge, fostering improvement, and eliminating inefficiencies</span>.
         </p>
         <p class="pt-4">
-When I'm not immersed in code, I'm a roller-skating, movie-watching, rock-climbing enthusiast. This blog is my platform to share knowledge, engage in tech discussions, and keep my skills fresh from the latest tech trends I've found on YouTube, <a href="https://dev.to/chadgauth" class="underline" target="_blank">dev.to</a>, Google News, and various Discord servers.        </p>
+        When I'm not immersed in code, I'm a roller-skating, dancing, movie-watching, rock-climbing enthusiast. This blog is my platform to <span class="highlight">share knowledge, engage in tech discussions, and keep my skills fresh</span> from the latest tech trends I've found on YouTube, <a href="https://dev.to/chadgauth" class="underline" target="_blank">dev.to</a>, Google News, and various Discord servers.
+        </p>
         <p class="pt-4">
-          Feel free to explore my blog or reach out for a chat or collaboration. I'm excited to work with diverse individuals and am committed to making a positive impact through technology.
+          Feel free to explore my blog or reach out for a chat or collaboration. I'm excited to work with diverse individuals and am committed to <span class="highlight">making a positive impact through technology</span>.
         </p>
       </div>
     </div>
@@ -101,6 +108,11 @@ When I'm not immersed in code, I'm a roller-skating, movie-watching, rock-climbi
 </BaseLayout>
 
 <style>
+
+.highlight {
+  background-color: lch(29.39% 9.17 180.13); /* Choose your preferred highlight color */
+  font-size: 1.125rem;
+}
 
 :root {
   --bg: theme('colors.background.800');
@@ -333,11 +345,19 @@ When I'm not immersed in code, I'm a roller-skating, movie-watching, rock-climbi
     border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
   }
 }
-
-
 </style>
 
 <script>
+
+const button = document.getElementById('showAllValues');
+const allValuesDiv = document.getElementById('allValues');
+
+if(button && allValuesDiv)
+  button.addEventListener('click', () => {
+    allValuesDiv.classList.toggle('hidden');
+  });
+
+
 class TxtType {
     private toRotate: string[];
     private el: HTMLElement;
@@ -412,9 +432,7 @@ document.body.appendChild(css);
 
 //document.getElementById('emailLink')?.addEventListener('click', sendEmail);
 
-
 document.addEventListener('astro:page-load', () => {
-    // This only runs once.
     setupTyping();
 });
 </script>
