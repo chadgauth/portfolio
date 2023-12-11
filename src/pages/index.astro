@@ -1,92 +1,91 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HorizontalCard from "../components/HorizontalCard.astro";
+import AboutMe from "../components/sections/AboutMe.astro";
+import TypeWriter from "../components/TypeWriter.astro";
 import profileImage from "../assets/chad_profile.jpg";
 import { getCollection } from "astro:content";
 import BlogSlider from "../components/BlogSlider.astro";
 import Icon from "../components/Icon.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { ModeToggle } from "@/components/ModeToggle";
 import { Image } from "astro:assets";
-const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+import ProfileImage from "@/components/ProfileImage.astro";
+import { Separator } from "@/components/ui/separator";
+import HorizontalCard from "@/components/HorizontalCard.astro";
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
 const currentYear = new Date().getFullYear();
 const age = currentYear - 1989;
 const grayscale = Math.min(age, 100);
 
-const last_posts = posts.slice(0, 3);
-const values = [
-  "Full-stack software engineering is my passion and expertise",
-  "I bring over a decade of exceptional career experience",
-  "I embrace change and push beyond artificial boundaries",
-  "Passionate about creating intuitive and human-centric designs",
-  "Transforming code into beautiful and meaningful art",
-  "Dedicated to continuous improvement and learning",
-  "Thriving on solving complex and challenging problems",
-  "Committed to mentoring and sharing knowledge for growth",
-  "Making a positive impact through technology",
-];
+const last_posts = posts;
 ---
 
-<BaseLayout className="p-0" sideBarActiveItemID="home">
-  <div class="flex flex-col h-screen">
-<div class="bg-background-900 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
-  <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
-    <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full glow">
-      <div class="flex flex-row justify-between w-full">
-        <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title">Chad Gauthier<div class="aurora">
-      <div class="aurora__item"></div>
-      <div class="aurora__item"></div>
-      <div class="aurora__item"></div>
-      <div class="aurora__item"></div>
-    </div></h1>
-        <a href="https://www.linkedin.com/in/chadgauth/" target="_blank"><Icon name="linkedin"/></a>
-      <!-- <a href="https://www.linkedin.com/" target="_blank"><Icon name="youtube"/></a> -->
+<BaseLayout sideBarActiveItemID="home">
+  <div class="grid grid-cols-[80px_1.5fr_minmax(80px,_.5fr)] gap-y-4 gap-x-5 md:grid-cols-[1fr_minmax(330px,_700px)_minmax(300px,_600px)_2fr] grid-rows-[80px_40px_300px] md:grid-rows-[40px_30px_minmax(200px,_360px)_minmax(100px,_120px)] md:gap-x-10 mt-10 pb-10">
+    <h1 class="text-3xl font-bold row-span-1 md:col-span-1 md:col-start-2 pt-4 md:pt-0 sm:text-5xl">Chad Gauthier</h1>
+    <!-- <div class="col-start-2 col-span-1 md:col-span-2 md:col-start-2">
+      <div class="aurora">
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
+        <div class="aurora__item"></div>
       </div>
-      <!-- <strong class="text-lg text-accent-200 h-4">Full-Stack Software Engineer</strong> -->
-      <div class="typewrite text-base py-2 leading-tight md:text-xl text-accent-300 h-4 sm:h-12" data-type={JSON.stringify(values)} role="textbox" aria-live="polite">
-        <span class="wrap"></span>
-      </div>
-      <!-- <button id="showAllValues" class="accessibility-button">Show all values</button>
-      <div id="allValues" class="hidden">
-        {values.map(value => (
-          <p>{value}</p>
-        ))}
-      </div> -->
+    </div> -->
+    <div class="row-start-1 max-h-72 col-start-1 md:row-start-3 md:col-start-3 md:col-end-4 mx-auto">
+      <ProfileImage
+        profileImage={profileImage}
+        altText="closeup of Chad Gauthier in a Japanese park"
+        class="row-start-2"
+      />
     </div>
-    <div class="flex flex-col md:flex-row">
-      <Image loading="eager" width="515" height="291" src={profileImage} alt="photograph of Chad Gauthier in a Japanese park wearing a hoodie that says 'Good Vibes'" />
-      <div class="overflow-hidden border-background-900 bg-background-900 text-text-50 md:border-l-2">
-        <div class="p-1 bg-accent-700 border-t-2 border-accent-600 text-2xl w-full text-accent-50">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mt-2 md:mt-1 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          </svg>
-          <h2 class="inline-block text-xl md:text-2xl">Engineering Entries</h2>
+      <AboutMe className="w-full h-full row-start-3 row-span-2 col-start-1 col-end-4 md:col-start-2 md:col-end-3" />
+      <TypeWriter className="col-start-1 col-end-3 md:col-start-2 md:col-span-2 row-start-2 pl-3">
+        <p>Full-stack software engineering is my passion and expertise</p>
+        <p>I bring over a decade of exceptional career experience</p>
+        <p>I embrace change and push beyond artificial boundaries</p>
+        <p>Passionate about creating intuitive and human-centric designs</p>
+        <p>Transforming code into beautiful and meaningful art</p>
+        <p>Dedicated to continuous improvement and learning</p>
+        <p>Thriving on solving complex and challenging problems</p>
+        <p>Committed to mentoring and sharing knowledge for growth</p>
+        <p>Making a positive impact through technology</p>
+      </TypeWriter>
+      <div class="row-start-1 row-span-1 col-start-3 md:col-start-3 md:row-start-4 m:w-48 md:mx-auto">
+        <div class="space-y-1 hidden md:block">
+          <h4 class="text-sm font-medium leading-none">Get In Touch</h4>
+          <p class="text-sm text-muted-foreground">
+            Socials and Source Code
+          </p>
         </div>
-        <BlogSlider last_posts={last_posts}></BlogSlider>
+        <Separator className="my-4 hidden md:block" />
+        <div class="flex h-5 flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 text-sm">
+          <a
+            class={buttonVariants({ size: "lg", variant: "full" })}
+            href="https://www.linkedin.com/in/chadgauth/"
+            target="_blank"><Icon name="linkedin" /></a
+          >
+          <Separator orientation="vertical" className="hidden md:block" />
+          <Separator orientation="horizontal" className="block md:hidden" />
+          <a
+            class={buttonVariants({ size: "lg", variant: "outline" })}
+            href="https://github.com/chadgauth/portfolio"
+            target="_blank">Source</a
+          >
+        </div>
       </div>
-    </div>
-    <div class="border-primary-800 bg-primary-700 border-2 min-h-12 px-6 pt-4 pb-12">
-      <h2 class="font-bold text-2xl text-text-200 pt-1 pb-4">About Me:</h2>
-      <div class="text-text-100">
-        <p class="pt-4">
-          Hi there! I'm a <span class="highlight">full-stack engineer</span> with a knack for <span class="highlight">React, Angular, TypeScript</span>, and the intricacies of edge servers, CDNs, and TypeScript configuration. Guided by <span class="highlight">customer focus, honesty, and directness</span>, I aim to deliver efficient solutions. My approach is shaped by lean training early in my career from a Japanese Lean Sensai and later from Lean IT courses. I'm a firm believer in <span class="highlight">sharing knowledge, fostering improvement, and eliminating inefficiencies</span>.
-        </p>
-        <p class="pt-4">
-        When I'm not immersed in code, I'm a roller-skating, dancing, movie-watching, rock-climbing enthusiast. This blog is my platform to <span class="highlight">share knowledge, engage in tech discussions, and keep my skills fresh</span> from the latest tech trends I've found on YouTube, <a href="https://dev.to/chadgauth" class="underline" target="_blank">dev.to</a>, Google News, and various Discord servers.
-        </p>
-        <p class="pt-4">
-          Feel free to explore my blog or reach out for a chat or collaboration. I'm excited to work with diverse individuals and am committed to <span class="highlight">making a positive impact through technology</span>.
-        </p>
+      <div class="flex justify-center align-middle pt-10 row-start-5 col-span-3 md:row-start-5 md:col-start-2 md:col-span-3 lg:col-start-3 sm:pl-0 md:max-w-xl xl:pl-20">
+        <BlogSlider last_posts={last_posts} />
       </div>
-    </div>
   </div>
-</div>
-<div class="border-primary-800 flex-grow">
-  <div class="p-5 pt-1 lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
-    
-  </div>
-  <div class="lg:max-w-[900px] max-w-[100vw] mx-auto">
-  <!-- {
+  
+  
+  <!-- <div class="border-primary-800 flex-grow">
+    <div class="p-5 pt-1 lg:max-w-[1024px] max-w-[100vw] mx-auto px-5"></div>
+    <div class="lg:max-w-[900px] max-w-[100vw] mx-auto">
+      {
     last_posts.map((post, index) => (
       <>
         <HorizontalCard
@@ -101,338 +100,266 @@ const values = [
         {index < last_posts.length - 1 && <div class="divider my-0" />}
       </>
     ))
-  } -->
-  </div>
-</div>
-</div>
+  }
+    </div>
+  </div> -->
 </BaseLayout>
 
 <style>
-
-.highlight {
-  background-color: lch(29.39% 9.17 180.13); /* Choose your preferred highlight color */
-  font-size: 1.125rem;
-}
-
-:root {
-  --bg: theme('colors.background.800');
+  /* :root {
+  --bg: theme('colors.primary.DEFAULT');
   --clr-1: theme('colors.text.200');
   --clr-2: theme('colors.accent.300');
   --clr-3: theme('colors.primary.200');
   --clr-4: theme('colors.background.300');
 
   --blur: .75rem;
-}
+} */
 
-.glow {
-  filter: drop-shadow(0 0 75px lch(var(--accent-700) / 0.25));
-}
+  .glow {
+    filter: drop-shadow(0 0 75px lch(var(--accent-700) / 0.25));
+  }
 
-.image-container {
-  position: relative;
-  overflow: hidden;
-}
+  .image-container {
+    position: relative;
+    overflow: hidden;
+  }
 
-.image-container::before {
-  width: 100%;
-  height: 100%;
-  background-color: hsl(129, 37%, 33%); /* Change this to your desired color */
-  opacity: 1;
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
+  .image-container::before {
+    width: 100%;
+    height: 100%;
+    background-color: hsl(
+      129,
+      37%,
+      33%
+    ); /* Change this to your desired color */
+    opacity: 1;
+    transition:
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
 
-.image-container:hover::before {
-  opacity: 0;
-}
+  .image-container:hover::before {
+    opacity: 0;
+  }
 
-.profile-image {
-  overflow:hidden;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  opacity: .89;
-  transition: all 0.3s ease;
-}
-
-.typewrite {
-  min-height: 3.4em;
-}
-
-@media (max-width: 768px) {
   .profile-image {
-    object-position: left;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.89;
+    transition: all 0.3s ease;
   }
-}
 
-@media (min-width: 768px) {
   .typewrite {
-    min-height: 1.6em;
-    padding-top: .2em;
+    min-height: 3.4em;
   }
-}
 
-.image-container:hover .profile-image {
-  filter: grayscale(0) !important;
-  opacity: 1;
-}
+  @media (max-width: 768px) {
+    .profile-image {
+      object-position: left;
+    }
+  }
 
-.title {
-  position: relative;
-  overflow: hidden;
-  background: var(--bg);
-  margin: 0;
-}
+  @media (min-width: 768px) {
+    .typewrite {
+      min-height: 1.6em;
+      padding-top: 0.2em;
+    }
+  }
 
-.aurora {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  mix-blend-mode: darken;
-  pointer-events: none;
-}
+  .image-container:hover .profile-image {
+    filter: grayscale(0) !important;
+    opacity: 1;
+  }
 
-.aurora__item {
-  overflow: hidden;
-  position: absolute;
-  width: 340px;
-  height: 100px;
-  background-color: var(--clr-1);
-  border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
-  filter: blur(var(--blur));
-  mix-blend-mode: overlay;
-}
+  .title {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    margin: 0;
+  }
 
-.aurora__item:nth-of-type(1) {
-  top: -50%;
-  animation: aurora-border 6s ease-in-out infinite,
-    aurora-1 12s ease-in-out infinite alternate;
-}
-
-.aurora__item:nth-of-type(2) {
-  background-color: var(--clr-3);
-  right: 0;
-  top: 0;
-  animation: aurora-border 6s ease-in-out infinite,
-    aurora-2 12s ease-in-out infinite alternate;
-}
-
-.aurora__item:nth-of-type(3) {
-  background-color: var(--clr-2);
-  left: 0;
-  bottom: 0;
-  animation: aurora-border 6s ease-in-out infinite,
-    aurora-3 8s ease-in-out infinite alternate;
-}
-
-.aurora__item:nth-of-type(4) {
-  background-color: var(--clr-4);
-  right: 0;
-  bottom: -50%;
-  animation: aurora-border 6s ease-in-out infinite,
-    aurora-4 24s ease-in-out infinite alternate;
-}
-
-@keyframes aurora-1 {
-  0% {
+  .aurora {
+    position: absolute;
     top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    mix-blend-mode: darken;
+    pointer-events: none;
+  }
+
+  .aurora__item {
+    overflow: hidden;
+    position: absolute;
+    width: 340px;
+    height: 100px;
+    background-color: var(--clr-1);
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    filter: blur(var(--blur));
+    mix-blend-mode: overlay;
+  }
+
+  .aurora__item:nth-of-type(1) {
+    top: -50%;
+    animation:
+      aurora-border 6s ease-in-out infinite,
+      aurora-1 12s ease-in-out infinite alternate;
+  }
+
+  .aurora__item:nth-of-type(2) {
+    background-color: var(--clr-3);
     right: 0;
-  }
-
-  50% {
-    top: 100%;
-    right: 75%;
-  }
-
-  75% {
-    top: 100%;
-    right: 25%;
-  }
-
-  100% {
     top: 0;
-    right: 0;
-  }
-}
-
-@keyframes aurora-2 {
-  0% {
-    top: -50%;
-    left: 0%;
+    animation:
+      aurora-border 6s ease-in-out infinite,
+      aurora-2 12s ease-in-out infinite alternate;
   }
 
-  60% {
-    top: 100%;
-    left: 75%;
-  }
-
-  85% {
-    top: 100%;
-    left: 25%;
-  }
-
-  100% {
-    top: -50%;
-    left: 0%;
-  }
-}
-
-@keyframes aurora-3 {
-  0% {
-    bottom: 0;
+  .aurora__item:nth-of-type(3) {
+    background-color: var(--clr-2);
     left: 0;
-  }
-
-  40% {
-    bottom: 100%;
-    left: 75%;
-  }
-
-  65% {
-    bottom: 40%;
-    left: 50%;
-  }
-
-  100% {
     bottom: 0;
-    left: 0;
+    animation:
+      aurora-border 6s ease-in-out infinite,
+      aurora-3 8s ease-in-out infinite alternate;
   }
-}
 
-@keyframes aurora-4 {
-  0% {
-    bottom: -50%;
+  .aurora__item:nth-of-type(4) {
+    background-color: var(--clr-4);
     right: 0;
-  }
-
-  50% {
-    bottom: 0%;
-    right: 40%;
-  }
-
-  90% {
-    bottom: 50%;
-    right: 25%;
-  }
-
-  100% {
     bottom: -50%;
-    right: 0;
-  }
-}
-
-@keyframes aurora-border {
-  0% {
-    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    animation:
+      aurora-border 6s ease-in-out infinite,
+      aurora-4 24s ease-in-out infinite alternate;
   }
 
-  25% {
-    border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+  /* For the text content */
+  .about-me-content {
+    position: relative; /* Ensure the text is above the pseudo-elements */
+    z-index: 1;
   }
 
-  50% {
-    border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+  @keyframes aurora-1 {
+    0% {
+      top: 0;
+      right: 0;
+    }
+
+    50% {
+      top: 100%;
+      right: 75%;
+    }
+
+    75% {
+      top: 100%;
+      right: 25%;
+    }
+
+    100% {
+      top: 0;
+      right: 0;
+    }
   }
 
-  75% {
-    border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+  @keyframes aurora-2 {
+    0% {
+      top: -50%;
+      left: 0%;
+    }
+
+    60% {
+      top: 100%;
+      left: 75%;
+    }
+
+    85% {
+      top: 100%;
+      left: 25%;
+    }
+
+    100% {
+      top: -50%;
+      left: 0%;
+    }
   }
 
-  100% {
-    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  @keyframes aurora-3 {
+    0% {
+      bottom: 0;
+      left: 0;
+    }
+
+    40% {
+      bottom: 100%;
+      left: 75%;
+    }
+
+    65% {
+      bottom: 40%;
+      left: 50%;
+    }
+
+    100% {
+      bottom: 0;
+      left: 0;
+    }
   }
-}
+
+  @keyframes aurora-4 {
+    0% {
+      bottom: -50%;
+      right: 0;
+    }
+
+    50% {
+      bottom: 0%;
+      right: 40%;
+    }
+
+    90% {
+      bottom: 50%;
+      right: 25%;
+    }
+
+    100% {
+      bottom: -50%;
+      right: 0;
+    }
+  }
+
+  @keyframes aurora-border {
+    0% {
+      border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    }
+
+    25% {
+      border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+    }
+
+    50% {
+      border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+    }
+
+    75% {
+      border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+    }
+
+    100% {
+      border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    }
+  }
 </style>
 
 <script>
-
-const button = document.getElementById('showAllValues');
-const allValuesDiv = document.getElementById('allValues');
-
-if(button && allValuesDiv)
-  button.addEventListener('click', () => {
-    allValuesDiv.classList.toggle('hidden');
-  });
-
-
-class TxtType {
-    private toRotate: string[];
-    private el: HTMLElement;
-    private loopNum: number;
-    private period: number;
-    private waitPeriod: number;
-    private txt: string;
-    private isDeleting: boolean;
-    private isWaiting: boolean;
-
-    constructor(el: HTMLElement, toRotate: string[], period: number, waitPeriod: number) {
-        this.toRotate = toRotate;
-        this.el = el;
-        this.loopNum = 0;
-        this.period = period || 2000;
-        this.waitPeriod = waitPeriod || 1000;
-        this.txt = '';
-        this.isDeleting = false;
-        this.isWaiting = false;
-        setTimeout(() => this.tick(), this.waitPeriod);
-    }
-
-    async tick() {
-      const fullTxt = this.toRotate[this.loopNum % this.toRotate.length];
-      const typeSpeed = 80;
-      const deleteSpeed = 50;
-      const endPause = 700;
-
-      if (this.isDeleting) {
-          if (this.txt.length > 0) {
-              this.txt = fullTxt.substring(0, this.txt.length - 1);
-              await new Promise(resolve => setTimeout(resolve, deleteSpeed));
-          } else {
-              this.isDeleting = false;
-              this.loopNum++;
-          }
-      } else {
-          const stillTyping = this.txt.length < fullTxt.length
-          if(stillTyping) this.txt = fullTxt.substring(0, this.txt.length + 1);
-          else this.isDeleting = true;
-          const nextCall = stillTyping ? typeSpeed : endPause;
-          await new Promise(resolve => setTimeout(resolve, nextCall));
-      }
-
-      this.el.innerHTML = `<span class="wrap">${this.txt}</span>`;
-      this.tick();
+  function sendEmail() {
+    console.log("email");
+    var user = "chadgauth";
+    var domain = "gmail.com";
+    window.location.href = "mailto:" + user + "@" + domain;
   }
-}
-
-function sendEmail() {
-  console.log("email")
-  var user = 'chadgauth';
-  var domain = 'gmail.com';
-  window.location.href = 'mailto:' + user + '@' + domain;
-}
-
-function setupTyping() {
-const elements = document.getElementsByClassName('typewrite');
-Array.from(elements).forEach(element => {
-  const toRotate = element.getAttribute('data-type');
-  const period = element.getAttribute('data-period');
-  const waitPeriod = element.getAttribute('data-wait');
-  if (toRotate) {
-      new TxtType(element, JSON.parse(toRotate), parseInt(period, 10), parseInt(waitPeriod, 10));
-  }
-});
-const css = document.createElement("style");
-css.type = "text/css";
-css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid hsl(177 7% 77%)}";
-document.body.appendChild(css);
-}
-
-//document.getElementById('emailLink')?.addEventListener('click', sendEmail);
-
-document.addEventListener('astro:page-load', () => {
-    setupTyping();
-});
 </script>

@@ -1,156 +1,149 @@
 ---
-const { last_posts=[] } = Astro.props;
-import 'caroucssel/styles/caroucssel.min.css'
-import { Image } from "astro:assets"
+const { last_posts = [] } = Astro.props;
+import "caroucssel/styles/caroucssel.min.css";
+import { Image } from "astro:assets";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+const { className } = Astro.props;
 ---
 
-<div class="container w-full relative">
-    <div transition:name="hero" class="caroucssel use-snap w-full h-full relative">
-        {last_posts.map((post: { data: { heroImage: string | null | undefined; title: string; pubDate: unknown; subtitle: unknown; description: unknown; }; slug: string; }, index: any) => (
-        <div class="item w-full h-full relative">
-            <div class="w-full h-[242px] overflow-hidden">
-                {post.data.heroImage && <Image
+<Card className={`container w-full relative text-foreground pb-0 pl-0 pr-0 overflow-hidden ${className}`}>
+  <CardHeader client:load>
+    
+    <CardTitle client:load>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block align-text-top mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+      <span>Engineering Entries</span>
+    </CardTitle>
+  </CardHeader>
+  <CardContent client:load className="relative h-72 overflow-hidden mb-4">
+    <div
+      transition:name="hero"
+      class="caroucssel use-snap w-full h-full absolute left-0 right-0 bottom-0 min-h-lg text-foreground top-3"
+    >
+      {
+        last_posts.map(
+          (
+            post: {
+              data: {
+                heroImage: string | null | undefined;
+                title: string;
+                pubDate: unknown;
+                subtitle: unknown;
+                description: unknown;
+              };
+              slug: string;
+            },
+            index: any
+          ) => (
+            <div class="item w-full h-full relative">
+              <div class="w-full h-[242px] overflow-hidden">
+                {post.data.heroImage && (
+                  <Image
                     class="h-full w-auto object-cover"
-                    width={528}
+                    width={512}
                     height={264}
                     format="webp"
-                    src={post.data.heroImage} 
-                    alt={post.data.title} 
-                />}
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                  />
+                )}
+              </div>
+              <div class="absolute top-0 bottom-0 px-8 py-4 bg-gradient-to-b from-secondary/95 to-background/75">
+                <div class="text-accent-50 text-2xl font-bold leading-snug line-clamp-1">
+                  {post.data.title}
+                </div>
+                <div class="text-lg text-accent-100 leading-snug line-clamp-1">
+                  {post.data.subtitle}
+                </div>
+                <div class="pt-3 text-background-200 text-sm line-clamp-2">
+                  {post.data.description}
+                </div>
+              </div>
+              <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
+                <Button>
+                  <span>Read More</span>
+                </Button>
+              </a>
+
+              <span class="absolute bottom-4 left-8 text-text-100">
+                {post.data.pubDate instanceof Date
+                  ? new Date(post.data.pubDate).toLocaleString("en-US", {
+                      month: "short",
+                    day: "numeric",
+                      year: "2-digit",
+                    })
+                  : "Invalid Date"}
+              </span>
             </div>
-            <div class="absolute top-0 bottom-0 px-8 py-4 bg-gradient-to-b from-secondary-700/95 to-background-900/75">
-                <div class="text-accent-50 text-2xl font-bold leading-snug line-clamp-1">{post.data.title}</div>
-                <div class="text-lg text-accent-100 leading-snug line-clamp-1">{post.data.subtitle}</div>
-                <div class="pt-3 text-background-200 text-sm line-clamp-2">{post.data.description}</div>
-            </div>
-            <a class="absolute bottom-4 right-8" href={"/blog/" + post.slug}>
-                <button class="custom-btn btn"><span>Read More</span></button>
-                
-            </a>
-             
-            <span class="absolute bottom-4 left-8 text-text-100">{post.data.pubDate instanceof Date ? 
-    new Date(post.data.pubDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }) 
-    : 'Invalid Date'}</span>
-        </div>
-        ))}
-    </div> 
-</div>
+          )
+        )
+      }
+    </div>
+  </CardContent>
+</Card>
 
 <style is:global>
-    .arrows {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%) scaleY(1.4) scaleX(.9);
-        transition: .1s opacity ease-out;
-    }    
-    .arrows[disabled] {
-        opacity: .3;
-    }
-    .next-arrow {
-        right: .3rem;
-    }
-    .prev-arrow {
-        left: .3rem;
-    }
-
-.custom-btn {
-  width: 100px;
-  height: 40px;
-  border-radius: 2px;
-  padding: 10px 25px;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-   7px 7px 20px 0px rgba(0,0,0,.1),
-   4px 4px 5px 0px rgba(0,0,0,.1);
-  outline: none;
-}
-
-    .btn {
-  width: 100px;
-  height: 40px;
-  line-height: 42px;
-  padding: 0;
-  border: none;
-  background: theme('colors.accent.600');
-  background: linear-gradient(0deg, theme('colors.accent.600'), theme('colors.primary.600'));
-}
-.btn:hover {
-  color: theme('colors.text.100');
-  background: theme('colors.accent.600');
-   box-shadow:none;
-}
-.btn:before,
-.btn:after{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  height:2px;
-  width:0;
-  background: theme('colors.accent.500');
-  box-shadow:
-   -1px -1px 5px 0px #fff,
-   7px 7px 20px 0px #0003,
-   4px 4px 5px 0px #0002;
-  transition:400ms ease all;
-}
-.btn:after{
-  right:inherit;
-  top:inherit;
-  left:0;
-  bottom:0;
-}
-.btn:hover:before,
-.btn:hover:after{
-  width:100%;
-  transition:800ms ease all;
-}
+  .arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) scaleY(1.4) scaleX(0.9);
+    transition: 0.1s opacity ease-out;
+  }
+  .arrows[disabled] {
+    opacity: 0.3;
+  }
+  .next-arrow {
+    right: 0.3rem;
+  }
+  .prev-arrow {
+    left: 0.3rem;
+  }
 </style>
 
 <script>
-import { Carousel } from 'caroucssel';
-import { Buttons } from 'caroucssel/features/buttons';
-import { Mouse } from 'caroucssel/features/mouse';
-import { Pagination } from 'caroucssel/features/pagination';
+  import { Carousel } from "caroucssel";
+  import { Buttons } from "caroucssel/features/buttons";
+  import { Mouse } from "caroucssel/features/mouse";
+  import { Pagination } from "caroucssel/features/pagination";
 
-function setupCarousel() {
-    var element = document.querySelector('.caroucssel');
-var items = Array.from(document.querySelectorAll('.item'));
+  function setupCarousel() {
+    var element = document.querySelector(".caroucssel");
+    var items = Array.from(document.querySelectorAll(".item"));
 
-if (!element) {
-    throw new Error('Missing element for carousel.');
-}
+    if (!element) {
+      throw new Error("Missing element for carousel.");
+    }
     new Carousel(element, {
-        features: [
-            new Buttons({
-                className: 'arrows',
-                nextClassName: 'next-arrow',
-                nextTitle: 'Click this button to go one step forward',
-                nextLabel: '>',
-                previousClassName: 'prev-arrow',
-                previousTitle: 'Click this button to go one step back',
-                previousLabel: '<',
-                template: ({ className, label, title }) =>
-                    `<button class="${className} text-3xl text-primary-400" title="${title}">
+      features: [
+        new Buttons({
+          className: "arrows",
+          nextClassName: "next-arrow",
+          nextTitle: "Click this button to go one step forward",
+          nextLabel: ">",
+          previousClassName: "prev-arrow",
+          previousTitle: "Click this button to go one step back",
+          previousLabel: "<",
+          template: ({ className, label, title }) =>
+            `<button class="${className} text-3xl text-primary-400" title="${title}">
             ${label}
             </button>`,
-            }),
-            new Mouse(),
-        ],
-        onScroll: function (event) {
-            items.forEach(function (item, index) {
-                item.classList[event.index.includes(index) ? 'add' : 'remove']('is-active');
-            });
-        }
+        }),
+        new Mouse(),
+      ],
+      onScroll: function (event) {
+        items.forEach(function (item, index) {
+          item.classList[event.index.includes(index) ? "add" : "remove"](
+            "is-active"
+          );
+        });
+      },
     });
-}
+  }
 
-
-document.addEventListener('astro:page-load', () => {
+  document.addEventListener("astro:page-load", () => {
     // This only runs once.
     setupCarousel();
   });

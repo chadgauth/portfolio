@@ -33,13 +33,13 @@ const pageTitle = `${postTitle} ${subtitle}`;
         />
       )
     }
-<a href="/" class="flex pb-5 pl-4 text-text-200 hover:underline">
+<a href="/" class="flex pb-5 pl-4 text-foreground hover:underline">
   <Icon iconCode="home" iconStyle="outline" customClasses="h-5 w-5 m-1 self-center" />
   <span class="self-center">Home</span>
 </a>
     <article class="prose max-w-[750px] mx-auto pb-10 px-4 prose-img:mx-auto">
-      <h1 class="title my-2 text-3xl text-yellow-200 font-bold">{postTitle}<span class="text-xl">&nbsp;&nbsp;{subtitle}</span></h1>
-      {pubDate && <time class="text-base-200">{displayDate}</time>}
+      <h1 class="title my-2 text-3xl text-accent-foreground font-bold">{postTitle}<span class="text-xl">&nbsp;&nbsp;{subtitle}</span></h1>
+      {pubDate && <time class="text-primary-foreground">{displayDate}</time>}
       <br class="border-base-800" />
       {badge && <div class="badge badge-secondary my-1">{badge}</div>}
       {

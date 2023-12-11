@@ -1,0 +1,68 @@
+---
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+let { className } = Astro.props;
+---
+<Card client:load className={className} >
+    <CardHeader client:load underlineWidth="6rem">
+        <CardTitle client:load>
+            About Me
+        </CardTitle>
+</CardHeader>
+    <CardContent client:load>
+    <div class="text-text-100">
+      <p class="pt-4">
+        Hi there! I'm a <span class="highlight">full-stack engineer</span>
+         with a knack for <span class="highlight"
+          >React, Angular, TypeScript</span
+        >, and the intricacies of edge servers, CDNs, and TypeScript
+        configuration. Guided by <span class="highlight"
+          >customer focus, honesty, and directness</span
+        >, I aim to deliver efficient solutions. My approach is shaped by
+        lean training early in my career from a Japanese Lean Sensai and
+        later from Lean IT courses. I'm a firm believer in <span
+          class="highlight"
+          >sharing knowledge, fostering improvement, and eliminating
+          inefficiencies</span
+        >.
+      </p>
+      <p class="pt-4">
+        When I'm not immersed in code, I'm a roller-skating, dancing,
+        movie-watching, rock-climbing enthusiast. This blog is my platform
+        to <span class="highlight"
+          >share knowledge, engage in tech discussions, and keep my skills
+          fresh</span
+        > from the latest tech trends I've found on YouTube, <span
+        class="highlight"><a
+          href="https://dev.to/chadgauth"
+          class="underline"
+          target="_blank">dev.to</a
+        ></span>, Google News, and various Discord servers.
+      </p>
+      <p class="pt-4">
+        Feel free to explore my blog or reach out for a chat or
+        collaboration. I'm excited to work with diverse individuals and am
+        committed to <span class="highlight"
+          >making a positive impact through technology</span
+        >.
+      </p>
+    </div>
+</CardContent>
+</Card>
+
+<style>
+.highlight {
+    text-shadow: 
+        0 0 0px oklch(0.7,0.12,125.16),
+        0 0 0px oklch(0.72,0.09,189.99),
+        0 0 0.9px oklch(0.75,0.06,246.82);
+    font-size: 1.075rem;
+    color: oklch(0.72, 0.09, 189.99);
+}
+</style>

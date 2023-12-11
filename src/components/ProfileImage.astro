@@ -1,0 +1,25 @@
+---
+import { Image } from "astro:assets";
+---
+<div class="profile-picture rounded-full p-1 max-w-xs max-h-xs glow relative">
+  <div
+    class="absolute inset-0 rounded-full fancy-border">
+  </div>
+  <Image
+    loading="eager"
+    class="rounded-full relative z-10"
+    width="576"
+    height="576"
+    src={Astro.props.profileImage}
+    alt={Astro.props.altText}
+  />
+</div>
+
+<style>
+    .fancy-border {
+        border: 2px solid theme('borderColor.transparent'); 
+        background-image: linear-gradient(to right, theme('colors.secondary.DEFAULT'), theme('colors.accent.DEFAULT'));
+        background-clip: padding-box, border-box; 
+        box-decoration-break: clone;
+    }
+</style>

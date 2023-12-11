@@ -1,10 +1,10 @@
 ---
 const { title, subtitle, img, desc, url, badge, tags, target = "_blank" } = Astro.props;
 import { Image } from "astro:assets";
+import { Card } from "./ui/card";
 ---
 
-<div
-  class="rounded-lg bg-blue-700 hover:shadow-xl transition ease-in-out hover:scale-[102%] text-grey-50"
+<Card
 >
   <a href={url} target={target}>
     <div class="hero-content flex-col md:flex-row">
@@ -34,4 +34,4 @@ import { Image } from "astro:assets";
       </div>
     </div>
   </a>
-</div>
+</Card>
