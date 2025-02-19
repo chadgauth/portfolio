@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Gauthier;Chad;;;
+FN:Chad Gauthier
+TITLE:Solution Architect & Technical Leader
+ORG:Handraise
+TEL;TYPE=CELL:719-799-3434
+EMAIL:chadgauth@gmail.com
+URL:https://chad.gauthier.dev
+URL;type=LinkedIn:https://www.linkedin.com/in/chadgauth/
+URL;type=GitHub:https://github.com/chadgauth
+NOTE:Solution Architect and Technical Leader with expertise in distributed systems\, API architecture\, and modern frontend architecture. Experienced in GraphQL\, React\, TypeScript\, and AI/ML integration.
+CATEGORIES:Solution Architecture,Technical Leadership,System Design
+END:VCARD

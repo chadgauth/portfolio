@@ -1,18 +1,20 @@
 ---
 import { Image } from "astro:assets";
+import QRModal from "./QRModal.astro";
 ---
-<div class="profile-picture rounded-full p-1 max-w-xs max-h-xs glow relative">
+<div class="profile-picture rounded-full p-1 max-w-xs max-h-xs glow relative cursor-pointer" id="profile-container">
   <div
     class="absolute inset-0 rounded-full fancy-border">
   </div>
   <Image
     loading="eager"
-    class="rounded-full relative z-10"
+    class="rounded-full relative z-[1]"
     width="576"
     height="576"
     src={Astro.props.profileImage}
     alt={Astro.props.altText}
   />
+  <QRModal />
 </div>
 
 <style>
@@ -23,3 +25,13 @@ import { Image } from "astro:assets";
         box-decoration-break: clone;
     }
 </style>
+
+<script>
+  const container = document.getElementById('profile-container');
+
+  container?.addEventListener('click', () => {
+    if (typeof window.showQRModal === 'function') {
+      window.showQRModal();
+    }
+  });
+</script>
