@@ -1,0 +1,122 @@
+---
+const skills = {
+  "System Architecture": [
+    { name: "GraphQL Architecture", timelineRefs: ["handraise-graphql", "crowdstreet-api"] },
+    { name: "Component Systems", timelineRefs: ["handraise-components", "progressive-ui"] },
+    { name: "Build Optimization", timelineRefs: ["handraise-build", "crowdstreet-build"] },
+    { name: "AI Integration", timelineRefs: ["handraise-gpt"] }
+  ],
+  "Technical Leadership": [
+    { name: "Team Mentorship", timelineRefs: ["progressive-intern", "crowdstreet-mentoring"] },
+    { name: "Architecture Planning", timelineRefs: ["progressive-websocket", "handraise-arch"] },
+    { name: "Technical Strategy", timelineRefs: ["handraise-strategy", "crowdstreet-strategy"] }
+  ],
+  "Performance": [
+    { name: "Build Time", timelineRefs: ["handraise-build", "crowdstreet-build"] },
+    { name: "Optimization", timelineRefs: ["progressive-websocket", "crowdstreet-deps"] }
+  ]
+};
+---
+
+<div class="mb-8 space-y-4">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-semibold">Filter by Skills</h2>
+    <div class="space-x-4">
+      <button id="sort-date" class="text-sm text-primary hover:underline">Sort by Date</button>
+      <button id="sort-impact" class="text-sm text-primary hover:underline">Sort by Impact</button>
+    </div>
+  </div>
+  
+  <div class="space-y-4">
+    {Object.entries(skills).map(([category, categorySkills]) => (
+      <div class="space-y-2">
+        <h3 class="text-lg font-medium">{category}</h3>
+        <div class="flex flex-wrap gap-2">
+          {categorySkills.map(skill => (
+            <button
+              class="skill-filter px-3 py-1 rounded-full bg-accent hover:bg-accent/80 transition-colors"
+              data-refs={JSON.stringify(skill.timelineRefs)}
+            >
+              {skill.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  const skillButtons = document.querySelectorAll('.skill-filter');
+  const sortDateBtn = document.getElementById('sort-date');
+  const sortImpactBtn = document.getElementById('sort-impact');
+  
+  let activeSkill: string[] = [];
+
+  skillButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const refs = JSON.parse((button as HTMLElement).dataset.refs || '[]');
+      
+      // Toggle active state
+      button.classList.toggle('bg-primary');
+      button.classList.toggle('text-white');
+      
+      if (activeSkill === refs) {
+        activeSkill = [];
+      } else {
+        activeSkill = refs;
+      }
+      
+      highlightTimelineItems();
+    });
+  });
+
+  function highlightTimelineItems() {
+    timelineItems.forEach(item => {
+      if (activeSkill.length === 0) {
+        item.classList.remove('opacity-40');
+        return;
+      }
+      
+      const itemId = (item as HTMLElement).dataset.id;
+      if (activeSkill.includes(itemId || '')) {
+        item.classList.remove('opacity-40');
+      } else {
+        item.classList.add('opacity-40');
+      }
+    });
+  }
+
+  sortDateBtn?.addEventListener('click', () => {
+    const container = document.querySelector('.time-line-container');
+    const items = Array.from(timelineItems);
+    items.sort((a, b) => {
+      const dateA = new Date((a as HTMLElement).dataset.date || '');
+      const dateB = new Date((b as HTMLElement).dataset.date || '');
+      return dateB.getTime() - dateA.getTime();
+    });
+    items.forEach(item => container?.appendChild(item));
+  });
+
+  sortImpactBtn?.addEventListener('click', () => {
+    const container = document.querySelector('.time-line-container');
+    const items = Array.from(timelineItems);
+    items.sort((a, b) => {
+      const impactA = parseInt((a as HTMLElement).dataset.impact || '0');
+      const impactB = parseInt((b as HTMLElement).dataset.impact || '0');
+      return impactB - impactA;
+    });
+    items.forEach(item => container?.appendChild(item));
+  });
+</script>
+
+<style>
+  .skill-filter {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .skill-filter:hover {
+    transform: translateY(-1px);
+  }
+</style>

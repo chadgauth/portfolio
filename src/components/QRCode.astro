@@ -1,0 +1,45 @@
+---
+const url = 'https://chad.gauthier.dev';
+let qrDataUrl = '';
+---
+
+<div class="qr-code-container">
+  <img
+    src={qrDataUrl}
+    alt="QR code for chad.gauthier.dev"
+    width="200"
+    height="200"
+    class="rounded-lg shadow-lg bg-white p-2 hidden"
+  />
+</div>
+
+<style>
+  .qr-code-container {
+    display: inline-block;
+  }
+</style>
+
+<script>
+  import QRCode from 'qrcode';
+
+  const generateQR = async () => {
+    const url = 'https://chad.gauthier.dev';
+    try {
+      const qrDataUrl = await QRCode.toDataURL(url, {
+        errorCorrectionLevel: 'H',
+        margin: 1,
+        width: 200,
+        color: {
+          dark: '#000',
+          light: '#fff'
+        }
+      });
+      document.querySelector('.qr-code-container img')?.setAttribute('src', qrDataUrl);
+      document.querySelector('.qr-code-container img')?.classList.remove('hidden');
+    } catch (err) {
+      console.error('Error generating QR code:', err);
+    }
+  };
+
+  generateQR();
+</script>
