@@ -1,17 +1,77 @@
-<div
-  class="sticky lg:hidden top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-600 text-orange-100 shadow-sm"
+---
+const { title } = Astro.props;
+---
+
+<header
+  class="sticky top-0 z-40 w-full border-b border-cyber-primary/10 bg-cyber-darker/80 backdrop-blur-sm transition-all duration-300"
 >
-  <div class="navbar">
-    <div class="navbar-start">
-      <label for="my-drawer" class="btn btn-square btn-ghost">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"
-          ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+  <div class="container mx-auto flex h-16 items-center justify-between px-4">
+    <a href="/" class="flex items-center space-x-2">
+      <span class="font-mono text-xl font-bold cyber-text-glow">
+        {title}
+      </span>
+    </a>
+
+    <nav class="flex items-center space-x-4">
+      <a 
+        href="/blog"
+        class="cyber-button"
+      >
+        Blog
+      </a>
+      
+      <button
+        id="theme-toggle"
+        class="cyber-button !p-2"
+        aria-label="Toggle theme"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="h-5 w-5 dark:hidden"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
         </svg>
-      </label>
-    </div>
-    <div class="navbar-center">
-      <a class="btn btn-ghost normal-case text-xl" href="/"></a>
-    </div>
-    <div class="navbar-end"></div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          class="hidden h-5 w-5 dark:block"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      </button>
+    </nav>
   </div>
-</div>
+</header>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>
+
+<style>
+  .cyber-button {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md
+           bg-cyber-darker border border-cyber-primary/20
+           text-cyber-text-primary text-sm font-medium
+           transition-all duration-200 hover:border-cyber-primary/40
+           hover:text-cyber-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.1)]
+           focus:outline-none focus:ring-2 focus:ring-cyber-primary/50;
+  }
+</style>

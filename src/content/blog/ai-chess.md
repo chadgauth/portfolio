@@ -1,10 +1,7 @@
 ---
 title: 'Navigating the Matrix of Progress:'
-subtitle: | 
-    AI's Potential and the Games that Reflect Our Choices
-description: |
-    AI's transformative potential, the power of fresh perspectives, and the deep impact on our understand of the game understanding and what's beyond
-pubDate: 'Sep 21 2023'
+description: "AI's transformative potential, the power of fresh perspectives, and the deep impact on our understand of the game understanding and what's beyond"
+pubDate: 2023-09-21
 heroImage: '/quantum_chess.jpg'
 ---
 

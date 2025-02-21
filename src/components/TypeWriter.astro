@@ -10,47 +10,52 @@ const { className = '' } = Astro.props;
   x-text="text"
   aria-hidden="true"
   aria-describedby="description"
-  class={`text-secondary-foreground text-base leading-tight md:text-xl h-9 md:h-14 ${className}`}
-  style="min-height: 1.6em;"
+  class={`relative font-mono ${className}`}
 >
 </div>
 
 <style>
-@keyframes blink {
-  0%, 50% { border-right-color: theme('colors.secondary.foreground'); border-opacity: 0.8 }
-  51%, 100% { border-right-color: transparent; }
-}
-
-div[x-data="typewriter()"]::after {
-  content: '';
-  display: inline-block;
-  width: 0.08em;
-  height: 1em;
-  border-right-width: 1px;
-  animation: blink 1s linear infinite;
-  margin-left: 2.5px;
-  vertical-align: text-bottom;
-}
-
-@media (min-width: 768px) {
-  div[x-data="typewriter()"]::after {
-    border-right-width: 2px;
-    height: 1.25em;
+  @keyframes cursor-blink {
+    0%, 49% { 
+      opacity: 1;
+    }
+    50%, 100% { 
+      opacity: 0;
+    }
   }
-}
+
+  [x-data="typewriter()"] {
+    position: relative;
+    min-height: 1.6em;
+  }
+
+  [x-data="typewriter()"]::after {
+    content: '|';
+    position: absolute;
+    margin-left: 0.1em;
+    color: oklch(0.8 0.2 140);
+    animation: cursor-blink 1s steps(2) infinite;
+    font-weight: 200;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [x-data="typewriter()"]::after {
+      animation: none;
+    }
+  }
 </style>
 
 <script>
   import Alpine from "alpinejs";
 
-  const MAX_FASTEST_DELETE_SPEED = 15;
-  const INITIAL_DELETE_SPEED = 60;
-  const SPEED_UP_AFTER = 5;
-  const FAST_SPEED = 10;
-  const RETRY_TIMEOUT = 20;
-  const BETWEEN_MESSAGES_TIMEOUT = 500;
-  const DELETE_START_TIMEOUT = 3500;
-  const TYPING_SPEED = 80;
+  const TYPING_SPEED = 50;
+  const DELETE_SPEED = 30;
+  const PAUSE_BEFORE_DELETE = 2000;
+  const PAUSE_BETWEEN_MESSAGES = 700;
+  const SPEED_UP_THRESHOLD = 5;
+  const FAST_DELETE_SPEED = 15;
+  const MIN_DELETE_SPEED = 8;
+  const RETRY_DELAY = 50;
 
   function initTypewriter() {
     Alpine.data("typewriter", () => ({
@@ -58,56 +63,62 @@ div[x-data="typewriter()"]::after {
       messages: [],
       currentMessage: 0,
       isDeleting: false,
+
       startTyping() {
         this.$nextTick(() => {
-          let messages = document.querySelectorAll('[x-ref="messages"] p');
+          const messages = document.querySelectorAll('[x-ref="messages"] p');
           this.messages = Array.from(messages).map(
             (message) => (message as HTMLElement).innerText
           );
           this.typeMessage();
         });
       },
-      typeMessage() {
-        if (!this.messages.length)
-          setTimeout(() => this.typeMessage(), RETRY_TIMEOUT);
-        else if (this.isDeleting) this.handleDeleting();
-        else this.handleTyping();
-      },
-      handleDeleting() {
-        let deleteSpeed = INITIAL_DELETE_SPEED;
 
-        if (this.text.length > 0) {
-          this.text = this.text.slice(0, -1);
-          if (
-            this.messages[this.currentMessage].length - this.text.length >
-            SPEED_UP_AFTER
-          ) {
-            deleteSpeed = FAST_SPEED;
-          }
-          setTimeout(
-            () => this.typeMessage(),
-            MAX_FASTEST_DELETE_SPEED + Math.random() * deleteSpeed
-          );
+      typeMessage() {
+        if (!this.messages.length) {
+          setTimeout(() => this.typeMessage(), RETRY_DELAY);
+          return;
+        }
+
+        if (this.isDeleting) {
+          this.deleteText();
         } else {
+          this.addText();
+        }
+      },
+
+      deleteText() {
+        if (this.text.length === 0) {
           this.isDeleting = false;
-          this.currentMessage =
-            (this.currentMessage + 1) % this.messages.length;
-          setTimeout(() => this.typeMessage(), BETWEEN_MESSAGES_TIMEOUT);
+          this.currentMessage = (this.currentMessage + 1) % this.messages.length;
+          setTimeout(() => this.typeMessage(), PAUSE_BETWEEN_MESSAGES);
+          return;
         }
+
+        let speed = DELETE_SPEED;
+        if (this.messages[this.currentMessage].length - this.text.length > SPEED_UP_THRESHOLD) {
+          speed = FAST_DELETE_SPEED;
+        }
+
+        this.text = this.text.slice(0, -1);
+        setTimeout(() => this.typeMessage(), MIN_DELETE_SPEED + Math.random() * speed);
       },
-      handleTyping() {
-        if (this.text.length < this.messages[this.currentMessage].length) {
-          this.text += this.messages[this.currentMessage][this.text.length];
-          setTimeout(() => this.typeMessage(), Math.random() * TYPING_SPEED);
-        } else {
+
+      addText() {
+        const currentMessageText = this.messages[this.currentMessage];
+        
+        if (this.text.length === currentMessageText.length) {
           this.isDeleting = true;
-          setTimeout(() => this.typeMessage(), DELETE_START_TIMEOUT);
+          setTimeout(() => this.typeMessage(), PAUSE_BEFORE_DELETE);
+          return;
         }
-      },
+
+        this.text += currentMessageText[this.text.length];
+        setTimeout(() => this.typeMessage(), Math.random() * TYPING_SPEED);
+      }
     }));
   }
   
   document.addEventListener("alpine:init", initTypewriter);
-
   document.addEventListener("astro:beforereload", initTypewriter);
 </script>

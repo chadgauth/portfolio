@@ -1,37 +1,53 @@
 ---
 import { Image } from "astro:assets";
-import QRModal from "./QRModal.astro";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  profileImage: ImageMetadata;
+  altText: string;
+  class?: string;
+}
+
+const { profileImage, altText, class: className } = Astro.props;
 ---
-<div class="profile-picture rounded-full p-1 max-w-xs max-h-xs glow relative cursor-pointer" id="profile-container">
-  <div
-    class="absolute inset-0 rounded-full fancy-border">
+
+<div class:list={["relative group", className]}>
+  <!-- Glow effect layers -->
+  <div class="absolute -inset-0.5 bg-cyber-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+  <div class="absolute -inset-0.5 bg-cyber-accent/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100"></div>
+  
+  <!-- Image container -->
+  <div class="relative rounded-full overflow-hidden bg-cyber-darker">
+    <div class="absolute inset-0 bg-cyber-gradient opacity-50"></div>
+    <Image
+      src={profileImage}
+      alt={altText}
+      class="relative z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+      format="webp"
+      quality={90}
+    />
+    
+    <!-- Scanline effect -->
+    <div class="absolute inset-0 z-20 pointer-events-none overflow-hidden opacity-[0.15]">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyber-primary/50 to-transparent w-full h-[200%] animate-scanline"></div>
+    </div>
+    
+    <!-- Border glow -->
+    <div class="absolute inset-0 z-30 rounded-full border border-cyber-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
   </div>
-  <Image
-    loading="eager"
-    class="rounded-full relative z-[1]"
-    width="576"
-    height="576"
-    src={Astro.props.profileImage}
-    alt={Astro.props.altText}
-  />
-  <QRModal />
 </div>
 
 <style>
-    .fancy-border {
-        border: 2px solid theme('borderColor.transparent'); 
-        background-image: linear-gradient(to right, theme('colors.secondary.DEFAULT'), theme('colors.accent.DEFAULT'));
-        background-clip: padding-box, border-box; 
-        box-decoration-break: clone;
+  @keyframes scanline {
+    from {
+      transform: translateY(-100%);
     }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  .animate-scanline {
+    animation: scanline 2.5s linear infinite;
+  }
 </style>
-
-<script>
-  const container = document.getElementById('profile-container');
-
-  container?.addEventListener('click', () => {
-    if (typeof window.showQRModal === 'function') {
-      window.showQRModal();
-    }
-  });
-</script>
