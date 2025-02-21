@@ -1,22 +1,129 @@
 ---
 const { sideBarActiveItemID } = Astro.props;
-const activeClass = "bg-base-800"; // For primary color replace with `active` class
+const activeClass = "bg-cyber-primary/10 text-cyber-primary cyber-text-glow";
 ---
 
-<ul class="menu grow shrink menu-md overflow-y-auto">
-    <li><a class="py-2 text-yellow-200 text-lg hover:text-yellow-100" id="home" href="/">Home</a></li>
-    <li><a class="py-2 text-yellow-200 text-lg hover:text-yellow-100" id="blog" href="/blog/">Blog</a></li>
-    <li>
-        <a
-            class="py-2 text-yellow-200 text-lg hover:text-yellow-100"
-            href="mailto:chadgauth@gmail.com"
-            target="_blank"
-            referrerpolicy="no-referrer-when-downgrade">Contact</a
-        >
-    </li>
-</ul>
+<div class="py-6">
+  <nav class="space-y-2 px-4">
+    <a
+      href="/"
+      class="cyber-button w-full justify-start !px-4 !py-2 text-base"
+      id="home"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mr-2 h-4 w-4"
+      >
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+      Home
+    </a>
+    <a
+      href="/blog/"
+      class="cyber-button w-full justify-start !px-4 !py-2 text-base"
+      id="blog"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mr-2 h-4 w-4"
+      >
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <line x1="10" y1="9" x2="8" y2="9" />
+      </svg>
+      Blog
+    </a>
+    <a
+      href="/cv"
+      class="cyber-button w-full justify-start !px-4 !py-2 text-base"
+      id="cv"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mr-2 h-4 w-4"
+      >
+        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <path d="M12 11h4" />
+        <path d="M12 16h4" />
+        <path d="M8 11h.01" />
+        <path d="M8 16h.01" />
+      </svg>
+      CV
+    </a>
+    <a
+      href="mailto:chadgauth@gmail.com"
+      class="cyber-button w-full justify-start !px-4 !py-2 text-base"
+      target="_blank"
+      referrerpolicy="no-referrer-when-downgrade"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mr-2 h-4 w-4"
+      >
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+      Contact
+    </a>
+  </nav>
+</div>
 
 <script define:vars={{ sideBarActiveItemID: sideBarActiveItemID, activeClass: activeClass }}>
 const activeItemElem = document.getElementById(sideBarActiveItemID);
-activeItemElem && activeItemElem.classList.add(activeClass);
+activeItemElem && activeItemElem.classList.add(...activeClass.split(' '));
 </script>
+
+<style>
+  .cyber-button {
+    @apply relative overflow-hidden transition-all duration-200;
+  }
+
+  .cyber-button::before {
+    content: '';
+    @apply absolute inset-0 bg-cyber-gradient opacity-0 transition-opacity duration-200;
+  }
+
+  .cyber-button:hover::before {
+    @apply opacity-100;
+  }
+
+  .cyber-button > * {
+    @apply relative z-10;
+  }
+</style>

@@ -1,9 +1,7 @@
 ---
 title: 'Dr. GitGood or:'
-subtitle: 'How I learned to Stop Worrying and Love the Refactor'
-description: |
-  The value of refactoring and the metamorphosis of a develop from fearing refactoring to embracing it, all with a sprinkle of "Dr. Strangelove"
-pubDate: 'Sep 19 2023'
+description: "The value of refactoring and the metamorphosis of a develop from fearing refactoring to embracing it, all with a sprinkle of 'Dr. Strangelove'"
+pubDate: 2023-09-19
 heroImage: '/dr_refactor.jpg'
 ---
 
@@ -228,7 +226,7 @@ Your code, much like a nuclear control panel, will show warning signs when thing
 
 Dr. GitGood's transformation was evident. From a stubborn developer to an agile refactoring advocate, his evolution mirrored that of his video player app.
 
-## Strangelove’s Code Wisdom
+## Strangelove's Code Wisdom
 
 Technical debt can creep up like an enemy spy. Neglecting it only compounds the problem. As Dr. GitGood realized, a stitch in time saves nine. Just as diplomatic measures can prevent a crisis in Dr. Strangelove's universe, proactive refactoring can prevent a codebase catastrophe.
 

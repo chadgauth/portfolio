@@ -2,85 +2,62 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
-export async function getStaticPaths({ paginate }) {
-  const posts = await getCollection("blog");
-  posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-  return paginate(posts, { pageSize: 10 });
-}
-
-const { page } = Astro.props;
-export const prerender = true;
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+);
 ---
 
-<BaseLayout title="Blog" sideBarActiveItemID="blog">
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Blog</div>
-  </div>
+<BaseLayout title="Blog">
+  <div class="container mx-auto px-4 py-12">
+    <div class="relative mb-12">
+      <h1 class="text-4xl font-mono font-bold bg-gradient-to-r from-cyber-primary to-cyber-accent bg-clip-text text-transparent">
+        Blog
+      </h1>
+      <div class="absolute -inset-x-4 -inset-y-2 border border-cyber-primary/20 bg-cyber-primary/5 blur-lg"></div>
+    </div>
 
-  <!-- {
-    page.data.length === 0 ? (
-      <div class="bg-base-800 border-l-4 border-secondary w-full p-4 min-w-full">
-        <p class="font-bold">Sorry!</p>
-        <p>There are no blog posts to show at the moment. Check back later!</p>
-      </div>
-    ) : (
-      <ul>
-        {page.data.map((post) => (
-          <>
-            <HorizontalCard
-              title={post.data.title}
-              subtitle={post.data.subtitle}
-              img={post.data.heroImage}
-              desc={post.data.description}
-              url={"/blog/" + post.slug}
-              target="_self"
-              badge={post.data.badge}
-            />
-            <div class="divider my-0" />
-          </>
-        ))}
-      </ul>
-    )
-  } -->
-
-  <div class="flex justify-between">
-    {
-      page.url.prev ? (
-        <a href={page.url.prev} class="btn btn-ghost my-10 mx-5">
-          {" "}
-          <svg
-            class="h-6 w-6 fill-current md:h-8 md:w-8"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
-          </svg>{" "}
-          Recent posts
-        </a>
-      ) : (
-        <div />
-      )
-    }
-    {
-      page.url.next ? (
-        <a href={page.url.next} class="btn btn-ghost my-10 mx-5">
-          Older Posts{" "}
-          <svg
-            class="h-6 w-6 fill-current md:h-8 md:w-8"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            {" "}
-            <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-          </svg>
-        </a>
-      ) : (
-        <div />
-      )
-    }
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <article class="cyber-card group">
+          <a href={`/blog/${post.slug}`} class="block p-6">
+            <div class="relative">
+              <h2 class="text-xl font-mono font-bold text-cyber-text-primary group-hover:text-cyber-primary transition-colors duration-200">
+                {post.data.title}
+              </h2>
+              <div class="mt-2 text-sm text-cyber-text-secondary">
+                {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </div>
+              <p class="mt-4 text-cyber-text-secondary line-clamp-3">
+                {post.data.description}
+              </p>
+              <div class="mt-4 flex items-center text-sm text-cyber-text-secondary">
+                <span class="cyber-button text-xs">Read More</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
   </div>
 </BaseLayout>
+
+<style>
+  .cyber-card {
+    @apply relative overflow-hidden rounded-lg border border-cyber-primary/20 bg-cyber-darker/50 backdrop-blur-sm
+           transition-all duration-200 hover:border-cyber-primary/40
+           hover:shadow-[0_0_30px_rgba(0,255,65,0.1)];
+  }
+
+  .cyber-button {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md
+           bg-cyber-darker border border-cyber-primary/20
+           text-cyber-text-primary text-sm font-medium
+           transition-all duration-200 hover:border-cyber-primary/40
+           hover:text-cyber-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.1)]
+           focus:outline-none focus:ring-2 focus:ring-cyber-primary/50;
+  }
+</style>

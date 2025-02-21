@@ -1,54 +1,17 @@
 ---
-import type { CVItem } from '../../data/cv';
-
-interface Props {
-  item: CVItem;
-}
-
-const { item } = Astro.props;
-
-const allSkills = [
-  ...item.skills.architecture,
-  ...item.skills.technical,
-  ...item.skills.development,
-  ...item.skills.leadership
-];
+const { title, subtitle } = Astro.props;
 ---
 
-<div 
-  class="flex group timeline-item transition-opacity duration-300"
-  data-id={item.id}
-  data-date={item.startDate}
-  data-impact={item.impact}
-  data-skills={JSON.stringify(allSkills)}
->
+<div class="flex">
   <div class="education__time">
-    <span class="w-4 h-4 bg-primary block rounded-full mt-1 transition-all duration-300 group-hover:scale-125 group-hover:shadow-lg"></span>
-    <span class="education__line bg-primary/30 block h-full w-[2px] translate-x-[7px] transition-all duration-300 group-hover:bg-primary"></span>
+    <span class="w-4 h-4 bg-primary block rounded-full mt-1"></span>
+    <span class="education__line bg-primary block h-full w-[2px] translate-x-[7px]"></span>
   </div>
-  <div class="experience__data bd-grid px-5 py-2 transition-all duration-300 rounded-lg group-hover:bg-accent/5">
-    <h3 class="font-semibold mb-1 text-lg group-hover:text-primary transition-colors duration-300">{item.title}</h3>
-    <span class="font-light text-sm text-muted-foreground">
-      {item.company} | {item.location} | {item.startDate} – {item.endDate}
-    </span>
-    <p class="my-4 text-justify leading-relaxed">
-      {item.highlights.map(highlight => (
-        <div class="mb-2">
-          <p>{highlight.text}</p>
-          <div class="flex gap-2 mt-1 flex-wrap">{highlight.relatedSkills.map(skill => <span class="text-xs px-2 py-1 bg-accent/30 rounded-full">{skill}</span>)}</div>
-        </div>
-      ))}
+  <div class="experience__data bd-grid px-5">
+    <h3 class="font-semibold mb-1">{title}</h3>
+    <span class="font-light text-sm">{subtitle}</span>
+    <p class="my-2 text-justify">
+      <slot />
     </p>
   </div>
 </div>
-
-<style>
-  .education__line {
-    transform-origin: top;
-    transition: transform 0.3s ease;
-  }
-  
-  .group:hover .education__line {
-    transform: scaleY(1.02) translateX(7px);
-  }
-</style>

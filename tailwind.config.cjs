@@ -12,9 +12,21 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border) / <alpha-value>)",
-        input: "hsl(var(--input) / <alpha-value>)",
-        ring: "hsl(var(--ring) / <alpha-value>)",
+        // Cyberpunk theme colors with transparency support
+        'cyber': {
+          black: 'oklch(0.1 0.02 240 / <alpha-value>)',
+          darker: 'oklch(0.15 0.02 240 / <alpha-value>)',
+          dark: 'oklch(0.2 0.02 240 / <alpha-value>)',
+          primary: 'oklch(0.8 0.2 140 / <alpha-value>)', // Matrix green
+          secondary: 'oklch(0.65 0.3 25 / <alpha-value>)', // Neon red
+          accent: 'oklch(0.85 0.2 200 / <alpha-value>)', // Cyan
+          'text-primary': 'oklch(0.9 0.02 240 / <alpha-value>)',
+          'text-secondary': 'oklch(0.7 0.02 240 / <alpha-value>)',
+        },
+        // System UI colors
+        border: "oklch(var(--border) / <alpha-value>)",
+        input: "oklch(var(--input) / <alpha-value>)",
+        ring: "oklch(var(--ring) / <alpha-value>)",
         background: "oklch(var(--background-oklch) / <alpha-value>)",
         foreground: "oklch(var(--foreground-oklch) / <alpha-value>)",
         primary: {
@@ -26,25 +38,30 @@ module.exports = {
           foreground: "oklch(var(--secondary-foreground-oklch) / <alpha-value>)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          DEFAULT: "oklch(0.65 0.3 25 / <alpha-value>)",
+          foreground: "oklch(0.98 0.005 240 / <alpha-value>)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
-          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+          DEFAULT: "oklch(0.15 0.02 240 / <alpha-value>)",
+          foreground: "oklch(0.65 0.02 240 / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
-          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+          DEFAULT: "oklch(0.85 0.2 200 / <alpha-value>)",
+          foreground: "oklch(0.1 0.02 240 / <alpha-value>)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
-          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+          DEFAULT: "oklch(0.1 0.02 240 / <alpha-value>)",
+          foreground: "oklch(0.95 0.005 240 / <alpha-value>)",
         },
         card: {
-          DEFAULT: "hsl(var(--card) / <alpha-value>)",
-          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+          DEFAULT: "oklch(0.15 0.02 240 / <alpha-value>)",
+          foreground: "oklch(0.95 0.005 240 / <alpha-value>)",
         },
+      },
+      backgroundImage: {
+        'cyber-gradient': 'linear-gradient(135deg, oklch(0.1 0.02 240) 0%, oklch(0.15 0.02 240) 100%)',
+        'cyber-gradient-hover': 'linear-gradient(135deg, oklch(0.15 0.02 240) 0%, oklch(0.2 0.02 240) 100%)',
+        'cyber-glow': 'linear-gradient(135deg, oklch(0.8 0.2 140 / 0.1) 0%, oklch(0.85 0.2 200 / 0.1) 100%)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -60,103 +77,25 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "fade-in": {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+        "fade-up": {
+          "0%": { opacity: 0, transform: "translateY(10px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.5s ease-out",
+        "fade-up": "fade-up 0.5s ease-out",
       },
     },
-    removeAlphaValue: (theme) => {
-      const colors = theme("colors");
-      const updatedColors = {};
-
-      for (const category in colors) {
-        const colorValues = colors[category];
-        const updatedColorValues = {};
-
-        for (const key in colorValues) {
-          const colorValue = colorValues[key];
-          const updatedColorValue = colorValue.replace(
-            / \/ <alpha-value>/g,
-            "",
-          );
-          updatedColorValues[key] = updatedColorValue;
-        }
-
-        updatedColors[category] = updatedColorValues;
-      }
-
-      return updatedColors;
-    },
-    typography: (theme) => ({
-      DEFAULT: {
-        css: {
-          h2: {
-            color: theme("removeAlphaValue").secondary.foreground,
-            fontWeight: "700",
-            margin: "2rem 0 .6rem",
-            "font-size": "1.3rem",
-          },
-          h3: {
-            color: theme("removeAlphaValue").accent.foreground,
-            margin: "1.4rem 0 .2rem",
-            "font-size": "1.1rem",
-          },
-          p: {
-            color: theme("removeAlphaValue").foreground,
-            margin: ".6rem 0 1.2rem",
-            "line-height": "1.5rem",
-          },
-          strong: {
-            color: theme("removeAlphaValue").foreground,
-          },
-          code: {
-            background: theme("removeAlphaValue").background,
-            color: theme("removeAlphaValue").primary.DEFAULT,
-            padding: ".2rem 0",
-            margin: "0 .1rem",
-          },
-          time: {
-            color: theme("removeAlphaValue").accent.DEFAULT,
-          },
-          marker: {
-            color: theme("removeAlphaValue").accent.DEFAULT,
-          },
-          ul: {
-            padding: "0 0 0 1rem",
-            color: theme("removeAlphaValue").foreground,
-          },
-          "ul > li": {
-            color: theme("removeAlphaValue").foreground,
-            padding: "4px 1px"
-          },
-          a: {
-            color: 'oklch(0.65 0.15 244.3)',
-            "text-decoration": "underline"
-          },
-          ".github-dark": {
-            "background-color": "oklch(0.21 0.02 276.22) !important",
-            border: "0.3rem solid oklch(0.28 0.03 271.18)",
-            "border-radius": "0.75rem",
-            padding: "4px 10px",
-            "margin-bottom": "2rem",
-          
-            // Scrollbar styles
-            "&::-webkit-scrollbar": {
-              width: "10px",
-            },
-            "&::-webkit-scrollbar-track": {
-              background: "oklch(0.21 0.02 276.22)", // Same as background-color
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "oklch(0.28 0.03 271.18)", // Same as border color
-              borderRadius: "0.75rem", // Same as border-radius
-            },
-          },
-        },
-      },
-    }),
   },
-  
-  plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("tailwindcss-animate"),
+  ],
 }
