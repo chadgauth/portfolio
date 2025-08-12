@@ -1,137 +1,217 @@
 ---
 import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-let params = new URL(Astro.request.url).searchParams;
-let message = params.get('message') || '';
-import qrImage from "../assets/qr.png";
+import qrImage from "../assets/qrcode.png";
 import { Image } from "astro:assets";
 
+let params = new URL(Astro.request.url).searchParams;
+let message = params.get('message') || '';
 ---
 
-<BaseLayout className="p-0">
-    <div class="flex flex-col h-screen">
-      <div class="bg-background-900 pt-2 pb-10 w-full flex-grow flex flex-col" style="flex-grow: 2;">
-        <div class="my-auto lg:max-w-[1024px] max-w-[100vw] mx-auto px-5">
-          <div class="bg-primary-800 px-3 md:px-6 py-3 pb-2 w-full glow">
-            <div class="flex flex-row justify-between w-full">
-                <div class="flex flex-row items-center justify-between" style="min-height: 3em;">
-                    <a href="/">
-                        <h1 class="text-2xl md:text-5xl text-accent-200 font-bold h-9 md:h-14 title leading-tight">Chad Gauthier</h1>
-                    </a>
-                    <!-- vCard -->
-                    <a class="bg-accent-700 text-white px-4 py-2 ml-2 mr-2 rounded-md text-sm font-medium" href="data:text/vcard,BEGIN:VCARD%0AN:Gauthier;Chad;;;%0AFN:Chad Gauthier%0ATEL;CELL:719-799-3434%0AEMAIL;PREF;INTERNET:chadgauth@gmail.com%0AURL:https://chad.gauthier.dev%0AEND:VCARD" download="Chad_Gauthier.vcf">Add me to Phone</a>
-                </div>
-              
-              <a href="https://www.linkedin.com/in/chadgauth/" target="_blank"><Icon name="linkedin"/></a>
-            </div>
+<BaseLayout title="Connect - Chad Gauthier" sideBarActiveItemID="networking">
+  <!-- Subtle accent line -->
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
   
-            <!-- Contact Form -->
-            <form
-            action="https://formspree.io/f/maygzgoy"
-            method="POST"
-            class="pt-4 space-y-4"
+  <div class="container mx-auto px-4 py-6 md:py-8">
+    <!-- Hero Section -->
+    <section class="relative py-8 md:py-12 mb-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-100 to-cyan-400 bg-clip-text text-transparent leading-tight mb-6">
+          Let's Connect
+        </h1>
+        
+        <div class="inline-flex items-center px-4 py-2 mb-6 rounded-lg bg-gray-800/40 border border-gray-600/30 backdrop-blur-sm">
+          <div class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></div>
+          <span class="text-cyan-400 font-mono font-medium text-sm tracking-wide">
+            Open to Engineering & Leadership Opportunities
+          </span>
+        </div>
+
+        <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
+          I'm always interested in connecting with fellow engineers, discussing technical challenges, or exploring collaboration opportunities. Whether you want to chat about AI systems, performance optimization, or just say hello.
+        </p>
+
+        <!-- Quick Contact Actions -->
+        <div class="flex flex-wrap gap-3 mb-8">
+          <a 
+            href="/chad-gauthier.vcf" 
+            download
+            class="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-600/30 hover:border-cyan-500/50"
           >
-          <label class="block">
-              <div>What's your email? <div class="text-sm text-green-600">It's just for me so I can keep in touch!</div></div>
-              <input type="email" name="email" class="mt-1 block w-full rounded-md bg-black border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-white">
-            </label>
-            <label class="block">
-              <div>Want to share more details? <div class="text-sm text-green-600">Feel free to share your phone number or anything you'd like to follow up on:</div></div>
-              <textarea name="message" class="mt-1 block w-full rounded-md bg-black border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-white">Met at {message}</textarea>
-            </label>
-            <div class="text-right">
-              <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-accent-700 hover:bg-accent-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send</button>
-            </div>
-            </form>
-            <button id="showQRButton" class="pt-10 text-grey-200 rounded-md text-sm font-medium">Show QR Code</button>
-  
-  <div id="qrModal" class="modal">
-    <div class="modal-content bg-primary-800">
-        <span id="closeModal" class="close">&times;</span>
-        <div class="centered-content">
-          <Image loading="eager" width="515" height="515" src={qrImage} alt="QR code" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4 mr-2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+            Add Contact
+          </a>
+
+          <a 
+            href="https://www.linkedin.com/in/chadgauth/" 
+            target="_blank"
+            class="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 bg-gray-800/40 border border-gray-600/30 text-gray-300 hover:border-gray-500/50"
+          >
+            <Icon name="linkedin" class="h-4 w-4 mr-2 pr-2" />
+            LinkedIn
+          </a>
         </div>
       </div>
-  </div>
+    </section>
+
+    <!-- Contact Methods Section -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Get in Touch
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Contact Form -->
+        <div class="bg-gray-800/30 border border-gray-600/20 rounded-xl p-6">
+          <h3 class="font-semibold text-cyan-400 mb-4">Send a Message</h3>
+          
+          <form
+            action="https://formspree.io/f/maygzgoy"
+            method="POST"
+            class="space-y-4"
+          >
+            <div>
+              <label for="email" class="block text-sm text-gray-300 mb-2">Email</label>
+              <input 
+                type="email" 
+                name="email" 
+                id="email"
+                required
+                class="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-lg text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+                placeholder="your.email@example.com"
+              >
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm text-gray-300 mb-2">Message</label>
+              <textarea 
+                name="message" 
+                id="message"
+                rows="4"
+                class="w-full px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-lg text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 resize-none"
+                placeholder="What would you like to discuss?"
+              >Met at {message}</textarea>
+            </div>
+
+            <button 
+              type="submit"
+              class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 rounded-lg font-medium hover:bg-cyan-600/30 hover:border-cyan-500/50 transition-all duration-200"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+
+        <!-- Direct Contact & QR -->
+        <div class="space-y-6">
+          <!-- Direct Contact -->
+          <div class="bg-gray-800/30 border border-gray-600/20 rounded-xl p-6">
+            <h3 class="font-semibold text-cyan-400 mb-4">Direct Contact</h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex items-center gap-3">
+                <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full"></div>
+                <a href="mailto:chadgauth@gmail.com" class="text-gray-300 hover:text-cyan-400 transition-colors">
+                  chadgauth@gmail.com
+                </a>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full"></div>
+                <span class="text-gray-300">719-799-3434</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full"></div>
+                <a href="https://chad.gauthier.dev" class="text-gray-300 hover:text-cyan-400 transition-colors">
+                  chad.gauthier.dev
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Code -->
+          <div class="bg-gray-800/30 border border-gray-600/20 rounded-xl p-6">
+            <h3 class="font-semibold text-cyan-400 mb-4">QR Code</h3>
+            <div class="flex flex-col items-center">
+              <button 
+                id="showQRButton"
+                class="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-gray-700/40 border border-gray-600/30 text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-600/40 hover:border-gray-500/50 transition-all duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                  <rect width="5" height="5" x="3" y="3" rx="1"/>
+                  <rect width="5" height="5" x="16" y="3" rx="1"/>
+                  <rect width="5" height="5" x="3" y="16" rx="1"/>
+                  <path d="m21 16-3.5-3.5-3.5 3.5"/>
+                </svg>
+                Show QR Code
+              </button>
+              <p class="text-xs text-gray-400 text-center">Scan to save contact info</p>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+  </div>
+
+  <!-- QR Modal -->
+  <div id="qrModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+    <div class="flex items-center justify-center min-h-full p-4">
+      <div class="bg-gray-800/90 border border-gray-600/30 rounded-xl p-6 max-w-sm w-full">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-200">Contact QR Code</h3>
+          <button 
+            id="closeModal"
+            class="text-gray-400 hover:text-gray-200 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+              <path d="m18 6-12 12"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="flex justify-center">
+          <Image 
+            src={qrImage} 
+            alt="QR code for Chad Gauthier's contact information"
+            class="w-48 h-48 rounded-lg"
+            loading="lazy"
+          />
+        </div>
+      </div>
     </div>
-  </BaseLayout>
+  </div>
 
-<!-- Add your styles here -->
-<style>
-#qrModal {
-  display: none;
-  position: fixed; /* Position it fixed relative to the viewport */
-  z-index: 1000; /* Give it a high z-index so it appears above other content */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-.modal-content {
-  position: relative;
-  background-color: #e0dfff;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  box-shadow: 0 0 10px #6dfff0, 0 0 20px #fb65fd; /* Add glow effect */
-}
+  <!-- Background effects -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-cyan-500/3 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-32 w-48 h-48 bg-blue-500/3 rounded-full blur-3xl"></div>
+  </div>
+</BaseLayout>
 
-.centered-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  text-shadow: 0 0 10px #6dfff0; /* Add glow effect to text */
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-  text-shadow: 0 0 20px #6dfff0; /* Increase glow effect on hover and focus */
-}
-  </style>
-
-<!-- Add your scripts here -->
 <script>
-window.onload = function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('qrModal');
-    const btn = document.getElementById('showQRButton');
-    const span = document.getElementById('closeModal');
-  
-    if(!btn || !span || !modal) return;
-    // When the user clicks the button, open the modal 
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-  
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-  
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
+    const showButton = document.getElementById('showQRButton');
+    const closeButton = document.getElementById('closeModal');
+
+    if (!modal || !showButton || !closeButton) return;
+
+    showButton.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
+
+    closeButton.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
       }
-    }
-}
-  </script>
+    });
+  });
+</script>
