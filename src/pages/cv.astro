@@ -1,166 +1,161 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import TimeLineElement from "../components/cv/TimeLine.astro";
+import { cvData, skillCategories, coreCompetencies, education } from "../data/cv.ts";
+
+const profileSummary = "Engineering leader with 10+ years in enterprise, finance, and high-growth startup environments. Known for delivering measurable business impact by owning projects end-to-end—from discovery through deployment—and mentoring teams to higher autonomy. Expertise spans front-end, back-end, and DevOps, with a strong product mindset. Achievements include cutting build times by 80%+, improving database performance 10x, and shipping features that boosted user engagement and reduced operational costs. Open-source contributor and advocate for engineering excellence.";
 ---
 
-<BaseLayout title="Resume" sideBarActiveItemID="cv">
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Profile</div>
-  </div>
+<BaseLayout title="CV - Chad Gauthier" sideBarActiveItemID="cv">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">
+        Chad Gauthier
+      </h1>
+      <p class="text-lg text-cyan-400 font-medium mb-6">
+        Senior Full-Stack Software Engineer & Product Engineering Lead
+      </p>
+      
+      <!-- Contact Info -->
+      <div class="flex flex-wrap gap-4 text-sm text-gray-400 mb-6">
+        <a href="mailto:chadgauth@gmail.com" class="hover:text-cyan-400 transition-colors">
+          chadgauth@gmail.com
+        </a>
+        <span>•</span>
+        <span>719-799-3434</span>
+        <span>•</span>
+        <a href="https://chad.gauthier.dev" class="hover:text-cyan-400 transition-colors">
+          chad.gauthier.dev
+        </a>
+        <span>•</span>
+        <a href="https://github.com/chadgauth" class="hover:text-cyan-400 transition-colors">
+          GitHub: chadgauth
+        </a>
+      </div>
+    </div>
 
-  <div class="mb-10 text-justify">
-    Experienced full-stack software engineer and team lead with a passion for driving innovation and solving complex technical challenges. Seeking a position with a startup or a company that values a dynamic, fast-paced approach to product delivery that focuses on customer experience, technical excellence, and offers opportunities to make a meaningful impact. Committed to mentoring and fostering a positive team culture while leveraging technical expertise to drive success.
-  </div>
+    <!-- Profile Summary -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-200 mb-4 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Profile
+      </h2>
+      <p class="text-gray-300 leading-relaxed">
+        {profileSummary}
+      </p>
+    </section>
 
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Education</div>
-  </div>
-  
-  <div class="time-line-container grid gap-4 mb-10">
-    <TimeLineElement
-      title="B.S. INFORMATION SYSTEMS"
-      subtitle="Gannon University, 2008-2013"
-    />
-    <TimeLineElement
-      title="B.A. THEATER/COMM ARTS"
-      subtitle="Gannon University, 2008-2013"
-    />
-  </div>
+    <!-- Core Competencies -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Core Competencies
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {coreCompetencies.map((competency) => (
+          <div class="flex items-center space-x-3 p-3 rounded-lg bg-gray-800/30 border border-gray-600/20">
+            <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full flex-shrink-0"></div>
+            <span class="text-gray-300 text-sm">{competency}</span>
+          </div>
+        ))}
+      </div>
+    </section>
 
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Work Experience</div>
-  </div>
-  
-  <div class="time-line-container mb-10">
-    <TimeLineElement
-      title="SENIOR SOFTWARE ENGINEER AND TEAM LEAD"
-      subtitle="CrowdStreet | Austin, TX | 06/2022 – Present"
-    >
-      Boosted Development Efficiency: Significantly reduced front-end build times which saved ~95% for each fresh app build by implementing a shell script using AI prompt engineering to quickly generate a complex shell script.
-      Efficient Resource Allocation: Analyzed, documented and successfully handed off a complete breakdown of an unplanned capital calls feature that accomplished the ‘business-only’ goals ahead-of-time and under budget.
-      Codebase Optimization: Eliminated circular dependencies reducing bundle sizes for front end web deployments by separating data-access and utils out of a catch-all React library.
-      Quality Assurance: Reduced day-to-day codebase complexity uncovering dozens of bugs in a complicated investment workflow by adding complete snapshot testing and implementing an entire overhaul of the underlying logic.
-      React/Front-End Expertise: Provided mentorship and guidance to team members on react and received positive feedback after giving teammates a crash course on debugging and when to use useCallback and useMemo.
-      Oauth: Increased team’s knowledge by providing mentorship to teammates after rapidly learning and setting up basic Microsoft B2C OAuth project.
-    </TimeLineElement>
-    <TimeLineElement
-      title="ASSOCIATE LEAD CONSULTANT"
-      subtitle="Cognizant Softvision | Austin, TX | 04/2021 – 05/2022"
-    >
-      Angular Expertise: Fully integrated an angular application with a custom DBMS that met the timeline of the contract by writing a greenfield angular application.
-      SEO Optimization: Provided SEO guidance and strategy for website deployment which now shows on the second result for the targeted keywords by diligently researching best practices and the highest value-add activities
-      UX Implementations: Developed a design overhaul improving accessibility and ease of use as measured by an increase of application usage by utilizing my passion for CSS
-    </TimeLineElement>
-    <TimeLineElement
-      title="IT APPLICATIONS DEVELOPER SENIOR"
-      subtitle="Progressive Insurance | Austin, TX | 06/2018 – 03/2021"
-    >
-      Architectural Leadership: Delivered a websocket/elasticache solution to deliver an app to thousands of claims representatives that saved multiple minutes per day, multiple times per day by designing a solution, gaining consensus and excitement from the team, while seeing its successful architecture and deployment into production. 
-      Enhanced Documentation: Delivered a Docsify website within a week which enabled searching on-call documentation allowing employees to more effectively manage on-call enabling teams to reduce bug counts and exceed Tier-3 KPIs.
-      Team Standardization: Individually taught many members of the domain team as needed to share my knowledge which allowed many teammates to immediately contribute to the codebase as I made myself readily available to pair.
-      Intern Mentorship: Provided an excellent summer internship experience as measured by an immediate offer, commentary that the engineer seemed senior-level, by providing strategically increasingly challenging work and encouragement throughout the process.
-    </TimeLineElement>
-    <TimeLineElement
-      title="IT APPLICATIONS DEVELOPER MID-LEVEL/ASSOCIATE"
-      subtitle="Progressive Insurance | Colorado Springs, CO | 01/2014 – 06/2018"
-    >
-      Agile Development / Rapid Prototyping: Developed a photo viewer application, saving 130 employee hours per day within a two-month Agile rapid release cycle.
-      CSS Expertise: Trained and strengthened the organizations skills on CSS becoming recognized as the de-facto CSS guru by developing an interactive CSS crash course.
-      UX Design: Designed and developed an entirely custom video player which supported an entirely new web application to playback videos for claims.
-      Remediating Deprecated Packages: Quickly remediated hundreds of deprecated functionalities across every application at progress which enabled the organization to eliminate security risks and upgrade to IE11.
-    </TimeLineElement>
-    <TimeLineElement
-      title="ITLP INTERN/CO-OP"
-      subtitle="General Electric | Erie, PA | 06/2011 – 12/2013"
-    >
-      Web Portal Development: Created an interactive and responsive web portal with Ruby on Rails.
-      Lean Insights: Gleaned valuable insights as demonstrated by my ability to utilize lean tools to recognize waste in the process after training for a summer with a Japanese Lean Sensei
-    </TimeLineElement>
-    <TimeLineElement
-      title="COMPUTER SCIENCE TUTOR"
-      subtitle="Gannon University | Erie, PA | 09/2010 – 06/2012"
-    >
-      Server Configuration: Installed and configured a licensing server so that students could learn Cobol.
-      Tutoring Recognition: Successfully tutored remedial computer science students and recognized for my success due to improved and passing grades after I provided patience, analogies, and guidance through assignments and projects.
-    </TimeLineElement>
-    <TimeLineElement
-      title="MISCELLANEOUS PROJECTS"
-      subtitle="09/2010 – 06/2012"
-    >
-      CMS / Wordpress: Created and developed WordPress-based web pages for friends and individual clients, incorporating features such as contact forms, photo galleries, and online presence.
-      SEO Conversion: Increased conversion for a choir’s website resulting in over 2x increase in page traffic and a 3x boost in conversion by providing my design expertise.
-    </TimeLineElement>
-  </div>
+    <!-- Professional Experience -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Professional Experience
+      </h2>
+      
+      <div class="space-y-8">
+        {cvData.map((item, index) => (
+          <div class="relative">
+            {/* Timeline connector */}
+            {index < cvData.length - 1 && (
+              <div class="absolute left-6 top-8 w-px h-full bg-gray-600/30"></div>
+            )}
+            
+            <div class="flex gap-6">
+              {/* Timeline dot */}
+              <div class="flex flex-col items-center">
+                <div class="w-3 h-3 bg-cyan-400 rounded-full ring-4 ring-cyan-400/20"></div>
+              </div>
 
-  <!-- <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Certifications</div>
-  </div> -->
+              {/* Content */}
+              <div class="flex-1 min-w-0">
+                <div class="mb-4">
+                  <h3 class="text-lg font-semibold text-gray-200 leading-tight">
+                    {item.title}
+                  </h3>
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2 mt-1">
+                    <span class="text-cyan-400 font-medium">{item.company}</span>
+                    <span class="hidden sm:block text-gray-500">•</span>
+                    <span class="text-gray-400 text-sm">{item.location}</span>
+                    <span class="hidden sm:block text-gray-500">•</span>
+                    <span class="text-gray-400 text-sm">{item.startDate} – {item.endDate}</span>
+                  </div>
+                </div>
 
-  <!-- <ul class="list-disc mx-6 mb-10 grid gap-2">
-    <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
-    </li>
-    <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
-    </li>
-  </ul> -->
+                {/* Highlights */}
+                <div class="space-y-3">
+                  {item.highlights.map((highlight) => (
+                    <div class="flex items-start gap-3">
+                      <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full mt-2 flex-shrink-0"></div>
+                      <p class="text-gray-300 text-sm leading-relaxed">{highlight}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
 
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Skills</div>
-  </div>
-  
-  <div class="mb-10">
-    <div class="text-lg font-bold">Front-end Development</div>
-    <ul class="list-disc md:columns-5 columns-2 mx-6">
-      <li>React</li>
-      <li>Typescript</li>
-      <li>Tailwind</li>
-      <li>Redux</li>
-      <li>NX</li>
-      <li>Rapid prototyping</li>
-      <li>Responsive Design</li>
-      <li>Angular</li>
-      <li>CSS</li>
-      <li>Accessibility</li>
-      <li>Vite</li>
-      <li>Material UI</li>
-    </ul>
-  </div>
-  
-  <div class="mb-10">
-    <div class="text-lg font-bold">Back-end Development</div>
-    <ul class="list-disc md:columns-5 columns-2 mx-6">
-      <li>RESTful API</li>
-      <li>Java 8/11</li>
-      <li>OpenAPI</li>
-      <li>.NET Framework 4.x/Core 2.x</li>
-      <li>AWS and Azure Cloud</li>
-      <li>Ruby on Rails</li>
-    </ul>
-  </div>
-  
-  <div class="mb-10">
-    <div class="text-lg font-bold">Devops</div>
-    <ul class="list-disc md:columns-5 columns-2 mx-6">
-      <li>OAuth Implementation</li>
-      <li>Shell scripts</li>
-      <li>Github/Bitbucket actions/scripts</li>
-      <li>Git</li>
-      <li>Jira</li>
-      <li>Azure DevOps</li>
-      <li>Terraform/Infrastructure as Code</li>
-    </ul>
-  </div>
-  
-  <div class="mb-10">
-    <div class="text-lg font-bold">Technical Leadership</div>
-    <ul class="list-disc md:columns-5 columns-2 mx-6">
-      <li>Technical strategy documentation</li>
-      <li>Delivery Analysis</li>
-      <li>Lean advocate</li>
-      <li>Lean advocate</li>
-      <li>Thoughtful code reviews</li>
-      <li>Team mentor/lead</li>
-      </ul>
+    <!-- Technical Skills -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Technical Skills
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {skillCategories.map((category) => (
+          <div class="bg-gray-800/30 border border-gray-600/20 rounded-xl p-4">
+            <h3 class="font-semibold text-cyan-400 mb-3">{category.name}</h3>
+            <div class="flex flex-wrap gap-2">
+              {category.skills.map((skill) => (
+                <span class="px-2 py-1 text-xs bg-gray-700/40 text-gray-300 rounded-md border border-gray-600/20">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="mb-8">
+      <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
+        <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
+        Education
+      </h2>
+      
+      <div class="space-y-4">
+        {education.map((edu) => (
+          <div class="flex items-start gap-3 p-4 rounded-lg bg-gray-800/30 border border-gray-600/20">
+            <div class="w-2 h-2 bg-cyan-400/60 rounded-full mt-2 flex-shrink-0"></div>
+            <div>
+              <h3 class="font-semibold text-gray-200">{edu.degree}</h3>
+              <div class="text-gray-400 text-sm">
+                {edu.school} • {edu.period}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   </div>
 </BaseLayout>

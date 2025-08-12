@@ -6,118 +6,136 @@ export interface CVItem {
   startDate: string;
   endDate: string;
   impact: number; // 1-10 scale for sorting by impact
-  skills: {
-    architecture: string[];
-    technical: string[];
-    development: string[];
-    leadership: string[];
-  };
-  highlights: {
-    text: string;
-    relatedSkills: string[];
-  }[];
+  highlights: string[];
 }
 
 export const cvData: CVItem[] = [
   {
     id: "handraise-2023",
-    title: "SOFTWARE ENGINEER (FRONT END / FULL STACK)",
+    title: "Software Engineer",
     company: "Handraise",
-    location: "Remote",
-    startDate: "2023-12",
-    endDate: "present",
-    impact: 9,
-    skills: {
-      architecture: ["API Architecture", "System Design", "Component Architecture", "AI/ML Systems"],
-      technical: ["GraphQL/URQL", "TypeScript", "React"],
-      development: ["Architecture Patterns", "Performance Optimization"],
-      leadership: ["Technical Strategy", "Architecture Planning"]
-    },
+    location: "Austin, TX",
+    startDate: "2023",
+    endDate: "May 2025",
+    impact: 10,
     highlights: [
-      {
-        text: "Architected and implemented a modern API layer using GraphQL/URQL, establishing strict contract enforcement and type safety across the full stack",
-        relatedSkills: ["API Architecture", "GraphQL/URQL"]
-      },
-      {
-        text: "Designed and implemented a scalable component architecture that improved development velocity by 40% and reduced UI inconsistencies by 60%",
-        relatedSkills: ["Component Architecture", "System Design"]
-      },
-      {
-        text: "Led the architecture and integration of AI systems, including custom LLM implementation for structured data processing and analysis",
-        relatedSkills: ["AI/ML Systems", "Architecture Patterns"]
-      }
+      "Built and deployed a high-performance, real-time filtering system capable of handling thousands of dynamic filters on the front end, enabling instant cross-intersections of data such as high-scoring news impact analysis by readership, platform, and tier",
+      "Reduced CI build times for the front-end by 70% in the first week by adopting PNPM and optimizing GitHub Action caching",
+      "Partnered with product and design teams to define, build, and launch high-impact features, ensuring measurable improvements in usability",
+      "Shifted release process from stage/main branches to tag-based deployments, cutting merge conflicts and increasing release reliability",
+      "Integrated AI-assisted code reviews (ellipsis.dev) to automate 50% of routine fixes, accelerating delivery cycles",
+      "Tuned Postgres parameters on Aurora SSD, delivering 10x faster query performance and improving customer-facing load times",
+      "Mentored contract and senior engineers, increasing team delivery velocity and ownership"
     ]
   },
   {
     id: "crowdstreet-2022",
-    title: "SENIOR SOFTWARE ENGINEER AND TEAM LEAD",
+    title: "Senior Software Engineer & Team Lead",
     company: "CrowdStreet",
     location: "Austin, TX",
-    startDate: "2022-06",
-    endDate: "2023-12",
-    impact: 8,
-    skills: {
-      architecture: ["System Design", "Performance Architecture", "Distributed Systems"],
-      technical: ["Build Systems", "OAuth", "Microservices"],
-      development: ["Architecture Patterns", "System Testing"],
-      leadership: ["Technical Leadership", "Architecture Planning"]
-    },
+    startDate: "2022",
+    endDate: "2023",
+    impact: 9,
     highlights: [
-      {
-        text: "Architected a distributed build system that reduced build times by 95% and improved development workflow efficiency",
-        relatedSkills: ["Performance Architecture", "Build Systems"]
-      },
-      {
-        text: "Redesigned system architecture to eliminate circular dependencies, resulting in 40% smaller bundle sizes and improved application performance",
-        relatedSkills: ["System Design", "Architecture Patterns"]
-      }
+      "Directed a cross-functional team to deliver an unplanned product MVP within two sprints, meeting executive expectations",
+      "Refactored NGINX configurations, removing 2,000+ lines of redundant code and enabling rapid global updates",
+      "Instituted front-end performance best practices, improving application responsiveness and developer productivity",
+      "Led team training on Chrome DevTools and React patterns, raising code quality across the organization"
     ]
   },
   {
-    id: "progressive-2018",
-    title: "IT APPLICATIONS DEVELOPER SENIOR",
+    id: "progressive-2013",
+    title: "IT Applications Developer Senior",
     company: "Progressive Insurance",
     location: "Austin, TX",
-    startDate: "2018-06",
-    endDate: "2021-03",
+    startDate: "2013",
+    endDate: "2021",
     impact: 9,
-    skills: {
-      architecture: ["Distributed Systems", "Real-time Architecture", "System Design"],
-      technical: ["WebSocket", "Caching", "High-Scale Systems"],
-      development: ["Architecture Patterns", "System Documentation"],
-      leadership: ["Architecture Planning", "Team Leadership"]
-    },
     highlights: [
-      {
-        text: "Architected and implemented a real-time distributed system using WebSocket and ElastiCache, serving thousands of concurrent users with sub-second latency",
-        relatedSkills: ["Distributed Systems", "Real-time Architecture"]
-      },
-      {
-        text: "Designed and implemented comprehensive system documentation and architecture decision records (ADRs) that reduced onboarding time by 50%",
-        relatedSkills: ["System Documentation", "Architecture Planning"]
-      }
+      "Reduced app loading times by 90%, saving ~3,500 hours annually in employee productivity",
+      "Spearheaded enhancements that eliminated 130 cumulative employee-hours per day in manual workflows",
+      "Championed mentorship programs, leading to successful intern conversions and internal promotions",
+      "Mastered Angular and SQL rapidly to deliver critical projects on schedule"
+    ]
+  },
+  {
+    id: "additional-projects",
+    title: "Additional Projects",
+    company: "Independent",
+    location: "Austin, TX",
+    startDate: "2010",
+    endDate: "Present",
+    impact: 7,
+    highlights: [
+      "Applied machine learning to Austin real estate analysis, launching an Airbnb venture with projected 25% annual ROI",
+      "Contributed to Roo Code (open-source IDE extension), improving UI/UX interaction and simplifying component architecture"
     ]
   }
 ];
 
-export const skillCategories = {
-  "System Architecture": [
-    "API Architecture",
-    "System Design",
-    "Component Architecture",
-    "Distributed Systems",
-    "Real-time Architecture",
-    "Performance Architecture"
-  ],
-  "Technical Leadership": [
-    "Architecture Planning",
-    "Technical Leadership",
-    "Technical Strategy"
-  ],
-  "Specialized Systems": [
-    "AI/ML Systems",
-    "High-Scale Systems",
-    "Performance Optimization",
-    "System Documentation"
-  ]
-};
+export interface SkillCategory {
+  name: string;
+  skills: string[];
+}
+
+export const skillCategories: SkillCategory[] = [
+  {
+    name: "Front-End",
+    skills: [
+      "React", "TypeScript", "JavaScript", "CSS", "Tailwind", "HTML5", 
+      "Redux", "GraphQL", "REST APIs", "Responsive Design", "Performance Optimization"
+    ]
+  },
+  {
+    name: "Back-End",
+    skills: [
+      "Node.js", "Python", "Express", "PostgreSQL", "Aurora", "MySQL", 
+      "MongoDB", "API Design", "Database Optimization", "Microservices"
+    ]
+  },
+  {
+    name: "DevOps/Cloud",
+    skills: [
+      "AWS", "Azure", "Terraform", "CI/CD", "GitHub Actions", "Docker", 
+      "Infrastructure as Code", "Performance Monitoring", "System Architecture"
+    ]
+  },
+  {
+    name: "Leadership & Product",
+    skills: [
+      "Technical Leadership", "Team Mentorship", "Cross-functional Collaboration", 
+      "Product Strategy", "Agile Development", "Code Reviews", "Architecture Planning"
+    ]
+  },
+  {
+    name: "Monitoring & Tools",
+    skills: [
+      "Grafana", "Datadog", "Sentry", "Jira", "Figma", "Growthbook", 
+      "Chrome DevTools", "Git", "PNPM", "Vite"
+    ]
+  }
+];
+
+export const coreCompetencies = [
+  "Product-Focused Full-Stack Development",
+  "Technical Leadership & Mentorship", 
+  "CI/CD & DevOps Automation",
+  "Cross-Functional Collaboration",
+  "Scalable Architecture Design",
+  "Cloud Infrastructure (AWS, Azure, Terraform)",
+  "Database Optimization (Postgres, Aurora)",
+  "AI Tooling Integration & Process Automation"
+];
+
+export const education = [
+  {
+    degree: "B.S. Information Systems",
+    school: "Gannon University",
+    period: "2008 – 2013"
+  },
+  {
+    degree: "B.A. Theatre/Communication Arts", 
+    school: "Gannon University",
+    period: "2008 – 2013"
+  }
+];

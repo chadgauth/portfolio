@@ -1,31 +1,54 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import AboutMe from "../components/sections/AboutMe.astro";
-import profileImage from "../assets/chad_profile.jpg";
+import profileImage from "../assets/chad_profile_new.png";
 import ProfileSection from "../components/sections/ProfileSection.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 ---
 
 <BaseLayout sideBarActiveItemID="home">
-  <div class="container mx-auto px-4">
+  <!-- Subtle accent line -->
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+  
+  <div class="container mx-auto px-4 py-6 md:py-8">
     <!-- Mobile Layout -->
-    <div class="flex flex-col items-center space-y-8 md:hidden">
-      <HeroSection />
-      <ProfileSection 
-        profileImage={profileImage}
-        class="w-full max-w-sm"
-      />
+    <div class="flex flex-col space-y-8 md:hidden">
+      <HeroSection class="w-full" />
+      <div class="w-full flex justify-center">
+        <div class="w-full max-w-xs">
+          <ProfileSection
+            profileImage={profileImage}
+            class="w-full"
+          />
+        </div>
+      </div>
       <AboutMe className="w-full" />
     </div>
 
     <!-- Desktop Layout -->
-    <div class="hidden md:grid md:grid-cols-[2fr_1fr] md:gap-x-12 md:gap-y-8">
-      <HeroSection class="col-span-2" />
-      <AboutMe />
-      <ProfileSection 
-        profileImage={profileImage}
-        class="row-span-2"
-      />
+    <div class="hidden md:block">
+      <div class="grid grid-cols-[1.8fr_1fr] gap-x-12 gap-y-8 items-start">
+        <!-- Main Content Area -->
+        <div class="space-y-8">
+          <HeroSection class="w-full" />
+          <AboutMe className="w-full" />
+        </div>
+        
+        <!-- Sidebar Area -->
+        <div class="sticky top-8">
+          <ProfileSection
+            profileImage={profileImage}
+            class="w-full"
+          />
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Subtle background effects -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-cyan-500/3 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-32 w-48 h-48 bg-blue-500/3 rounded-full blur-3xl"></div>
+  </div>
 </BaseLayout>
+
