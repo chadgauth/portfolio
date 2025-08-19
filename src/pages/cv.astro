@@ -1,8 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { cvData, skillCategories, coreCompetencies, education } from "../data/cv.ts";
+import { cvDataV2 as cvData, skillCategories, coreCompetencies, education } from "../data/cv.ts";
 
 const profileSummary = "Engineering leader with 10+ years in enterprise, finance, and high-growth startup environments. Known for delivering measurable business impact by owning projects end-to-end—from discovery through deployment—and mentoring teams to higher autonomy. Expertise spans front-end, back-end, and DevOps, with a strong product mindset. Achievements include cutting build times by 80%+, improving database performance 10x, and shipping features that boosted user engagement and reduced operational costs. Open-source contributor and advocate for engineering excellence.";
+const techSkills = Array.from(
+  new Set(
+    cvData.flatMap((i) => [
+      ...i.stack,
+      ...i.highlights.flatMap((h) => h.skillsFilter),
+    ])
+  )
+).sort();
 ---
 
 <BaseLayout title="CV - Chad Gauthier" sideBarActiveItemID="cv">
@@ -61,16 +69,36 @@ const profileSummary = "Engineering leader with 10+ years in enterprise, finance
       </div>
     </section>
 
-    <!-- Professional Experience -->
+    <!-- Professional Experience + Tech Filter -->
     <section class="mb-12">
       <h2 class="text-xl font-bold text-gray-200 mb-6 flex items-center">
         <span class="w-1 h-6 bg-cyan-400 mr-3 rounded-full"></span>
         Professional Experience
       </h2>
+
+      <!-- Tech Filter -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-semibold text-gray-300">Filter by Tech</h3>
+          <button id="clear-tech-filter" class="text-xs text-cyan-400 hover:underline">Clear</button>
+        </div>
+        <div class="flex flex-wrap gap-2" id="tech-chip-container">
+          {techSkills.map((skill) => (
+            <button class="tech-chip px-2.5 py-1 text-xs rounded-md border border-gray-600/30 bg-gray-800/40 text-gray-300 hover:bg-gray-800/80"
+                    data-skill={skill}>
+              {skill}
+            </button>
+          ))}
+        </div>
+      </div>
       
-      <div class="space-y-8">
+      <div class="space-y-8" id="experience-list">
         {cvData.map((item, index) => (
-          <div class="relative">
+          <div class="relative timeline-item"
+               data-id={item.id}
+               data-impact={item.impact}
+               data-stack={item.stack.join(",")}
+               data-hskills={item.highlights.flatMap((h) => h.skillsFilter).join(",")}>
             {/* Timeline connector */}
             {index < cvData.length - 1 && (
               <div class="absolute left-6 top-8 w-px h-full bg-gray-600/30"></div>
@@ -84,7 +112,7 @@ const profileSummary = "Engineering leader with 10+ years in enterprise, finance
 
               {/* Content */}
               <div class="flex-1 min-w-0">
-                <div class="mb-4">
+                <div class="mb-3">
                   <h3 class="text-lg font-semibold text-gray-200 leading-tight">
                     {item.title}
                   </h3>
@@ -95,14 +123,30 @@ const profileSummary = "Engineering leader with 10+ years in enterprise, finance
                     <span class="hidden sm:block text-gray-500">•</span>
                     <span class="text-gray-400 text-sm">{item.startDate} – {item.endDate}</span>
                   </div>
+                  <!-- Stack badges -->
+                  <div class="flex flex-wrap gap-1.5 mt-2">
+                    {item.stack.map((s) => (
+                      <span class="px-2 py-0.5 text-[10px] rounded border border-gray-600/30 bg-gray-800/40 text-gray-300">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Highlights */}
                 <div class="space-y-3">
-                  {item.highlights.map((highlight) => (
+                  {item.highlights.map((h) => (
                     <div class="flex items-start gap-3">
                       <div class="w-1.5 h-1.5 bg-cyan-400/60 rounded-full mt-2 flex-shrink-0"></div>
-                      <p class="text-gray-300 text-sm leading-relaxed">{highlight}</p>
+                      <div class="text-gray-300 text-sm leading-relaxed">
+                        <div>{h.oneLiner}</div>
+                        {h.furtherDetails && (
+                          <details class="mt-1">
+                            <summary class="cursor-pointer text-cyan-400/80 hover:text-cyan-400">More</summary>
+                            <div class="mt-1 text-gray-400">{h.furtherDetails}</div>
+                          </details>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -111,6 +155,47 @@ const profileSummary = "Engineering leader with 10+ years in enterprise, finance
           </div>
         ))}
       </div>
+
+      <script>
+        const chips = Array.from(document.querySelectorAll('.tech-chip'));
+        const clearBtn = document.getElementById('clear-tech-filter');
+        const items = Array.from(document.querySelectorAll('.timeline-item'));
+        const selected = new Set();
+
+        function applyFilter() {
+          if (selected.size === 0) {
+            items.forEach((el) => el.classList.remove('hidden'));
+            return;
+          }
+          items.forEach((el) => {
+            const stack = (el.getAttribute('data-stack') || '').split(',').map((s) => s.trim()).filter(Boolean);
+            const hskills = (el.getAttribute('data-hskills') || '').split(',').map((s) => s.trim()).filter(Boolean);
+            const haystack = new Set([...stack, ...hskills]);
+            const matchesAll = Array.from(selected).every((skill) => haystack.has(String(skill)));
+            el.classList.toggle('hidden', !matchesAll);
+          });
+        }
+
+        chips.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const skill = btn.getAttribute('data-skill') || '';
+            if (btn.classList.contains('ring-1')) {
+              btn.classList.remove('ring-1', 'ring-cyan-400/60', 'bg-gray-800/80');
+              selected.delete(skill);
+            } else {
+              btn.classList.add('ring-1', 'ring-cyan-400/60', 'bg-gray-800/80');
+              selected.add(skill);
+            }
+            applyFilter();
+          });
+        });
+
+        clearBtn?.addEventListener('click', () => {
+          selected.clear();
+          chips.forEach((btn) => btn.classList.remove('ring-1', 'ring-cyan-400/60', 'bg-gray-800/80'));
+          applyFilter();
+        });
+      </script>
     </section>
 
     <!-- Technical Skills -->
