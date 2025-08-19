@@ -1,0 +1,358 @@
+---
+import { cvDataV2 } from '../../data/cv.ts';
+import { getSmartFilterSkills, analyzeSkills } from '../../data/cv-analytics.ts';
+
+// Get skill analytics
+const skillAnalytics = analyzeSkills();
+const smartSkills = getSmartFilterSkills();
+
+// Organize data by skills for skill-first filtering
+const skillMap = new Map();
+skillAnalytics.forEach(skill => {
+  if (skill.frequency >= 2) {
+    const relatedExperiences = cvDataV2.filter(exp => {
+      const allSkills = [...exp.stack, ...exp.highlights.flatMap(h => h.skillsFilter)];
+      return allSkills.includes(skill.name);
+    });
+    
+    skillMap.set(skill.name, {
+      ...skill,
+      experiences: relatedExperiences
+    });
+  }
+});
+---
+
+<div class="cv-skill-focused max-w-7xl mx-auto bg-white" id="cv-skill-focused">
+  <!-- Clean Header -->
+  <div class="p-6 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900">Professional Experience</h2>
+        <p class="text-gray-600 mt-1">Filter by technology to see relevant experience</p>
+      </div>
+      
+      <!-- Search -->
+      <div class="flex items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search skills or companies..."
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64"
+          id="skill-search"
+        />
+        <button class="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50">
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills Filter Grid -->
+  <div class="p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Filter by Technology</h3>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+      {smartSkills.slice(0, 18).map((skillName) => {
+        const skillData = skillAnalytics.find(s => s.name === skillName);
+        return skillData ? (
+          <button 
+            class="skill-filter-btn p-3 text-left border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            data-skill={skillData.name}
+          >
+            <div class="font-medium text-gray-900 text-sm">{skillData.name}</div>
+            <div class="text-xs text-gray-500 mt-1">
+              {skillData.frequency} {skillData.frequency === 1 ? 'role' : 'roles'}
+            </div>
+          </button>
+        ) : null;
+      })}
+    </div>
+  </div>
+
+  <!-- Default View: All Experiences -->
+  <div class="default-view p-6" id="default-view">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">All Experience</h3>
+    <div class="space-y-4">
+      {cvDataV2.map((exp) => (
+        <div class="experience-card p-6 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all duration-200">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h4 class="text-lg font-semibold text-gray-900">{exp.title}</h4>
+              <div class="text-blue-600 font-medium">{exp.company}</div>
+              <div class="text-sm text-gray-500">{exp.location} • {exp.startDate} – {exp.endDate}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm font-medium text-gray-900">Impact: {exp.impact}/10</div>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <div class="flex flex-wrap gap-2">
+              {exp.stack.map((tech) => (
+                <span class="tech-tag px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded border">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+          
+          <div class="text-sm text-gray-700">
+            {exp.highlights[0]?.oneLiner}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Skill-Focused View (Hidden by default) -->
+  <div class="skill-view hidden p-6" id="skill-view">
+    <!-- Skill Header -->
+    <div class="skill-header mb-6">
+      <h3 class="text-2xl font-bold text-gray-900 mb-2" id="selected-skill-name">React</h3>
+      <p class="text-gray-600" id="selected-skill-summary">Used in 4 roles across different companies</p>
+    </div>
+
+    <!-- Companies using this skill -->
+    <div class="companies-grid">
+      <h4 class="text-lg font-semibold text-gray-900 mb-4">Experience with <span id="skill-name-repeat">React</span></h4>
+      <div class="space-y-4" id="skill-experiences">
+        <!-- Dynamic content will be populated here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Clean, minimal styling -->
+<style>
+  /* Clean, light theme */
+  .cv-skill-focused {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  /* Skill filter states */
+  .skill-filter-btn.active {
+    @apply border-blue-500 bg-blue-100 ring-2 ring-blue-200;
+  }
+
+  .skill-filter-btn.active .font-medium {
+    @apply text-blue-900;
+  }
+
+  /* Tech tag highlighting */
+  .tech-tag.highlighted {
+    @apply bg-blue-100 text-blue-800 border-blue-300 font-medium;
+  }
+
+  /* Experience highlighting */
+  .experience-card.highlighted {
+    @apply border-blue-300 bg-blue-50;
+  }
+
+  /* Clean animations */
+  .slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<!-- Simple, focused JavaScript -->
+<script>
+  class CVSkillFocused {
+    private selectedSkill: string | null = null;
+    private skillData = new Map();
+
+    constructor() {
+      this.initializeSkillData();
+      this.bindEvents();
+    }
+
+    private initializeSkillData() {
+      // Get skill data from the rendered content
+      const skillButtons = document.querySelectorAll('.skill-filter-btn');
+      skillButtons.forEach(btn => {
+        const skillName = btn.getAttribute('data-skill');
+        if (skillName) {
+          this.skillData.set(skillName, {
+            name: skillName,
+            button: btn
+          });
+        }
+      });
+    }
+
+    private bindEvents() {
+      // Skill filter clicks
+      document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => this.handleSkillClick(e));
+      });
+
+      // Search
+      const searchInput = document.getElementById('skill-search') as HTMLInputElement;
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => this.handleSearch(e));
+      }
+
+      // Clear button
+      document.querySelector('button:has-text("Clear")')?.addEventListener('click', () => {
+        this.clearAll();
+      });
+    }
+
+    private handleSkillClick(e: Event) {
+      const btn = e.currentTarget as HTMLElement;
+      const skillName = btn.getAttribute('data-skill');
+      
+      if (!skillName) return;
+
+      // Toggle selection
+      if (this.selectedSkill === skillName) {
+        this.clearSelection();
+        return;
+      }
+
+      // Clear previous selection
+      this.clearSelection();
+
+      // Set new selection
+      this.selectedSkill = skillName;
+      btn.classList.add('active');
+
+      // Show skill-focused view
+      this.showSkillView(skillName);
+    }
+
+    private showSkillView(skillName: string) {
+      const defaultView = document.getElementById('default-view');
+      const skillView = document.getElementById('skill-view');
+      
+      if (!defaultView || !skillView) return;
+
+      // Hide default view
+      defaultView.classList.add('hidden');
+      
+      // Update skill view content
+      this.updateSkillViewContent(skillName);
+      
+      // Show skill view
+      skillView.classList.remove('hidden');
+      skillView.classList.add('slide-in');
+    }
+
+    private updateSkillViewContent(skillName: string) {
+      // Find experiences that use this skill
+      const allExperiences = Array.from(document.querySelectorAll('.experience-card'));
+      const relevantExperiences: HTMLElement[] = [];
+
+      allExperiences.forEach(exp => {
+        const techTags = exp.querySelectorAll('.tech-tag');
+        let hasSkill = false;
+        
+        techTags.forEach(tag => {
+          if (tag.textContent?.trim() === skillName) {
+            hasSkill = true;
+            tag.classList.add('highlighted');
+          } else {
+            tag.classList.remove('highlighted');
+          }
+        });
+        
+        if (hasSkill) {
+          relevantExperiences.push(exp as HTMLElement);
+        }
+      });
+
+      // Update skill header
+      const skillNameEl = document.getElementById('selected-skill-name');
+      const skillSummaryEl = document.getElementById('selected-skill-summary');
+      const skillRepeatEl = document.getElementById('skill-name-repeat');
+      
+      if (skillNameEl) skillNameEl.textContent = skillName;
+      if (skillSummaryEl) {
+        skillSummaryEl.textContent = `Used in ${relevantExperiences.length} ${relevantExperiences.length === 1 ? 'role' : 'roles'}`;
+      }
+      if (skillRepeatEl) skillRepeatEl.textContent = skillName;
+
+      // Populate experiences
+      const experiencesContainer = document.getElementById('skill-experiences');
+      if (experiencesContainer) {
+        experiencesContainer.innerHTML = '';
+        
+        relevantExperiences.forEach(exp => {
+          const clone = exp.cloneNode(true) as HTMLElement;
+          clone.classList.add('highlighted');
+          experiencesContainer.appendChild(clone);
+        });
+      }
+    }
+
+    private clearSelection() {
+      // Remove active state from all buttons
+      document.querySelectorAll('.skill-filter-btn.active').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Clear highlighting
+      document.querySelectorAll('.tech-tag.highlighted').forEach(tag => {
+        tag.classList.remove('highlighted');
+      });
+
+      document.querySelectorAll('.experience-card.highlighted').forEach(exp => {
+        exp.classList.remove('highlighted');
+      });
+
+      // Show default view
+      const defaultView = document.getElementById('default-view');
+      const skillView = document.getElementById('skill-view');
+      
+      if (defaultView && skillView) {
+        skillView.classList.add('hidden');
+        defaultView.classList.remove('hidden');
+      }
+
+      this.selectedSkill = null;
+    }
+
+    private handleSearch(e: Event) {
+      const input = e.target as HTMLInputElement;
+      const query = input.value.toLowerCase();
+      
+      // Simple search implementation
+      document.querySelectorAll('.skill-filter-btn, .experience-card').forEach(el => {
+        const text = el.textContent?.toLowerCase() || '';
+        if (query === '' || text.includes(query)) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    }
+
+    private clearAll() {
+      this.clearSelection();
+      
+      const searchInput = document.getElementById('skill-search') as HTMLInputElement;
+      if (searchInput) {
+        searchInput.value = '';
+      }
+      
+      // Show all elements
+      document.querySelectorAll('.hidden').forEach(el => {
+        el.classList.remove('hidden');
+      });
+    }
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    new CVSkillFocused();
+  });
+</script>

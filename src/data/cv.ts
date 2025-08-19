@@ -477,22 +477,66 @@ export const skillCategories: SkillCategory[] = [
   }
 ];
 
-export const coreCompetencies = [
-  "Product-Focused Full-Stack Development",
-  "Technical Leadership & Mentorship",
-  "Developer Experience (DX) & Tooling",
-  "Monorepos (Nx)",
-  "Front-End Performance Optimization (bundle analysis, lazy loading)",
-  "API & Backend Development (Node.js, GraphQL, Postgres)",
-  "CI/CD & DevOps Automation",
-  "Cross-Functional Collaboration",
-  "Scalable Architecture Design",
-  "Cloud Infrastructure (AWS, Azure, Terraform)",
-  "Database Optimization (Postgres, Aurora)",
-  "AI Tooling Integration & Process Automation",
-  "Testing Strategy & QA Automation",
-  "Identity & Access (OIDC/OAuth2, Entra ID B2C)",
-  "Performance Engineering (NGINX, WebSockets, Caching)"
+// Top 10 skills for $185K+ platform/front-end/DX roles
+export const keySkills = [
+  "Angular",
+  "Nx Monorepos",
+  "React",
+  "TypeScript",
+  "Developer Experience",
+  "Storybook",
+  "Biome",
+  "GitHub Actions",
+  "Cypress",
+  "Performance Optimization"
+];
+
+// Deep skills organized by category for expandable sections
+export const deepSkillCategories = [
+  {
+    name: "Front-End",
+    skills: [
+      "Angular (8–13)", "React", "TypeScript", "JavaScript", "Nx", "Storybook",
+      "Biome", "ESLint", "CSS", "Tailwind", "Redux", "React Query", "Zustand",
+      "GraphQL", "REST APIs", "Responsive Design", "Accessibility (WCAG 2.1)",
+      "Performance Optimization", "Lazy Loading", "Code Splitting", "Caching",
+      "Material UI", "Lighthouse", "Bundle Analyzer"
+    ]
+  },
+  {
+    name: "Back-End",
+    skills: [
+      "Node.js", "Python", "Express", "PostgreSQL", "Aurora", "MySQL", "SQL Server",
+      "MongoDB", "API Design", "GraphQL", "Database Optimization", "Microservices",
+      ".NET (Core/Framework)", "Java 8/11", "Ruby on Rails", "Redis/ElastiCache", "WebSockets"
+    ]
+  },
+  {
+    name: "DevOps/DX",
+    skills: [
+      "GitHub Actions", "Azure DevOps", "Bitbucket Pipelines", "Terraform", "CI/CD",
+      "Docker", "Infrastructure as Code", "Performance Monitoring", "System Architecture",
+      "NGINX", "CloudFront/CDN", "RDS/Aurora Postgres", "AWS Lambda", "Serverless",
+      "Shell Scripting", "PNPM", "Nx Generators", "Task Graph Caching", "Code Review Automation (ellipsis.dev)"
+    ]
+  },
+  {
+    name: "Testing",
+    skills: [
+      "Jest", "Vitest", "Cypress", "Playwright", "React Testing Library",
+      "Snapshot Testing", "Visual Regression Testing", "Contract Testing", "CI Test Parallelization/Caching"
+    ]
+  },
+  {
+    name: "Other",
+    skills: [
+      "OAuth 2.0/2.1", "OIDC", "JWT", "Microsoft Entra ID (B2C)", "SSO", "Secure Cookies/Session Management",
+      "Technical Leadership", "Team Mentorship", "Cross-functional Collaboration", "Product Strategy",
+      "Agile Development", "Code Reviews", "Architecture Planning", "Grafana", "Datadog", "Sentry",
+      "OpenTelemetry", "Lighthouse CI", "Docsify", "Jira", "Figma", "Growthbook", "Chrome DevTools",
+      "Git", "Vite", "SEO", "WordPress", "Machine Learning", "Lean"
+    ]
+  }
 ];
 
 export const education = [

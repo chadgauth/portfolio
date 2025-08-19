@@ -1,0 +1,71 @@
+---
+/**
+ * SkillFilter.astro
+ * UI-only component. Renders skill buttons with counts.
+ * No business logic. Emits data-skill attributes for parent to wire behavior.
+ */
+export interface SkillView {
+  slug: string;
+  label: string;
+  count: number;
+  level?: 'Expert' | 'Advanced' | 'Intermediate';
+}
+
+interface Props {
+  title?: string;
+  skills: SkillView[]; // already counted & sorted by parent
+}
+
+const { title = 'Filter by Technology', skills } = Astro.props;
+---
+
+<div class="space-y-3" aria-label="Skill Filters">
+  <h2 class="text-lg font-bold mb-4" style="color: oklch(0.9 0.03 240);">
+    {title}
+  </h2>
+
+  <!-- Top skills prominently displayed -->
+  <div class="space-y-2">
+    <h3 class="text-xs font-medium uppercase tracking-wide" style="color: oklch(0.6 0.05 240);">Primary Skills</h3>
+    {skills.slice(0, 8).map((s) => (
+      <button
+        class="skill-filter group w-full text-left p-2.5 rounded-lg border transition-all duration-200 hover:scale-[1.01]"
+        style="background: oklch(0.08 0.02 240); border-color: oklch(0.15 0.05 240); color: oklch(0.78 0.05 240);"
+        data-skill={s.slug}
+      >
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-sm">{s.label}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full" style="background: oklch(0.12 0.08 250); color: oklch(0.7 0.1 250);">
+            {s.count}
+          </span>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Additional skills in compact format -->
+  {skills.length > 8 && (
+    <div class="space-y-2">
+      <h3 class="text-xs font-medium uppercase tracking-wide" style="color: oklch(0.6 0.05 240);">Supporting Skills</h3>
+      <div class="flex flex-wrap gap-1.5">
+        {skills.slice(8).map((s) => (
+          <button
+            class="skill-filter-small px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105"
+            style="background: oklch(0.08 0.02 240); border: 1px solid oklch(0.15 0.05 240); color: oklch(0.7 0.05 240);"
+            data-skill={s.slug}
+          >
+            {s.label} ({s.count})
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .skill-filter.active {
+    background: oklch(0.12 0.08 250) !important;
+    border-color: oklch(0.4 0.15 250) !important;
+    box-shadow: 0 0 20px oklch(0.4 0.15 250 / 0.2);
+  }
+</style>

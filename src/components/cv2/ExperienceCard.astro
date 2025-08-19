@@ -1,0 +1,150 @@
+---
+/**
+ * ExperienceCard.astro
+ * UI-only card for a single experience (compact, desktop-first).
+ * No business logic: emits dataset attributes for parent page scripting.
+ */
+import type { CV2Experience } from "../../data/cv2.schema";
+
+interface Props {
+  exp: CV2Experience;
+  skillLabelBySlug: Map<string, string>;
+}
+
+const { exp, skillLabelBySlug } = Astro.props;
+
+// Build union of skills for dataset (primary + supporting + achievements)
+const unionSkills = Array.from(
+  new Set([
+    ...(exp.primarySkills ?? []),
+    ...(exp.supportingSkills ?? []),
+    ...exp.achievements.flatMap((a) => a.skills ?? []),
+  ])
+);
+const unionSkillsAttr = unionSkills.join(",");
+---
+
+<article
+  class="experience-card expanded group relative p-5 rounded-[18px] border transition-all duration-300 overflow-hidden hover:shadow-2xl"
+  style="background: oklch(0.07 0.02 240); border-color: oklch(0.12 0.05 240);"
+  data-exp-id={exp.id}
+  data-exp-skills={unionSkillsAttr}
+>
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(120% 120% at 100% 0%, oklch(0.45 0.12 260 / 0.12) 0%, transparent 60%);"></div>
+  <div class="relative z-10">
+    <!-- Header compact -->
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <h3 class="text-lg font-bold mb-1" style="color: oklch(0.9 0.03 240);">
+          {exp.role}
+        </h3>
+        <div class="text-base font-semibold mb-0.5" style="color: oklch(0.7 0.15 250);">
+          {exp.company}
+        </div>
+        <div class="text-xs" style="color: oklch(0.6 0.05 240);">
+          {exp.location}{exp.location ? " • " : ""}{exp.period.start} – {exp.period.end ?? "Present"}{exp.mode ? ` • ${exp.mode}` : ""}
+        </div>
+      </div>
+      <!-- Context chips -->
+      <div class="flex gap-1.5">
+        {(exp.domains ?? []).map((d) => (
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-medium"
+                style="background: oklch(0.1 0.05 250); color: oklch(0.75 0.08 250); border: 1px solid oklch(0.15 0.05 250);">
+            {d}
+          </span>
+        ))}
+        {(exp.productAreas ?? []).map((p) => (
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-medium"
+                style="background: oklch(0.1 0.05 250); color: oklch(0.75 0.08 250); border: 1px solid oklch(0.15 0.05 250);">
+            {p}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tech stack (single wrap row) -->
+    <div class="mb-4">
+      <div class="flex flex-wrap gap-1">
+        {(exp.primarySkills ?? []).map((slug) => (
+          <span class="tech-tag px-2 py-0.5 rounded-md text-xs font-medium transition-all duration-200"
+                style="background: oklch(0.1 0.05 250); color: oklch(0.78 0.08 250); border: 1px solid oklch(0.15 0.05 250);"
+                data-tech={slug}>
+            {skillLabelBySlug.get(slug) ?? slug}
+          </span>
+        ))}
+        {(exp.supportingSkills ?? []).map((slug) => (
+          <span class="tech-tag px-2 py-0.5 rounded-md text-xs font-medium opacity-75 transition-all duration-200"
+                style="background: oklch(0.1 0.05 250); color: oklch(0.7 0.06 250); border: 1px solid oklch(0.15 0.05 250);"
+                data-tech={slug}>
+            {skillLabelBySlug.get(slug) ?? slug}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Achievements grid (dense 2-col) -->
+    <div class="mt-2">
+      <h4 class="text-xs font-semibold mb-2" style="color: oklch(0.75 0.05 240);">
+        Key Achievements
+      </h4>
+      <div class="grid md:grid-cols-2 gap-2.5">
+        {exp.achievements.map((ach) => {
+          const achSkillsAttr = (ach.skills ?? []).join(",");
+          return (
+            <div class="achievement p-2.5 rounded-xl border"
+                 style="background: oklch(0.05 0.02 240); border-color: oklch(0.1 0.05 240);"
+                 data-ach-id={ach.id}
+                 data-ach-skills={achSkillsAttr}>
+              <div class="flex items-start justify-between gap-2">
+                <h5 class="font-bold text-[12.5px]" style="color: oklch(0.85 0.05 240);">
+                  {ach.oneLiner}
+                </h5>
+              </div>
+              {ach.details && (
+                <p class="text-[11.5px] leading-snug mt-1" style="color: oklch(0.7 0.03 240);">
+                  {ach.details}
+                </p>
+              )}
+
+              <!-- Outcomes as badges -->
+              {(ach.outcomes && ach.outcomes.length > 0) && (
+                <div class="flex flex-wrap gap-1 mt-2">
+                  {ach.outcomes.map((o) => {
+                    const dir = o.direction === "decrease" ? "↓" : o.direction === "increase" ? "↑" : "•";
+                    const text = o.delta != null
+                      ? `${dir} ${o.delta}${o.unit}`
+                      : o.after != null
+                        ? `${dir} ${o.after}${o.unit}`
+                        : o.before != null
+                          ? `${dir} ${o.before}${o.unit}`
+                          : o.note ?? dir;
+
+                    return (
+                      <span class="px-1.5 py-0.5 rounded-md text-[10px] font-medium"
+                            style="background: oklch(0.08 0.05 260); color: oklch(0.7 0.08 260);">
+                        {text}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
+              <!-- Tech chips -->
+              {(ach.skills && ach.skills.length > 0) && (
+                <div class="flex flex-wrap gap-1 mt-2">
+                  {ach.skills.map((slug) => (
+                    <span class="tech-tag-small px-1.5 py-0.5 rounded-md text-[10px] font-medium transition-all duration-200"
+                          style="background: oklch(0.08 0.05 260); color: oklch(0.65 0.08 260);"
+                          data-tech={slug}>
+                      {skillLabelBySlug.get(slug) ?? slug}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</article>

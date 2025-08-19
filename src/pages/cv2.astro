@@ -1,0 +1,241 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SkillFilter from "../components/cv2/SkillFilter.astro";
+import ExperienceCard from "../components/cv2/ExperienceCard.astro";
+import { cv2Data } from "../data/cv2.data";
+
+// Build helpers on the server (no DOM)
+const skillLabelBySlug = new Map(cv2Data.skills.map(s => [s.slug, s.label]));
+
+// Build skill -> experience count (union: primary, supporting, achievement skills)
+const skillCounts = new Map<string, number>();
+for (const exp of cv2Data.experiences) {
+  const union = new Set<string>([
+    ...(exp.primarySkills ?? []),
+    ...(exp.supportingSkills ?? []),
+    ...exp.achievements.flatMap(a => a.skills ?? []),
+  ]);
+  union.forEach(s => {
+    skillCounts.set(s, (skillCounts.get(s) ?? 0) + 1);
+  });
+}
+
+// Compose SkillFilter input (sorted by count desc, label asc)
+const skillsForView = cv2Data.skills
+  .map(s => ({
+    slug: s.slug,
+    label: s.label,
+    count: skillCounts.get(s.slug) ?? 0,
+    level: undefined as 'Expert' | 'Advanced' | 'Intermediate' | undefined, // optional for future
+  }))
+  .filter(s => s.count > 0)
+  .sort((a, b) => (b.count - a.count) || a.label.localeCompare(b.label));
+---
+
+<BaseLayout title="CV Demo - Chad Gauthier" sideBarActiveItemID="cv">
+  <div class="cv2-pro min-h-screen relative">
+    <!-- Background -->
+    <div class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
+      <!-- Ambient lighting -->
+      <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div class="cursor-glow fixed w-32 h-32 rounded-full pointer-events-none transition-transform duration-75 ease-out" id="cursor-glow"></div>
+      </div>
+
+      <!-- Header -->
+      <header class="border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-xl relative z-10">
+        <div class="max-w-screen-2xl mx-auto px-8 py-8">
+          <div class="flex items-end justify-between">
+            <div>
+              <h1 class="text-5xl font-black tracking-tight mb-3" style="color: oklch(0.9 0.03 240);">
+                Chad Gauthier
+              </h1>
+              <p class="text-xl font-medium mb-2" style="color: oklch(0.7 0.15 250);">
+                Senior Full-Stack Software Engineer & Technical Lead
+              </p>
+              <div class="flex items-center gap-6 text-sm" style="color: oklch(0.6 0.05 240);">
+                <span>chadgauth@gmail.com</span>
+                <span class="w-1 h-1 rounded-full bg-current"></span>
+                <span>GitHub: chadgauth</span>
+                <span class="w-1 h-1 rounded-full bg-current"></span>
+                <span>Austin, TX</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold" style="color: oklch(0.8 0.1 160);">10+ Years</div>
+              <div class="text-sm" style="color: oklch(0.6 0.05 240);">Engineering Excellence</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="relative z-10">
+        <div class="max-w-screen-2xl mx-auto px-8 py-8">
+          <div class="grid grid-cols-12 gap-8">
+            <!-- Sidebar: Skill Filters -->
+            <aside class="col-span-12 lg:col-span-3 space-y-4">
+              <div class="sticky top-8">
+                <SkillFilter skills={skillsForView} />
+                <button
+                  class="w-full mt-4 p-3 rounded-xl border transition-all duration-200 hover:scale-[1.02] text-sm font-medium"
+                  style="background: oklch(0.06 0.02 240); border-color: oklch(0.12 0.05 240); color: oklch(0.65 0.05 240);"
+                  id="clear-filters"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            </aside>
+
+            <!-- Main: Experience Grid -->
+            <main class="col-span-12 lg:col-span-9">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold" style="color: oklch(0.9 0.03 240);">Professional Experience</h2>
+                <div class="text-sm" style="color: oklch(0.6 0.05 240);">
+                  <span id="experience-count">{cv2Data.experiences.length}</span> roles shown
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5" id="experiences-container">
+                {cv2Data.experiences.map(exp => (
+                  <ExperienceCard exp={exp} skillLabelBySlug={skillLabelBySlug} />
+                ))}
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .cursor-glow { background: radial-gradient(circle, oklch(0.4 0.1 250 / 0.08) 0%, transparent 70%); }
+
+    /* Experience card transitions (kept lightweight for reliability) */
+    .experience-card {
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+
+    /* Achievement spotlight/dim states */
+    .achievement.spotlight {
+      outline: 1px solid oklch(0.4 0.15 250 / 0.4);
+      background: oklch(0.07 0.05 250);
+    }
+    .achievement.dim {
+      opacity: 0.6;
+      filter: saturate(0.7);
+    }
+
+    /* Tech tag highlighting */
+    .tech-tag.highlighted,
+    .tech-tag-small.highlighted {
+      background: oklch(0.15 0.1 250) !important;
+      color: oklch(0.9 0.1 250) !important;
+      border-color: oklch(0.4 0.15 250) !important;
+      box-shadow: 0 0 15px oklch(0.4 0.15 250 / 0.3);
+    }
+  </style>
+
+  <script>
+    // Vanilla JS (no TS types to avoid Astro client-side TS errors)
+    (function () {
+      const cursorGlow = document.getElementById('cursor-glow');
+      document.addEventListener('mousemove', (e) => {
+        if (cursorGlow) cursorGlow.style.transform = `translate(${e.clientX - 64}px, ${e.clientY - 64}px)`;
+      });
+
+      const selected = new Set();
+
+      function splitCSV(str) {
+        return (str || '')
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean);
+      }
+
+      function updateUI() {
+        const cards = document.querySelectorAll('.experience-card');
+        let visible = 0;
+
+        cards.forEach(card => {
+          const htmlCard = card as HTMLElement;
+          const expSkills = new Set(splitCSV(card.getAttribute('data-exp-skills')));
+          // AND semantics: require every selected skill to exist in union set
+          const qualifies = selected.size === 0 || Array.from(selected).every(s => expSkills.has(s));
+
+          // Reliable show/hide for grid items (no layout ghosts)
+          if (qualifies) {
+            htmlCard.style.display = 'block';
+            htmlCard.style.opacity = '1';
+            htmlCard.style.transform = 'none';
+            visible++;
+          } else {
+            htmlCard.style.opacity = '0';
+            htmlCard.style.transform = 'scale(0.98)';
+            // after fade, hide completely to compress grid
+            setTimeout(() => { (htmlCard as HTMLElement).style.display = 'none'; }, 180);
+          }
+
+          // Highlight achievements & tech tags when any selection exists
+          const achs = card.querySelectorAll('.achievement');
+          const tags = card.querySelectorAll('[data-tech]');
+
+          if (selected.size === 0) {
+            achs.forEach(a => { a.classList.remove('spotlight', 'dim'); });
+            tags.forEach(t => { t.classList.remove('highlighted'); });
+          } else {
+            // Achievements: spotlight those that reference at least one selected skill
+            achs.forEach(a => {
+              const achSkills = new Set(splitCSV(a.getAttribute('data-ach-skills')));
+              let match = false;
+              selected.forEach(s => { if (achSkills.has(s)) match = true; });
+              a.classList.toggle('spotlight', match);
+              a.classList.toggle('dim', !match);
+            });
+            // Tech tags
+            tags.forEach(t => {
+              const slug = t.getAttribute('data-tech');
+              const isHighlighted = !!slug && selected.has(slug);
+              t.classList.toggle('highlighted', isHighlighted);
+            });
+          }
+        });
+
+        const countEl = document.getElementById('experience-count');
+        if (countEl) {
+          // count visible cards (display != 'none')
+          const count = Array.from(document.querySelectorAll('.experience-card'))
+            .filter(el => (el as HTMLElement).style.display !== 'none').length;
+          countEl.textContent = String(count);
+        }
+      }
+
+      // Skill filter interactions
+      document.querySelectorAll('.skill-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const slug = btn.getAttribute('data-skill');
+          if (!slug) return;
+          if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            selected.delete(slug);
+          } else {
+            btn.classList.add('active');
+            selected.add(slug);
+          }
+          updateUI();
+        });
+      });
+
+      // Clear filters
+      document.getElementById('clear-filters')?.addEventListener('click', () => {
+        selected.clear();
+        document.querySelectorAll('.skill-filter.active').forEach(b => b.classList.remove('active'));
+        updateUI();
+      });
+
+      // Initial render
+      updateUI();
+    })();
+  </script>
+</BaseLayout>
