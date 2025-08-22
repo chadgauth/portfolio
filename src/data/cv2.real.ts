@@ -40,34 +40,37 @@ cvDataV2.forEach(exp => {
   });
 });
 
+// Skill categorization map
+const skillCategoryMap: Record<CV2Skill['category'], string[]> = {
+  frontend: ['React', 'Angular', 'TypeScript', 'JavaScript', 'CSS', 'HTML', 'Storybook', 'Figma', 'Front-End', 'UI/UX', 'Responsive Design'],
+  backend: ['Node.js', 'Python', '.NET', 'Ruby on Rails', 'Java'],
+  database: ['PostgreSQL', 'Aurora', 'MySQL', 'SQL Server', 'MongoDB', 'Redis', 'Database'],
+  cloud: ['AWS', 'Azure', 'Lambda', 'Serverless'],
+  devops: ['CI/CD', 'GitHub Actions', 'Terraform', 'Docker', 'NGINX', 'Infrastructure', 'Shell Scripting', 'DevOps', 'Nx'],
+  api: ['GraphQL', 'REST', 'API'],
+  data: ['Analytics', 'Data', 'ETL', 'Visualization', 'BI', 'Tableau', 'Power BI', 'Spark', 'Hadoop', 'ML', 'Machine Learning'],
+  testing: ['Jest', 'Cypress', 'Testing', 'Playwright', 'Vitest'],
+  leadership: ['Leadership', 'Mentorship', 'Team', 'Management'],
+  security: ['Security', 'OAuth', 'JWT', 'OIDC'],
+  design: ['Accessibility', 'WCAG', 'Design', 'UX'],
+  other: []
+};
+
+// Helper function to categorize a skill
+function categorizeSkill(skill: string): CV2Skill['category'] {
+  for (const [category, keywords] of Object.entries(skillCategoryMap)) {
+    if (category === 'other') continue;
+    if (keywords.some(keyword => skill.includes(keyword))) {
+      return category as CV2Skill['category'];
+    }
+  }
+  return 'other';
+}
+
 // Create skills with categories
 const skills: CV2Skill[] = Array.from(allSkillsSet).map(skill => {
   const slug = createSkillSlug(skill);
-  
-  // Categorize skills
-  let category: CV2Skill['category'] = 'other';
-  
-  if (['React', 'Angular', 'TypeScript', 'JavaScript', 'CSS', 'HTML', 'Storybook', 'Figma', 'Front-End', 'UI/UX', 'Responsive Design'].some(frontend => skill.includes(frontend))) {
-    category = 'frontend';
-  } else if (['Node.js', 'Python', '.NET', 'Ruby on Rails', 'Java'].some(backend => skill.includes(backend))) {
-    category = 'backend';
-  } else if (['PostgreSQL', 'Aurora', 'MySQL', 'SQL Server', 'MongoDB', 'Redis', 'Database'].some(db => skill.includes(db))) {
-    category = 'database';
-  } else if (['AWS', 'Azure', 'Lambda', 'Serverless'].some(cloud => skill.includes(cloud))) {
-    category = 'cloud';
-  } else if (['CI/CD', 'GitHub Actions', 'Terraform', 'Docker', 'NGINX', 'Infrastructure', 'Shell Scripting', 'DevOps', 'Nx'].some(devops => skill.includes(devops))) {
-    category = 'devops';
-  } else if (['GraphQL', 'REST', 'API'].some(api => skill.includes(api))) {
-    category = 'api';
-  } else if (['Jest', 'Cypress', 'Testing', 'Playwright', 'Vitest'].some(test => skill.includes(test))) {
-    category = 'testing';
-  } else if (['Leadership', 'Mentorship', 'Team', 'Management'].some(lead => skill.includes(lead))) {
-    category = 'leadership';
-  } else if (['Security', 'OAuth', 'JWT', 'OIDC'].some(sec => skill.includes(sec))) {
-    category = 'security';
-  } else if (['Accessibility', 'WCAG', 'Design', 'UX'].some(design => skill.includes(design))) {
-    category = 'design';
-  }
+  const category = categorizeSkill(skill);
   
   return {
     slug,

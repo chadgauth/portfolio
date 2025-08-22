@@ -1,0 +1,59 @@
+---
+interface Props {
+  size?: 'full' | 'compact';
+  showShapes?: boolean;
+}
+
+const { size = 'full', showShapes = true } = Astro.props;
+---
+
+<!-- Animated Background -->
+<div class="absolute inset-0" style="background: linear-gradient(135deg, oklch(0.15 0.02 240), oklch(0.13 0.02 250), oklch(0.15 0.02 240));">
+  <div class="absolute inset-0" style="background: radial-gradient(circle at 20% 80%, oklch(0.85 0.15 180 / 0.12) 0%, transparent 50%);"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(circle at 80% 20%, oklch(0.8 0.18 200 / 0.12) 0%, transparent 50%);"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(circle at 40% 40%, oklch(0.82 0.16 260 / 0.12) 0%, transparent 50%);"></div>
+</div>
+
+<!-- Floating Geometric Shapes -->
+{showShapes && (
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class={`floating-shape shape-1 absolute border border-cyan-500/20 rounded-lg ${size === 'full' ? 'w-16 h-16' : 'w-12 h-12'}`}></div>
+    <div class={`floating-shape shape-2 absolute border border-blue-500/20 rounded-full ${size === 'full' ? 'w-12 h-12' : 'w-8 h-8'}`}></div>
+    <div class={`floating-shape shape-3 absolute border border-purple-500/20 rounded-lg rotate-45 ${size === 'full' ? 'w-20 h-20' : 'w-16 h-16'}`}></div>
+    <div class={`floating-shape shape-4 absolute bg-cyan-500/20 rounded-full ${size === 'full' ? 'w-8 h-8' : 'w-6 h-6'}`}></div>
+    {size === 'full' && (
+      <div class="floating-shape shape-5 absolute w-24 h-24 border border-green-500/30 rounded-lg rotate-12"></div>
+    )}
+  </div>
+)}
+
+<style>
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes floatAlt {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(180deg); }
+  }
+
+  /* Floating shapes */
+  .floating-shape {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .shape-1 { top: 20%; left: 10%; animation-delay: 0s; }
+  .shape-2 { top: 60%; left: 80%; animation-delay: 1s; animation-name: floatAlt; }
+  .shape-3 { top: 30%; left: 70%; animation-delay: 2s; }
+  .shape-4 { top: 80%; left: 20%; animation-delay: 3s; animation-name: floatAlt; }
+  .shape-5 { top: 10%; left: 90%; animation-delay: 4s; }
+
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .floating-shape {
+      display: none;
+    }
+  }
+</style>

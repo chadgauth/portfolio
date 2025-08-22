@@ -19,81 +19,466 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+// Get other recent posts for recommendations
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+);
+const otherPosts = allPosts.filter(p => p.slug !== post.slug).slice(0, 2);
 ---
 
-<BaseLayout title={post.data.title}>
-  <article class="container mx-auto px-4 py-12">
-    <div class="max-w-3xl mx-auto">
-      <!-- Header -->
-      <header class="relative mb-12">
-        <h1 class="text-4xl md:text-5xl font-mono font-bold bg-gradient-to-r from-cyber-primary to-cyber-accent bg-clip-text text-transparent">
-          {post.data.title}
-        </h1>
-        <div class="absolute -inset-x-4 -inset-y-2 border border-cyber-primary/20 bg-cyber-primary/5 blur-lg"></div>
-        
-        <div class="mt-6 flex items-center text-cyber-text-secondary">
-          <time datetime={new Date(post.data.pubDate).toISOString()}>
-            {new Date(post.data.pubDate).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </time>
-        </div>
-      </header>
+<BaseLayout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
+  <!-- Article Structured Data for SEO -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "image": post.data.heroImage ? `https://chad.gauthier.dev${post.data.heroImage}` : "https://chad.gauthier.dev/social_img.png",
+    "author": {
+      "@type": "Person",
+      "name": "Chad Gauthier",
+      "url": "https://chad.gauthier.dev",
+      "sameAs": ["https://www.linkedin.com/in/chadgauth/", "https://github.com/chadgauth"]
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Chad Gauthier",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://chad.gauthier.dev/chad_profile_new.png"
+      }
+    },
+    "datePublished": post.data.pubDate.toISOString(),
+    "dateModified": post.data.updatedDate ? post.data.updatedDate.toISOString() : post.data.pubDate.toISOString(),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://chad.gauthier.dev/blog/${post.slug}`
+    },
+    "articleSection": "Technology",
+    "keywords": ["Software Engineering", "Programming", "Web Development", "AI", "Technology", "Chad Gauthier"],
+    "wordCount": post.body?.length || 1000,
+    "articleBody": post.data.description
+  })}></script>
+  <!-- Hero Section with matching background -->
+  <div class="relative py-20 overflow-hidden">
+    <!-- Animated Background (matching home page) -->
+    <div class="absolute inset-0" style="background: linear-gradient(135deg, oklch(0.15 0.02 240), oklch(0.13 0.02 250), oklch(0.15 0.02 240));">
+      <div class="absolute inset-0" style="background: radial-gradient(circle at 20% 80%, oklch(0.85 0.15 180 / 0.12) 0%, transparent 50%);"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(circle at 80% 20%, oklch(0.8 0.18 200 / 0.12) 0%, transparent 50%);"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(circle at 40% 40%, oklch(0.82 0.16 260 / 0.12) 0%, transparent 50%);"></div>
+    </div>
 
-      <!-- Content -->
-      <div class="cyber-card p-8 mb-12">
-        <div class="prose prose-invert max-w-none prose-h2:text-cyber-primary prose-h3:text-cyber-primary prose-a:text-cyber-primary hover:prose-a:text-cyber-accent prose-strong:text-cyber-text-primary prose-code:text-cyber-accent">
-          <Content />
-        </div>
-      </div>
+    <!-- Floating Geometric Shapes -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="floating-shape shape-1 absolute w-12 h-12 border border-cyan-500/20 rounded-lg"></div>
+      <div class="floating-shape shape-2 absolute w-8 h-8 border border-blue-500/20 rounded-full"></div>
+      <div class="floating-shape shape-3 absolute w-16 h-16 border border-purple-500/20 rounded-lg rotate-45"></div>
+      <div class="floating-shape shape-4 absolute w-6 h-6 bg-cyan-500/10 rounded-full"></div>
+    </div>
 
-      <!-- Navigation -->
-      <div class="flex justify-between items-center">
-        <a href="/blog" class="cyber-button">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m15 18-6-6 6-6"/>
+    <!-- Navigation Header -->
+    <nav class="relative z-20 container mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors duration-200 group">
+          <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
-          Back to Blog
+          <span class="font-semibold">Home</span>
+        </a>
+        
+        <a href="/blog" class="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0l-4-4m4 4l-4 4"></path>
+          </svg>
+          <span>All Posts</span>
         </a>
       </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 container mx-auto px-4 py-4">
+      <div class="max-w-5xl mx-auto">
+        
+        <!-- Hero Image -->
+        {post.data.heroImage && (
+          <div class="relative mb-6 rounded-2xl overflow-hidden shadow-2xl">
+            <img
+              src={post.data.heroImage}
+              alt={post.data.title}
+              class="w-full h-48 md:h-64 object-cover"
+              transition:name={`hero-${post.slug}`}
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+          </div>
+        )}
+
+        <!-- Article Header -->
+        <header class="text-center mb-8">
+          <div class="inline-flex items-center px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm mb-6">
+            <time datetime={new Date(post.data.pubDate).toISOString()}>
+              {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+          
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent leading-tight mb-4">
+            {post.data.title}
+          </h1>
+          
+          {post.data.description && (
+            <p class="text-lg text-gray-300 leading-relaxed max-w-4xl mx-auto">
+              {post.data.description}
+            </p>
+          )}
+        </header>
+      </div>
     </div>
-  </article>
+  </div>
+
+  <!-- Article Content -->
+  <section class="relative py-12 bg-gray-900/50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-7xl mx-auto ml-auto mr-8">
+        
+        <!-- Main Content -->
+        <article class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-8 md:p-12 backdrop-blur-sm shadow-2xl mb-12 max-w-none">
+          <div class="prose prose-lg prose-invert max-w-none
+                      prose-headings:text-cyan-400 prose-headings:font-bold
+                      prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+                      prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                      prose-p:text-gray-300 prose-p:leading-relaxed
+                      prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:text-cyan-300
+                      prose-strong:text-white prose-em:text-gray-200
+                      prose-code:text-cyan-400 prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded
+                      prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-700
+                      prose-blockquote:border-l-4 prose-blockquote:border-cyan-500/50 prose-blockquote:bg-gray-800/50 prose-blockquote:italic
+                      prose-img:rounded-lg prose-img:border prose-img:border-gray-700/50 prose-img:max-h-96 prose-img:object-contain prose-img:mx-auto prose-img:cursor-pointer prose-img:hover:border-cyan-500/50 prose-img:transition-all
+                      prose-li:text-gray-300">
+            <Content />
+          </div>
+        </article>
+
+        <!-- Related Posts -->
+        {otherPosts.length > 0 && (
+          <section class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-200 mb-8 flex items-center">
+              <div class="w-1 h-6 bg-cyan-500 mr-4 rounded-full"></div>
+              More Articles
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              {otherPosts.map((relatedPost) => (
+                <a href={`/blog/${relatedPost.slug}`} class="group block">
+                  <article class="bg-gray-800/30 border border-gray-700/50 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
+                    {relatedPost.data.heroImage && (
+                      <div class="relative mb-4 rounded-lg overflow-hidden">
+                        <img 
+                          src={relatedPost.data.heroImage} 
+                          alt={relatedPost.data.title}
+                          class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    
+                    <h3 class="text-lg font-semibold text-gray-200 group-hover:text-cyan-400 transition-colors duration-200 line-clamp-2 mb-2">
+                      {relatedPost.data.title}
+                    </h3>
+                    
+                    <p class="text-gray-400 text-sm line-clamp-2 mb-3">
+                      {relatedPost.data.description}
+                    </p>
+                    
+                    <div class="text-xs text-gray-500">
+                      {new Date(relatedPost.data.pubDate).toLocaleDateString()}
+                    </div>
+                  </article>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Navigation Footer -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center p-6 bg-gray-800/30 border border-gray-700/50 rounded-xl backdrop-blur-sm">
+          <a href="/blog" class="cyber-button-secondary">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            All Posts
+          </a>
+          
+          <div class="text-center">
+            <div class="text-sm text-gray-400">Enjoyed this article?</div>
+            <button onclick="openContactModal()" class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium cursor-pointer">
+              Let's connect →
+            </button>
+          </div>
+          
+          <a href="/" class="cyber-button-primary">
+            <span>Back to Home</span>
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Lightbox Modal -->
+  <div id="imageLightbox" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-7xl max-h-full w-full h-full flex items-center justify-center">
+      <!-- Close Button -->
+      <button id="closeLightbox" class="absolute top-4 right-4 z-10 w-10 h-10 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 rounded-full flex items-center justify-center text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <!-- Navigation Buttons -->
+      <button id="prevImage" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 rounded-full flex items-center justify-center text-white transition-colors opacity-0 pointer-events-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      
+      <button id="nextImage" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800/80 hover:bg-gray-700 border border-gray-600 rounded-full flex items-center justify-center text-white transition-colors opacity-0 pointer-events-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+      
+      <!-- Image Container -->
+      <div class="relative w-full h-full flex items-center justify-center">
+        <img id="lightboxImage" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" alt="">
+        
+        <!-- Image Caption -->
+        <div id="imageCaption" class="absolute bottom-4 left-4 right-4 bg-gray-900/80 text-white p-3 rounded-lg backdrop-blur-sm opacity-0 pointer-events-none transition-opacity">
+          <p class="text-sm text-center"></p>
+        </div>
+      </div>
+      
+      <!-- Image Counter -->
+      <div id="imageCounter" class="absolute top-4 left-4 bg-gray-900/80 text-white px-3 py-1 rounded-full text-sm opacity-0 pointer-events-none">
+        <span id="currentImageNum">1</span> / <span id="totalImages">1</span>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-  .cyber-card {
-    @apply relative overflow-hidden rounded-lg border border-cyber-primary/20 bg-cyber-darker/50 backdrop-blur-sm;
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
   }
 
-  .cyber-button {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-md
-           bg-cyber-darker border border-cyber-primary/20
-           text-cyber-text-primary text-sm font-medium
-           transition-all duration-200 hover:border-cyber-primary/40
-           hover:text-cyber-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.1)]
-           focus:outline-none focus:ring-2 focus:ring-cyber-primary/50;
+  @keyframes floatAlt {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(180deg); }
   }
 
-  /* Custom Prose Styles */
-  .prose {
-    @apply text-cyber-text-secondary;
+  /* Floating shapes */
+  .floating-shape {
+    animation: float 8s ease-in-out infinite;
   }
 
-  .prose pre {
-    @apply bg-cyber-darker border border-cyber-primary/20 rounded-lg overflow-x-auto;
+  .shape-1 { top: 15%; left: 85%; animation-delay: 0s; }
+  .shape-2 { top: 70%; left: 10%; animation-delay: 2s; animation-name: floatAlt; }
+  .shape-3 { top: 25%; left: 15%; animation-delay: 4s; }
+  .shape-4 { top: 80%; left: 80%; animation-delay: 6s; animation-name: floatAlt; }
+
+  /* Button styles */
+  .cyber-button-primary {
+    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 
+           text-white font-semibold rounded-lg transition-all duration-300
+           hover:shadow-lg hover:shadow-cyan-500/25 hover:scale-105;
   }
 
-  .prose code {
-    @apply bg-cyber-darker px-1 py-0.5 rounded text-sm;
+  .cyber-button-secondary {
+    @apply inline-flex items-center px-6 py-3 bg-gray-800 border border-gray-600 
+           text-gray-300 font-semibold rounded-lg transition-all duration-300
+           hover:bg-gray-700 hover:border-gray-500 hover:text-white;
   }
 
-  .prose img {
-    @apply rounded-lg border border-cyber-primary/20;
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  .prose blockquote {
-    @apply border-l-4 border-cyber-primary/50 bg-cyber-darker/30 px-6 py-4 rounded-r-lg;
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .floating-shape {
+      display: none;
+    }
   }
 </style>
+
+<script>
+  // Image Lightbox functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('imageLightbox');
+    const lightboxImage = document.getElementById('lightboxImage') as HTMLImageElement;
+    const imageCaption = document.getElementById('imageCaption');
+    const imageCounter = document.getElementById('imageCounter');
+    const currentImageNum = document.getElementById('currentImageNum');
+    const totalImages = document.getElementById('totalImages');
+    const closeLightbox = document.getElementById('closeLightbox');
+    const prevButton = document.getElementById('prevImage');
+    const nextButton = document.getElementById('nextImage');
+    
+    // Check if all required elements exist
+    if (!lightbox || !lightboxImage || !imageCaption || !imageCounter ||
+        !currentImageNum || !totalImages || !closeLightbox || !prevButton || !nextButton) {
+      return;
+    }
+    
+    // Get all images in the article content
+    const articleImages = Array.from(document.querySelectorAll('article img')) as HTMLImageElement[];
+    let currentImageIndex = 0;
+    
+    // Add click handlers to all images
+    articleImages.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        openLightbox(index);
+      });
+    });
+    
+    function openLightbox(index: number) {
+      currentImageIndex = index;
+      const img = articleImages[index];
+      
+      if (lightboxImage && img) {
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt || '';
+      }
+      
+      // Show caption if image has alt text or next sibling em tag
+      const caption = img.alt || (img.nextElementSibling?.tagName === 'EM' ? img.nextElementSibling.textContent : '');
+      if (caption && imageCaption) {
+        const captionP = imageCaption.querySelector('p');
+        if (captionP) {
+          captionP.textContent = caption;
+        }
+        imageCaption.classList.remove('opacity-0', 'pointer-events-none');
+      } else if (imageCaption) {
+        imageCaption.classList.add('opacity-0', 'pointer-events-none');
+      }
+      
+      // Update counter
+      if (articleImages.length > 1) {
+        if (currentImageNum) {
+          currentImageNum.textContent = String(index + 1);
+        }
+        if (totalImages) {
+          totalImages.textContent = String(articleImages.length);
+        }
+        if (imageCounter) {
+          imageCounter.classList.remove('opacity-0', 'pointer-events-none');
+        }
+        
+        // Show/hide navigation buttons
+        if (prevButton) {
+          if (index > 0) {
+            prevButton.classList.remove('opacity-0', 'pointer-events-none');
+          } else {
+            prevButton.classList.add('opacity-0', 'pointer-events-none');
+          }
+        }
+        
+        if (nextButton) {
+          if (index < articleImages.length - 1) {
+            nextButton.classList.remove('opacity-0', 'pointer-events-none');
+          } else {
+            nextButton.classList.add('opacity-0', 'pointer-events-none');
+          }
+        }
+      } else {
+        if (imageCounter) {
+          imageCounter.classList.add('opacity-0', 'pointer-events-none');
+        }
+        if (prevButton) {
+          prevButton.classList.add('opacity-0', 'pointer-events-none');
+        }
+        if (nextButton) {
+          nextButton.classList.add('opacity-0', 'pointer-events-none');
+        }
+      }
+      
+      if (lightbox) {
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    function closeLightboxModal() {
+      if (lightbox) {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+    
+    function showPrevImage() {
+      if (currentImageIndex > 0) {
+        openLightbox(currentImageIndex - 1);
+      }
+    }
+    
+    function showNextImage() {
+      if (currentImageIndex < articleImages.length - 1) {
+        openLightbox(currentImageIndex + 1);
+      }
+    }
+    
+    // Event listeners
+    closeLightbox.addEventListener('click', closeLightboxModal);
+    prevButton.addEventListener('click', showPrevImage);
+    nextButton.addEventListener('click', showNextImage);
+    
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightboxModal();
+      }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (lightbox && !lightbox.classList.contains('hidden')) {
+        switch(e.key) {
+          case 'Escape':
+            closeLightboxModal();
+            break;
+          case 'ArrowLeft':
+            showPrevImage();
+            break;
+          case 'ArrowRight':
+            showNextImage();
+            break;
+        }
+      }
+    });
+    
+    // Add smooth scroll behavior for internal links
+    const links = document.querySelectorAll('a[href^="#"]');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('href');
+        if (href) {
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  });
+</script>

@@ -1,63 +1,199 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import HeroBackground from "../../components/HeroBackground.astro";
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
 ---
 
-<BaseLayout title="Blog">
-  <div class="container mx-auto px-4 py-12">
-    <div class="relative mb-12">
-      <h1 class="text-4xl font-mono font-bold bg-gradient-to-r from-cyber-primary to-cyber-accent bg-clip-text text-transparent">
-        Blog
-      </h1>
-      <div class="absolute -inset-x-4 -inset-y-2 border border-cyber-primary/20 bg-cyber-primary/5 blur-lg"></div>
-    </div>
+<BaseLayout title="Blog - Chad Gauthier" sideBarActiveItemID="blog">
+  <!-- Compact Header Section -->
+  <div class="relative py-16 overflow-hidden">
+    <HeroBackground size="compact" showShapes={true} />
 
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => (
-        <article class="cyber-card group">
-          <a href={`/blog/${post.slug}`} class="block p-6">
-            <div class="relative">
-              <h2 class="text-xl font-mono font-bold text-cyber-text-primary group-hover:text-cyber-primary transition-colors duration-200">
-                {post.data.title}
-              </h2>
-              <div class="mt-2 text-sm text-cyber-text-secondary">
-                {new Date(post.data.pubDate).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </div>
-              <p class="mt-4 text-cyber-text-secondary line-clamp-3">
-                {post.data.description}
-              </p>
-              <div class="mt-4 flex items-center text-sm text-cyber-text-secondary">
-                <span class="cyber-button text-xs">Read More</span>
-              </div>
-            </div>
-          </a>
-        </article>
-      ))}
+    <!-- Navigation Header -->
+    <nav class="relative z-20 container mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors duration-200 group">
+          <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span class="font-semibold">Home</span>
+        </a>
+        
+        <div class="text-gray-400 font-mono text-sm">
+          {posts.length} Articles
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header Content -->
+    <div class="relative z-10 container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="space-y-4 fade-in-up">
+          <div class="text-lg text-cyan-400 font-mono tracking-wider">
+            > Engineering Insights
+          </div>
+          <h1 class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent leading-tight">
+            Blog<span class="text-white">.</span>
+          </h1>
+          <p class="text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto">
+            Thoughts on Software Development & Innovation
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Blog Posts Grid -->
+  <section class="relative py-16 bg-gray-900/50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        
+        <!-- Posts Grid -->
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post, index) => (
+            <article class="cyber-card group fade-in-up" style={`animation-delay: ${index * 0.1}s`}>
+              <a href={`/blog/${post.slug}`} class="block h-full">
+                <div class="relative h-full flex flex-col">
+                  
+                  <!-- Hero Image -->
+                  {post.data.heroImage && (
+                    <div class="relative h-48 overflow-hidden rounded-t-lg">
+                      <img 
+                        src={post.data.heroImage} 
+                        alt={post.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        transition:name={`hero-${post.slug}`}
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                      
+                      <!-- Category Badge -->
+                      <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-medium rounded-full backdrop-blur-sm">
+                          Engineering
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <!-- Content -->
+                  <div class="flex-1 p-6 flex flex-col">
+                    <!-- Date -->
+                    <div class="text-sm text-gray-500 mb-3">
+                      {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </div>
+                    
+                    <!-- Title -->
+                    <h2 class="text-xl font-bold text-gray-200 group-hover:text-cyan-400 transition-colors duration-200 line-clamp-2 mb-3 flex-shrink-0">
+                      {post.data.title}
+                    </h2>
+                    
+                    <!-- Description -->
+                    <p class="text-gray-400 line-clamp-3 leading-relaxed mb-4 flex-1">
+                      {post.data.description}
+                    </p>
+                    
+                    <!-- Read More -->
+                    <div class="flex items-center text-cyan-400 group-hover:text-cyan-300 transition-colors duration-200">
+                      <span class="text-sm font-medium">Read Article</span>
+                      <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <!-- Call to Action -->
+        <div class="mt-16 text-center">
+          <div class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-8 backdrop-blur-sm">
+            <h3 class="text-2xl font-bold text-gray-200 mb-4">
+              Want to discuss these ideas?
+            </h3>
+            <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
+              I'm always interested in connecting with fellow developers and discussing 
+              technology, best practices, and innovative solutions.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button onclick="openContactModal()" class="cyber-button-primary">
+                <span>Get In Touch</span>
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+              <a href="/" class="cyber-button-secondary">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <span>Back to Home</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .cyber-card {
-    @apply relative overflow-hidden rounded-lg border border-cyber-primary/20 bg-cyber-darker/50 backdrop-blur-sm
-           transition-all duration-200 hover:border-cyber-primary/40
-           hover:shadow-[0_0_30px_rgba(0,255,65,0.1)];
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .cyber-button {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-md
-           bg-cyber-darker border border-cyber-primary/20
-           text-cyber-text-primary text-sm font-medium
-           transition-all duration-200 hover:border-cyber-primary/40
-           hover:text-cyber-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.1)]
-           focus:outline-none focus:ring-2 focus:ring-cyber-primary/50;
+  /* Fade in animations */
+  .fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  /* Card styles */
+  .cyber-card {
+    @apply relative overflow-hidden rounded-lg border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm
+           transition-all duration-300 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/10
+           hover:transform hover:-translate-y-1;
+  }
+
+  /* Button styles */
+  .cyber-button-primary {
+    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 
+           text-white font-semibold rounded-lg transition-all duration-300
+           hover:shadow-lg hover:shadow-cyan-500/25 hover:scale-105;
+  }
+
+  .cyber-button-secondary {
+    @apply inline-flex items-center px-6 py-3 bg-gray-800 border border-gray-600 
+           text-gray-300 font-semibold rounded-lg transition-all duration-300
+           hover:bg-gray-700 hover:border-gray-500 hover:text-white;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>

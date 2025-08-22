@@ -10,13 +10,84 @@ export interface Props {
 	image?: string;
 }
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = '/social_img.png' } = Astro.props;
+const socialImage = new URL(image, Astro.url);
+
+// Generate structured data for SEO
+const isHomePage = Astro.url.pathname === '/';
+const isBlogPost = Astro.url.pathname.startsWith('/blog/') && Astro.url.pathname !== '/blog/';
+const isBlogIndex = Astro.url.pathname === '/blog/' || Astro.url.pathname.startsWith('/blog/page/');
+
+// Person/Professional structured data
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Chad Gauthier",
+  "jobTitle": "Full-stack / Product Engineer",
+  "description": "Amazing AF engineer. Experiments constantly, always learning and growing, solves hard problems, and crafts clean, intuitive UI. Rapid prototyper who derisks and ships.",
+  "url": "https://chad.gauthier.dev",
+  "image": "https://chad.gauthier.dev/chad_profile_new.png",
+  "sameAs": [
+    "https://www.linkedin.com/in/chadgauth/",
+    "https://github.com/chadgauth"
+  ],
+  "email": "chadgauth@gmail.com",
+  "telephone": "+1-719-799-3434",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Texas",
+    "addressRegion": "TX",
+    "addressCountry": "US"
+  },
+  "knowsAbout": [
+    "Product thinking", "Derisking", "Rapid prototyping", "DX", "Accessibility", "Cost optimization",
+    "JavaScript", "TypeScript", "React", "React Native", "Angular", "Node.js", "GraphQL", "PostgreSQL",
+    "Performance optimization", "Design systems", "A/B testing", "Feature flags", "CI/CD", "Observability",
+    "Software Engineering", "Full-Stack Development", "AI/ML", "System Architecture"
+  ]
+};
+
+// Website/Organization structured data
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Chad Gauthier - Software Engineer",
+  "description": "Professional portfolio and engineering insights from Chad Gauthier, a senior software engineer specializing in AI systems and full-stack development",
+  "url": "https://chad.gauthier.dev",
+  "author": {
+    "@type": "Person",
+    "name": "Chad Gauthier"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://chad.gauthier.dev/blog?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
+
+// Blog structured data
+const blogSchema = isBlogIndex ? {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Chad Gauthier's Engineering Blog",
+  "description": "Insights on software engineering, AI development, and technology innovation",
+  "url": "https://chad.gauthier.dev/blog",
+  "author": {
+    "@type": "Person",
+    "name": "Chad Gauthier"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Chad Gauthier"
+  }
+} : null;
 ---
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
-<meta name="description" content={description} />
+<meta name="description" content={isHomePage ? "Amazing AF engineer. Product-minded full-stack dev who experiments, learns fast, and ships clean, high-performance UI. Hire-signal: strong." : description} />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&family=Nunito&display=swap" rel="stylesheet">
@@ -27,28 +98,72 @@ const { title, description, image = '/social_img.png' } = Astro.props;
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:type" content={Astro.url.pathname === '/' ? 'website' : 'article'} />
+<meta property="og:site_name" content="Chad Gauthier - Software Engineer" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={isHomePage ? "Chad Gauthier — Amazing AF Engineer" : title} />
+<meta property="og:description" content={isHomePage ? "Relentless learner and problem-solver with a knack for UI, speed, and derisking." : description} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:locale" content="en_US" />
+{Astro.url.pathname.startsWith('/blog/') && (
+  <>
+    <meta property="article:author" content="Chad Gauthier" />
+    <meta property="article:section" content="Technology" />
+    <meta property="article:tag" content="Software Engineering" />
+  </>
+)}
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@chadgauth" />
+<meta name="twitter:creator" content="@chadgauth" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- Additional Social Meta -->
+<meta name="author" content="Chad Gauthier" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0891b2" />
+
+<!-- Structured Data for SEO -->
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)}></script>
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+{blogSchema && <script type="application/ld+json" set:html={JSON.stringify(blogSchema)}></script>}
+
+<!-- Enhanced SEO Meta Tags -->
+<meta name="keywords" content="Chad Gauthier, Software Engineer, Full-Stack Developer, AI Engineer, JavaScript, TypeScript, React, Node.js, Python, Texas" />
+<meta name="classification" content="Technology, Software Engineering, Web Development" />
+<meta name="category" content="Technology" />
+<meta name="coverage" content="Worldwide" />
+<meta name="distribution" content="Global" />
+<meta name="rating" content="General" />
+<meta name="revisit-after" content="7 days" />
+
+<!-- Technical SEO -->
+<meta http-equiv="Content-Language" content="en-US" />
+<meta name="language" content="English" />
+<meta name="geo.region" content="US-TX" />
+<meta name="geo.placename" content="Texas" />
+<meta name="ICBM" content="31.9686, -99.9018" />
+
+<!-- Performance and Accessibility -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <ViewTransitions />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
 
 <script type="text/partytown">
     (function(c,l,a,r,i,t,y){
