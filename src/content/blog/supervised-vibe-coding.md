@@ -2,7 +2,7 @@
 title: "Supervised Vibe Coding: Part One - Building a Severance-Inspired React Native Game"
 description: "How AI-assisted development became my own version of refining scary numbers, and building an ASMR file refinement sim inspired by Severance."
 pubDate: 2025-08-22
-heroImage: "/super_vibe.png"
+heroImage: ../../assets/super_vibe.png
 ---
 
 I’ve started building a React Native game inspired by the Macrodata Refinement (MDR) team from the show [Severance](https://screenrant.com/severance-season-2-macrodata-refinement-watchers-computers-purpose-explainer/). In the show, office workers circle numbers on a screen until some “feel scary.” It’s absurd, hypnotic, and unsettling, which makes it a perfect metaphor for hunting meaning inside monotony.

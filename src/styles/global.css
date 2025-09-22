@@ -37,6 +37,7 @@
   html {
     font-family: 'Space Grotesk', sans-serif;
     @apply antialiased;
+    background-color: oklch(0.1 0.02 240);
   }
 
   body {
@@ -133,27 +134,25 @@
 /* View Transitions */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.4s;
+  animation-duration: 0.3s;
 }
 
 ::view-transition-old(root) {
-  animation-name: slide-out-to-left;
+  animation-name: fade-out;
 }
 
 ::view-transition-new(root) {
-  animation-name: slide-in-from-right;
+  animation-name: fade-in;
 }
 
-@keyframes slide-out-to-left {
+@keyframes fade-out {
   to {
-    transform: translateX(-100%);
     opacity: 0;
   }
 }
 
-@keyframes slide-in-from-right {
+@keyframes fade-in {
   from {
-    transform: translateX(100%);
     opacity: 0;
   }
 }

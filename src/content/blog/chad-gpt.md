@@ -2,7 +2,7 @@
 title: 'Crafting My Digital Doppelgänger: A CustomGPT experiment'
 description: 'Join me as I recount my adventure of creating a custom GPT, the challenges I faced, and how I overcame them. Learn about zero shot prompting, custom GPTs, and the future of AI-powered digital replicas.'
 pubDate: 2023-12-06
-heroImage: '/doppler.png'
+heroImage: ../../assets/doppler.png
 ---
 
 I have been experimenting with and embarking on a journey to explore how to utilize AI to replicate my voice or attempt to emulate me to provide behavioural style interview question examples of the highlights/challenges of my career. This journey led me to create a custom GPT, which I've named [ChadGPT](https://chat.openai.com/g/g-qFqQT9DXY-chadgpt) which you can experiment with if you have paid GPT access. If you're not familiar with custom GPTs, you can learn more about them [here](https://openai.com/blog/introducing-gpts).

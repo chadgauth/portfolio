@@ -2,7 +2,7 @@
 title: 'Dr. GitGood or:'
 description: "The value of refactoring and the metamorphosis of a develop from fearing refactoring to embracing it, all with a sprinkle of 'Dr. Strangelove'"
 pubDate: 2023-09-19
-heroImage: '/dr_refactor.jpg'
+heroImage: ../../assets/dr_refactor.jpg
 ---
 
 In a world where the cold, unforgiving wastelands of legacy code loom large, our story follows Dr. GitGood, an intrepid developer who finds himself entrenched in a sprawling fortress of convoluted code. Much like the War Room officials in "Dr. Strangelove," Dr. GitGood is challenged to decode a complex system of operations, a task he initially resents.

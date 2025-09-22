@@ -2,7 +2,7 @@
 title: 'Navigating the Matrix of Progress:'
 description: "AI's transformative potential, the power of fresh perspectives, and the deep impact on our understand of the game understanding and what's beyond"
 pubDate: 2023-09-21
-heroImage: '/quantum_chess.jpg'
+heroImage: ../../assets/quantum_chess.jpg
 ---
 
 In my younger years, a chessboard was more than just a game—it was a world waiting to be discovered. Across that board, my mother and I would lock into cerebral duels, each move a calculated step, each piece a story. The weight of every decision would sometimes press heavily upon me, as the expanse of the board seemed to stretch and morph with endless possibilities. A single game could feel like an eternity, with hours spent pondering over that one 'perfect' move.

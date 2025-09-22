@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import HeroBackground from "../../components/HeroBackground.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
   return [
@@ -38,7 +39,7 @@ const posts = (await getCollection('blog')).sort(
     <!-- Header Content -->
     <div class="relative z-10 container mx-auto px-4">
       <div class="max-w-4xl mx-auto text-center">
-        <div class="space-y-4 fade-in-up">
+        <div class="space-y-4">
           <div class="text-lg text-cyan-400 font-mono tracking-wider">
             > Engineering Insights
           </div>
@@ -61,15 +62,15 @@ const posts = (await getCollection('blog')).sort(
         <!-- Posts Grid -->
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, index) => (
-            <article class="cyber-card group fade-in-up" style={`animation-delay: ${index * 0.1}s`}>
+            <article class="cyber-card group">
               <a href={`/blog/${post.slug}`} class="block h-full">
                 <div class="relative h-full flex flex-col">
                   
                   <!-- Hero Image -->
                   {post.data.heroImage && (
                     <div class="relative h-48 overflow-hidden rounded-t-lg">
-                      <img 
-                        src={post.data.heroImage} 
+                      <Image
+                        src={post.data.heroImage}
                         alt={post.data.title}
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         transition:name={`hero-${post.slug}`}

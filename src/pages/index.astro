@@ -3,6 +3,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import ProfileImage from "../components/ProfileImage.astro";
 import profileImage from "../assets/chad_profile_new.png";
+import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
+import airDash from "../assets/dashboard.png";
 
 // Get recent blog posts
 const posts = (await getCollection('blog')).sort(
@@ -166,8 +169,10 @@ const posts = (await getCollection('blog')).sort(
           <div class="grid lg:grid-cols-2 gap-0">
             <!-- Image Side -->
             <div class="relative h-64 lg:h-auto">
-              <img
-                src="/dashboard.png"
+              <Picture
+                src={airDash}
+                width={448}
+                height={537}
                 alt="Austin Airalytics Project"
                 class="w-full h-full object-cover"
               />
@@ -237,7 +242,7 @@ const posts = (await getCollection('blog')).sort(
                   <!-- Background Image -->
                   {post.data.heroImage && (
                     <div class="absolute inset-0">
-                      <img
+                      <Image
                         src={post.data.heroImage}
                         alt={post.data.title}
                         class="w-full h-full object-cover opacity-20"

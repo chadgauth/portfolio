@@ -3,7 +3,7 @@ title: "Austin Airalytics: A Full-Stack Next.js Showcase for Rental Analytics"
 description: "A deep dive into building a comprehensive rental analytics platform with Next.js, showcasing full-stack development and data processing skills."
 pubDate: 2025-09-22
 tags: ["Next.js", "Full-Stack", "TypeScript", "Data Analytics", "React", "tRPC"]
-heroImage: '/dashboard.png'
+heroImage: ../../assets/dashboard.png
 ---
 
 # Austin Airalytics: Turning Austin's Airbnb Chaos into Clarity
@@ -18,7 +18,7 @@ I built this with real users in mind, focusing on the things that matter when yo
 
 - **The Listings Dashboard**: A paginated table that lets you sort by price, neighborhood, or room type with a click. It’s like having a personal real estate agent who never sleeps.
 
-![Listings Dashboard](/dashboard.png)
+<!-- ![Listings Dashboard](/dashboard.png) -->
 *The interactive listings dashboard in action.*
 
 - **Smart Filtering**: Sidebar controls for price ranges, amenities, and property types—dial in exactly what you need from thousands of options without the headache.
