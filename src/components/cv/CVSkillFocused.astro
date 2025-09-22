@@ -1,5 +1,4 @@
 ---
-import { cvDataV2 } from '../../data/cv.ts';
 import { getSmartFilterSkills, analyzeSkills } from '../../data/cv-analytics.ts';
 
 // Get skill analytics
@@ -10,15 +9,15 @@ const smartSkills = getSmartFilterSkills();
 const skillMap = new Map();
 skillAnalytics.forEach(skill => {
   if (skill.frequency >= 2) {
-    const relatedExperiences = cvDataV2.filter(exp => {
-      const allSkills = [...exp.stack, ...exp.highlights.flatMap(h => h.skillsFilter)];
-      return allSkills.includes(skill.name);
-    });
+    // const relatedExperiences = cvDataV2.filter(exp => {
+    //   const allSkills = [...exp.stack, ...exp.highlights.flatMap(h => h.skillsFilter)];
+    //   return allSkills.includes(skill.name);
+    // });
     
-    skillMap.set(skill.name, {
-      ...skill,
-      experiences: relatedExperiences
-    });
+    // skillMap.set(skill.name, {
+    //   ...skill,
+    //   experiences: relatedExperiences
+    // });
   }
 });
 ---
@@ -69,7 +68,7 @@ skillAnalytics.forEach(skill => {
   </div>
 
   <!-- Default View: All Experiences -->
-  <div class="default-view p-6" id="default-view">
+  <!-- <div class="default-view p-6" id="default-view">
     <h3 class="text-lg font-semibold text-gray-900 mb-4">All Experience</h3>
     <div class="space-y-4">
       {cvDataV2.map((exp) => (
@@ -99,9 +98,9 @@ skillAnalytics.forEach(skill => {
             {exp.highlights[0]?.oneLiner}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
+      ))} -->
+    <!-- </div>
+  </div> -->
 
   <!-- Skill-Focused View (Hidden by default) -->
   <div class="skill-view hidden p-6" id="skill-view">

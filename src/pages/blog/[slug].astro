@@ -170,7 +170,7 @@ const otherPosts = allPosts.filter(p => p.slug !== post.slug).slice(0, 2);
                   <article class="bg-gray-800/30 border border-gray-700/50 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10">
                     {relatedPost.data.heroImage && (
                       <div class="relative mb-4 rounded-lg overflow-hidden">
-                        <img 
+                        <Image 
                           src={relatedPost.data.heroImage} 
                           alt={relatedPost.data.title}
                           class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"

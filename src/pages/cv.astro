@@ -1,16 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { realCV2Data } from "../data/cv2.real";
 import HeroBackground from "../components/HeroBackground.astro";
-
-const cv2Data = realCV2Data;
+import CVLayout from "../components/cv/CVLayout.astro";
+import { experiences, skills } from "@/data/cv2";
 
 // Build helpers on the server (no DOM)
-const skillLabelBySlug = new Map(cv2Data.skills.map(s => [s.slug, s.label]));
+const skillLabelBySlug = new Map(skills.map(s => [s.slug, s.label]));
 
 // Build skill frequency count from actual usage across experiences
 const skillFrequency = new Map<string, number>();
-cv2Data.experiences.forEach(exp => {
+experiences.forEach(exp => {
   const expSkills = new Set([
     ...(exp.primarySkills ?? []),
     ...(exp.supportingSkills ?? []),
@@ -34,7 +33,7 @@ const skillsForFilter = Array.from(skillFrequency.entries())
   }));
 
 // Sort experiences by start date (newest first)
-const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
+const sortedExperiences = [...experiences].sort((a, b) => {
   const dateA = new Date(a.period.start);
   const dateB = new Date(b.period.start);
   return dateB.getTime() - dateA.getTime();
@@ -43,7 +42,7 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
 
 <BaseLayout title="Professional Experience - Chad Gauthier" sideBarActiveItemID="cv">
   <!-- Compact Header Section -->
-  <div class="relative py-16 overflow-hidden">
+  <div class="relative py-8 md:py-16 overflow-hidden">
     <HeroBackground size="compact" showShapes={true} />
 
     <!-- Navigation Header -->
@@ -98,52 +97,47 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
     </div>
   </div>
 
-  <!-- Skills Filter Section -->
-  <section class="relative py-8 bg-gray-900/50">
+  <!-- Skills Filter and Experience Timeline -->
+  <section class="relative py-4 lg:py-8 bg-gray-900/50">
     <div class="container mx-auto px-4">
-      <div class="max-w-6xl mx-auto">
-        <div class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-6 backdrop-blur-sm mb-8">
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-bold text-gray-200 flex items-center">
-              <div class="w-1 h-6 bg-cyan-500 mr-4 rounded-full"></div>
-              Filter by Technology
-            </h3>
-            <button
-              id="clear-filters"
-              class="text-sm text-gray-400 hover:text-cyan-400 transition-colors font-mono"
-            >
-              Clear All
-            </button>
-          </div>
-          
-          <div class="flex flex-wrap gap-3" id="skills-container">
-            {skillsForFilter.map((skill) => (
+      <div>
+        <CVLayout>
+          <div slot="filters">
+            <div class="flex items-center justify-between mb-4 md:mb-6">
+              <h3 class="text-lg md:text-xl font-bold text-gray-200 flex items-center">
+                <div class="w-1 h-5 md:h-6 bg-cyan-500 mr-3 md:mr-4 rounded-full"></div>
+                Filter by Technology
+              </h3>
               <button
-                class="skill-filter inline-flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 rounded-lg font-medium transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50"
-                data-skill={skill.slug}
+                id="clear-filters"
+                class="text-sm text-gray-400 hover:text-cyan-400 transition-colors font-mono"
               >
-                <span>{skill.label}</span>
-                <span class="bg-gray-700/60 text-gray-400 text-xs px-2 py-1 rounded-full">
-                  {skill.count}
-                </span>
+                Clear All
               </button>
-            ))}
-          </div>
-          
-          <!-- Show total count -->
-          <div class="mt-4 text-sm text-gray-500 font-mono">
-            Showing top {skillsForFilter.length} most used technologies from {cv2Data.skills.length} total
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+            </div>
 
-  <!-- Experience Timeline -->
-  <section class="relative py-8 bg-gray-900/50">
-    <div class="container mx-auto px-4">
-      <div class="max-w-4xl mx-auto">
-        <main class="space-y-8" id="experiences-content">
+            <div class="flex gap-2 lg:gap-3 overflow-x-auto md:flex-wrap md:overflow-visible pb-2 md:pb-0" id="skills-container">
+              {skillsForFilter.map((skill) => (
+                <button
+                  class="skill-filter inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 rounded-lg font-medium transition-all duration-200 border border-gray-600/30 hover:border-gray-500/50 whitespace-nowrap"
+                  data-skill={skill.slug}
+                >
+                  <span>{skill.label}</span>
+                  <span class="bg-gray-700/60 text-gray-400 text-xs px-2 py-1 rounded-full">
+                    {skill.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <!-- Show total count -->
+            <div class="mt-4 text-sm text-gray-500 font-mono">
+              Showing top {skillsForFilter.length} most used technologies from {skills.length} total
+            </div>
+          </div>
+
+          <div slot="experiences">
+            <main class="space-y-8" id="experiences-content">
           {sortedExperiences.map((exp, index) => {
             const unionSkills = Array.from(new Set([
               ...(exp.primarySkills ?? []),
@@ -249,36 +243,36 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
               </div>
             );
           })}
-        </main>
+            </main>
 
-        <!-- Call to Action -->
-        <div class="mt-16 text-center">
-          <div class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-8 backdrop-blur-sm">
-            <h3 class="text-2xl font-bold text-gray-200 mb-4">
-              Let's build something amazing together
-            </h3>
-            <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
-              I'm passionate about tackling complex challenges and creating innovative solutions. 
-              Always open to discussing new opportunities and interesting projects.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <button onclick="openContactModal()" class="cyber-button-primary">
-                <span>Get In Touch</span>
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-              </button>
-              <a href="/" class="cyber-button-secondary">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                <span>Back to Home</span>
-              </a>
+            <!-- Call to Action -->
+            <div class="mt-16 text-center">
+              <div class="bg-gray-800/30 border border-gray-700/50 rounded-2xl p-8 backdrop-blur-sm">
+                <h3 class="text-2xl font-bold text-gray-200 mb-4">
+                  Let's build something amazing together
+                </h3>
+                <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
+                  I'm passionate about tackling complex challenges and creating innovative solutions.
+                  Always open to discussing new opportunities and interesting projects.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button onclick="openContactModal()" class="cyber-button-primary">
+                    <span>Get In Touch</span>
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                  <a href="/" class="cyber-button-secondary">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span>Back to Home</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </CVLayout>
   </section>
 </BaseLayout>
 
@@ -312,7 +306,7 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
     opacity: 0;
     transform: translateY(20px);
     pointer-events: none;
-    height: 0;
+    max-height: 0;
     overflow: hidden;
     margin: 0;
     transition: all 400ms ease;
@@ -328,9 +322,17 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
     border-color: rgba(6, 182, 212, 0.4) !important;
   }
 
-  .achievement.dim {
-    opacity: 0.4;
-    transform: scale(0.98);
+  .achievement.visible {
+    max-height: 1000px;
+    transition: all 400ms ease;
+  }
+
+  .achievement.hidden {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    transition: all 400ms ease;
   }
 
   /* Tech tag highlighting */
@@ -342,21 +344,37 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
     transform: translateY(-1px);
   }
 
+
   /* Button styles */
   .cyber-button-primary {
-    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 
+    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600
            text-white font-semibold rounded-lg transition-all duration-300
            hover:shadow-lg hover:shadow-cyan-500/25 hover:scale-105;
   }
 
   .cyber-button-secondary {
-    @apply inline-flex items-center px-6 py-3 bg-gray-800 border border-gray-600 
+    @apply inline-flex items-center px-6 py-3 bg-gray-800 border border-gray-600
            text-gray-300 font-semibold rounded-lg transition-all duration-300
            hover:bg-gray-700 hover:border-gray-500 hover:text-white;
   }
+
+   #skills-container::-webkit-scrollbar {
+    height: 4px;
+  }
+  #skills-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+  #skills-container::-webkit-scrollbar-thumb {
+    background: rgba(6, 182, 212, 0.5);
+    border-radius: 2px;
+  }
+  #skills-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(6, 182, 212, 0.7);
+  }
 </style>
 
-<script>
+<script is:inline>
   (function() {
     const selectedSkills = new Set();
 
@@ -370,8 +388,8 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
 
       experiences.forEach(exp => {
         const expSkills = new Set(splitCSV(exp.getAttribute('data-exp-skills')));
-        const shouldShow = selectedSkills.size === 0 || 
-          Array.from(selectedSkills).every(skill => expSkills.has(skill));
+        const shouldShow = selectedSkills.size === 0 ||
+          Array.from(selectedSkills).some(skill => expSkills.has(skill));
 
         if (shouldShow) {
           exp.classList.remove('hidden');
@@ -386,7 +404,8 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
 
         if (selectedSkills.size === 0) {
           achievements.forEach(ach => {
-            ach.classList.remove('highlight', 'dim');
+            ach.classList.remove('highlight', 'hidden');
+            ach.classList.add('visible');
           });
           techTags.forEach(tag => {
             tag.classList.remove('highlighted');
@@ -396,7 +415,13 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
             const achSkills = new Set(splitCSV(ach.getAttribute('data-ach-skills')));
             const hasMatch = Array.from(selectedSkills).some(skill => achSkills.has(skill));
             ach.classList.toggle('highlight', hasMatch);
-            ach.classList.toggle('dim', !hasMatch);
+            if (hasMatch) {
+              ach.classList.add('visible');
+              ach.classList.remove('hidden');
+            } else {
+              ach.classList.remove('visible');
+              ach.classList.add('hidden');
+            }
           });
 
           techTags.forEach(tag => {
@@ -433,6 +458,7 @@ const sortedExperiences = [...cv2Data.experiences].sort((a, b) => {
       });
       updateExperiences();
     });
+
 
     // Initial state
     updateExperiences();

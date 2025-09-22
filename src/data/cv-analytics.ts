@@ -1,5 +1,7 @@
 // CV Analytics & Smart Filtering Logic
-import { cvDataV2, type CVItemV2, type CVHighlightV2 } from './cv.ts';
+
+import type { CV2Experience } from './cv2.schema';
+import { experiences } from './cv2';
 
 export interface SkillAnalytics {
   name: string;
@@ -37,10 +39,11 @@ export function analyzeSkills(): SkillAnalytics[] {
   }>();
 
   // Process all experiences
-  cvDataV2.forEach((exp, expIndex) => {
+  experiences.forEach((exp, expIndex) => {
     const allSkills = [
-      ...exp.stack,
-      ...exp.highlights.flatMap((h: CVHighlightV2) => h.skillsFilter)
+      ...(exp.primarySkills || []),
+      ...(exp.supportingSkills || []),
+      ...exp.achievements.flatMap((a) => a.skills)
     ];
 
     // Deduplicate skills within this experience
@@ -59,7 +62,7 @@ export function analyzeSkills(): SkillAnalytics[] {
       const skillData = skillMap.get(skill)!;
       skillData.count++;
       skillData.experiences.push(exp.id);
-      skillData.impacts.push(exp.impact);
+      skillData.impacts.push(8);
       skillData.lastUsed = Math.min(skillData.lastUsed, expIndex);
     });
   });
@@ -108,40 +111,41 @@ export function getTopSkills(limit: number = 10): SkillAnalytics[] {
 }
 
 // Calculate relevance score for an experience given selected skills
-export function calculateRelevanceScore(exp: CVItemV2, selectedSkills: string[]): number {
+export function calculateRelevanceScore(exp: CV2Experience, selectedSkills: string[]): number {
   if (selectedSkills.length === 0) return 0;
 
   const allExpSkills = [
-    ...exp.stack,
-    ...exp.highlights.flatMap((h: CVHighlightV2) => h.skillsFilter)
+    ...(exp.primarySkills || []),
+    ...(exp.supportingSkills || []),
+    ...exp.achievements.flatMap((a) => a.skills)
   ];
-  
+
   const uniqueExpSkills = [...new Set(allExpSkills)];
   const skillMatches = selectedSkills.filter(skill => uniqueExpSkills.includes(skill));
-  
+
   // Get skill analytics for frequency bonus
   const skillAnalytics = analyzeSkills();
   const skillFrequencyMap = new Map(skillAnalytics.map(s => [s.name, s.frequency]));
-  
+
   // Calculate score components
   const skillMatchScore = skillMatches.length * 2.0;
-  const impactScore = exp.impact * 1.5;
+  const impactScore = 8 * 1.5;
   const recencyBonus = getRecencyBonus(exp);
   const frequencyBonus = skillMatches.reduce((sum, skill) => {
     return sum + (skillFrequencyMap.get(skill) || 1) * 0.8;
   }, 0);
-  
+
   return skillMatchScore + impactScore + recencyBonus + frequencyBonus;
 }
 
 // Get recency bonus based on experience position in timeline
-function getRecencyBonus(exp: CVItemV2): number {
-  const expIndex = cvDataV2.findIndex(e => e.id === exp.id);
+function getRecencyBonus(exp: CV2Experience): number {
+  const expIndex = experiences.findIndex(e => e.id === exp.id);
   return Math.max(0, 10 - expIndex) * 1.2;
 }
 
 // Sort experiences by relevance for filtered view
-export function sortByRelevance(experiences: CVItemV2[], selectedSkills: string[]): CVItemV2[] {
+export function sortByRelevance(experiences: CV2Experience[], selectedSkills: string[]): CV2Experience[] {
   if (selectedSkills.length === 0) {
     return [...experiences]; // Return chronological order
   }
@@ -154,19 +158,20 @@ export function sortByRelevance(experiences: CVItemV2[], selectedSkills: string[
 }
 
 // Filter experiences that match ALL selected skills
-export function filterExperiences(experiences: CVItemV2[], selectedSkills: string[]): CVItemV2[] {
+export function filterExperiences(experiences: CV2Experience[], selectedSkills: string[]): CV2Experience[] {
   if (selectedSkills.length === 0) {
     return experiences;
   }
 
   return experiences.filter(exp => {
     const allExpSkills = [
-      ...exp.stack,
-      ...exp.highlights.flatMap((h: CVHighlightV2) => h.skillsFilter)
+      ...(exp.primarySkills || []),
+      ...(exp.supportingSkills || []),
+      ...exp.achievements.flatMap((a) => a.skills)
     ];
-    
+
     const uniqueExpSkills = [...new Set(allExpSkills)];
-    
+
     // Check if ALL selected skills are present in this experience
     return selectedSkills.every(skill => uniqueExpSkills.includes(skill));
   });
@@ -175,55 +180,57 @@ export function filterExperiences(experiences: CVItemV2[], selectedSkills: strin
 // Get overall experience metrics for header
 export function getExperienceMetrics(): ExperienceMetrics {
   const currentYear = new Date().getFullYear();
-  
+
   // Calculate total years (approximate)
   const earliestYear = 2010; // Based on CV data
   const totalYears = currentYear - earliestYear;
-  
+
   // Count unique companies
-  const companies = new Set(cvDataV2.map(exp => exp.company)).size;
-  
+  const companies = new Set(experiences.map(exp => exp.company)).size;
+
   // Count unique technologies
-  const allTech = cvDataV2.flatMap(exp => [
-    ...exp.stack,
-    ...exp.highlights.flatMap((h: CVHighlightV2) => h.skillsFilter)
+  const allTech = experiences.flatMap(exp => [
+    ...(exp.primarySkills || []),
+    ...(exp.supportingSkills || []),
+    ...exp.achievements.flatMap((a) => a.skills)
   ]);
   const technologies = new Set(allTech).size;
-  
+
   // Get latest role info
-  const latest = cvDataV2[0]; // Assuming chronological order
-  
+  const latest = experiences[0]; // Assuming chronological order
+
   // Get top impact score
-  const topImpact = Math.max(...cvDataV2.map(exp => exp.impact));
-  
+  const topImpact = 10;
+
   return {
     totalYears,
     companies,
     technologies,
-    latestRole: latest.title,
+    latestRole: latest.role,
     latestCompany: latest.company,
     topImpact
   };
 }
 
 // Search experiences by query across all content
-export function searchExperiences(experiences: CVItemV2[], query: string): CVItemV2[] {
+export function searchExperiences(experiences: CV2Experience[], query: string): CV2Experience[] {
   if (!query.trim()) {
     return experiences;
   }
-  
+
   const lowercaseQuery = query.toLowerCase();
-  
+
   return experiences.filter(exp => {
     // Search in title, company, stack, and highlight content
     const searchableContent = [
-      exp.title,
+      exp.role,
       exp.company,
       exp.location,
-      ...exp.stack,
-      ...exp.highlights.flatMap(h => [h.oneLiner, h.furtherDetails || '', ...h.skillsFilter])
+      ...(exp.primarySkills || []),
+      ...(exp.supportingSkills || []),
+      ...exp.achievements.flatMap(a => [a.oneLiner, a.details || '', ...a.skills])
     ].join(' ').toLowerCase();
-    
+
     return searchableContent.includes(lowercaseQuery);
   });
 }
@@ -236,12 +243,13 @@ export function getSkillFrequency(skillName: string): number {
 }
 
 // Get matching skills for an experience (for highlighting)
-export function getMatchingSkills(exp: CVItemV2, selectedSkills: string[]): string[] {
+export function getMatchingSkills(exp: CV2Experience, selectedSkills: string[]): string[] {
   const allExpSkills = [
-    ...exp.stack,
-    ...exp.highlights.flatMap((h: CVHighlightV2) => h.skillsFilter)
+    ...(exp.primarySkills || []),
+    ...(exp.supportingSkills || []),
+    ...exp.achievements.flatMap((a) => a.skills)
   ];
-  
+
   const uniqueExpSkills = [...new Set(allExpSkills)];
   return selectedSkills.filter(skill => uniqueExpSkills.includes(skill));
 }

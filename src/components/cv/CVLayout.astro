@@ -1,0 +1,15 @@
+---
+// CV Layout component for responsive desktop/mobile layout
+---
+
+<div class="flex md:flex-row flex-col gap-6 lg:gap-8">
+  <!-- Filters slot -->
+  <div class="fixed bottom-0 left-0 right-0 md:static md:bottom-auto md:left-auto md:right-auto md:w-[300px] order-last bg-gray-900/95 lg:bg-gray-800/30 backdrop-blur-sm border-t lg:border lg:border-gray-700/50 rounded-t-2xl lg:rounded-2xl p-4 lg:p-6 z-10">
+    <slot name="filters" />
+  </div>
+
+  <!-- Experiences slot -->
+  <div class="md:flex-1">
+    <slot name="experiences" />
+  </div>
+</div>
