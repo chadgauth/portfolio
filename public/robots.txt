@@ -2,8 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://chad.gauthier.dev/sitemap-index.xml
-Sitemap: https://chad.gauthier.dev/sitemap-0.xml
+Sitemap: https://chad.gauthier.dev/sitemap.xml
 
 # Allow all major search engines
 User-agent: Googlebot

@@ -48,22 +48,22 @@ const posts = (await getCollection('blog')).sort(
           </div>
 
           <p class="text-xl text-gray-400 leading-relaxed max-w-lg">
-            Transforming ideas into elegant code solutions. Passionate about AI, web technologies, 
-            and creating digital experiences that make a difference.
+            Transforming ideas into elegant code solutions. Passionate about AI, web technologies,
+            and creating digital experiences that make a difference. Based in Austin, TX.
           </p>
 
-          <div class="flex flex-wrap gap-4">
-            <a href="/cv" class="cyber-button-primary group">
-              <span class="relative z-10">View My CV</span>
-              <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-            </a>
-            <a href="/blog" class="cyber-button-secondary">
-              <span>Read My Blog</span>
-            </a>
-            <button onclick="openContactModal()" class="cyber-button-outline">
-              <span>Get In Touch</span>
-            </button>
-          </div>
+            <div class="flex flex-wrap gap-4">
+              <a href="/cv" class="cyber-button-primary group">
+                <span class="relative z-10">View My CV</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+              </a>
+              <a href="/blog" class="cyber-button-secondary">
+                <span>Read My Blog</span>
+              </a>
+              <button onclick="openContactModal()" class="cyber-button-outline">
+                <span>Get In Touch</span>
+              </button>
+            </div>
 
           <!-- Tech Stack Icons -->
           <div class="pt-8">
@@ -109,26 +109,107 @@ const posts = (await getCollection('blog')).sort(
                 </div>
               </div>
 
-              <!-- Latest Blog Link -->
-              {posts.length > 0 && (
-                <div class="mt-6 pt-6 border-t border-gray-700/50">
-                  <div class="text-sm text-gray-400 mb-2">Latest Post:</div>
-                  <a href={`/blog/${posts[0].slug}`} class="block p-3 rounded-lg bg-gray-800/30 border border-gray-700/30 hover:border-cyan-500/50 transition-all duration-200 group">
-                    <div class="text-sm font-medium text-cyan-400 group-hover:text-cyan-300 line-clamp-1">
-                      {posts[0].data.title}
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">
-                      {new Date(posts[0].data.pubDate).toLocaleDateString()}
-                    </div>
+              <!-- Links -->
+              <div class="mt-6 pt-6 border-t border-gray-700/50 space-y-3">
+                {posts.length > 0 && (
+                  <div>
+                    <div class="text-sm text-gray-400 mb-2">Latest Post:</div>
+                    <a href={`/blog/${posts[0].slug}`} class="block p-3 rounded-lg bg-gray-800/30 border border-gray-700/30 hover:border-cyan-500/50 transition-all duration-200 group">
+                      <div class="text-sm font-medium text-cyan-400 group-hover:text-cyan-300 line-clamp-1">
+                        {posts[0].data.title}
+                      </div>
+                      <div class="text-xs text-gray-500 mt-1">
+                        {new Date(posts[0].data.pubDate).toLocaleDateString()}
+                      </div>
+                    </a>
+                  </div>
+                )}
+                <div class="text-sm text-gray-400 mb-2">Find Me Online:</div>
+                <div class="gap-4 inline-flex">
+                  <a href="https://github.com/chadgauth" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors duration-200">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                    </svg>
+                    <span class="text-sm">GitHub</span>
+                  </a>
+                  <a href="https://www.linkedin.com/in/chadgauth" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors duration-200">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    <span class="text-sm">LinkedIn</span>
                   </a>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Portfolio Highlight Section -->
+  <section class="relative py-20 bg-gray-900/30">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 fade-in-up">
+        <h2 class="text-4xl lg:text-5xl font-bold mb-4">
+          <span class="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Featured Project
+          </span>
+        </h2>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+          Showcasing innovative solutions and cutting-edge technologies
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl overflow-hidden shadow-2xl">
+          <div class="grid lg:grid-cols-2 gap-0">
+            <!-- Image Side -->
+            <div class="relative h-64 lg:h-auto">
+              <img
+                src="/dashboard.png"
+                alt="Austin Airalytics Project"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+            </div>
+
+            <!-- Content Side -->
+            <div class="p-8 lg:p-12 flex flex-col justify-center">
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Austin Airalytics
+                  </h3>
+                  <p class="text-gray-300 text-lg leading-relaxed">
+                    A comprehensive rental analytics platform built with Next.js, featuring interactive dashboards,
+                    advanced filtering, and real-time data visualization for short-term rental markets.
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                  <span class="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-sm rounded-full border border-cyan-500/30">Next.js</span>
+                  <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-sm rounded-full border border-blue-500/30">TypeScript</span>
+                  <span class="px-3 py-1 bg-green-500/20 text-green-400 text-sm rounded-full border border-green-500/30">tRPC</span>
+                  <span class="px-3 py-1 bg-purple-500/20 text-purple-400 text-sm rounded-full border border-purple-500/30">Data Analytics</span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <a href="https://austin-airalytics.vercel.app/" target="_blank" rel="noopener noreferrer" class="cyber-button-primary group flex-1 text-center">
+                    <span class="relative z-10">View Live Demo</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+                  </a>
+                  <a href="https://github.com/chadgauth/austin-airalytics" target="_blank" rel="noopener noreferrer" class="cyber-button-secondary flex-1 text-center">
+                    <span>View Source</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Enhanced Blog Slider Section -->
   <section class="relative py-20 bg-gray-900/50">
