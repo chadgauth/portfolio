@@ -3,6 +3,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import HeroBackground from "../../components/HeroBackground.astro";
 
+export async function getStaticPaths() {
+  return [
+    { params: { page: undefined } } // for /blog/
+  ];
+}
+
 const posts = (await getCollection('blog')).sort(
   (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );

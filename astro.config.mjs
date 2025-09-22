@@ -15,15 +15,6 @@ export default defineConfig({
       entrypoint: "astro/assets/services/noop"
     }
   },
-  output: "server",
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true
-    },
-    speedInsights: {
-      enabled: true
-    },
-    imageService: true,
-    functionPerRoute: true
-  })
+  output: "static",
+  adapter: vercel()
 });
