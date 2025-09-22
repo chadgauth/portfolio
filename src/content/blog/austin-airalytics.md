@@ -4,6 +4,8 @@ description: "A deep dive into building a comprehensive rental analytics platfor
 pubDate: 2025-09-22
 tags: ["Next.js", "Full-Stack", "TypeScript", "Data Analytics", "React", "tRPC"]
 heroImage: ../../assets/dashboard.png
+buttonText: "View Live Demo"
+buttonUrl: "https://austin-airalytics.vercel.app/"
 ---
 
 # Austin Airalytics: Turning Austin's Airbnb Chaos into Clarity
